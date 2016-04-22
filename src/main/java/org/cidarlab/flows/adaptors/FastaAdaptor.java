@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.sf.json.JSONArray;
 import org.cidarlab.flows.Args;
 import org.cidarlab.flows.DOM.ComponentType;
 import org.cidarlab.flows.DOM.DNAcomponent;
 import org.cidarlab.flows.Utilities;
 import org.clothoapi.clotho3javaapi.Clotho;
 import org.clothoapi.clotho3javaapi.ClothoConnection;
+
 
 /**
  *
@@ -34,6 +36,26 @@ public class FastaAdaptor {
         }
         clothoObject.logout();
         conn.closeConnection();
+    }
+    
+    public static List<DNAcomponent> getAllDNAComponents(String username, String password){
+        List<DNAcomponent> components = new ArrayList<DNAcomponent>();
+        ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
+        Clotho clothoObject = new Clotho(conn);
+        clothoObject.login(username,password);
+        
+        Map queryDNAcomponents = new HashMap();
+        queryDNAcomponents.put("schema",DNAcomponent.class.getCanonicalName());
+        JSONArray arr = new JSONArray();
+        arr = (JSONArray)clothoObject.query(queryDNAcomponents);
+        for(Object obj:arr){
+            Map compMap = new HashMap();
+            compMap = (Map)obj;
+            DNAcomponent component = DNAcomponent.fromMap(compMap);
+            components.add(component);
+        }
+        conn.closeConnection();
+        return components;
     }
     
     public static List<DNAcomponent> FastaToComponents(List<String> lines){

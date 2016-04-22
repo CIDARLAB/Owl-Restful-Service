@@ -5,6 +5,7 @@
  */
 package org.cidarlab.flows.adaptors;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.cidarlab.flows.Args;
@@ -57,8 +58,21 @@ public class FastaAdaptorTest {
     public void testFastaToClotho(){
         String username = user;
         String password = pass;
+        System.out.println("Username :: " + user + "\nPassword :: " + password);
         String filepath = Utilities.getResourcesFilepath() + "test.fasta";
         FastaAdaptor.FastaToClotho(username, password, filepath);
+    }
+    
+    @Test
+    public void testGetAllDNAComponents(){
+        String username = user;
+        String password = pass;
+        List<DNAcomponent> components = new ArrayList<DNAcomponent>();
+        components = FastaAdaptor.getAllDNAComponents(username, password);
+        for(DNAcomponent component:components){
+            System.out.println(component.getJSON().toString(4));
+            System.out.println("\n");
+        }
         
     }
     

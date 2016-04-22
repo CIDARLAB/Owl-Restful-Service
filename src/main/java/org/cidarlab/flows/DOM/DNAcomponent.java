@@ -45,11 +45,16 @@ public class DNAcomponent {
     }
     
     public Map getMap(){
-        Map obj = new HashMap();
-        obj.put("name", this.name);
-        obj.put("schema", DNAcomponent.class.getCanonicalName());
-        obj.put("sequence", this.sequence);
-        obj.put("type", this.type.toString());
-        return obj;
+        Map map = new HashMap();
+        map.put("name", this.name);
+        map.put("schema", DNAcomponent.class.getCanonicalName());
+        map.put("sequence", this.sequence);
+        map.put("type", this.type.toString());
+        return map;
+    }
+    
+    public static DNAcomponent fromMap(Map map){        
+        DNAcomponent comp = new DNAcomponent((String)map.get("name"),ComponentType.valueOf((String)map.get("type")),(String)map.get("sequence"));
+        return comp;
     }
 }
