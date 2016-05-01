@@ -8,9 +8,9 @@ PartType CDS(name);
 PartType Terminator(name);
 
 //This file has to be created for every .fasta file
-CDS g1(.SEQUENCE("GTAAGAGGGGACAA"), .name("geneName1"));
-CDS g2(.SEQUENCE("AAAAGAGGGGACAA"), .name("geneName2"));
-CDS g3(.SEQUENCE("CCAAGAGGGGACAA"), .name("geneName3"));
+CDS g0(.SEQUENCE("GTAAGAGGGGACAA"), .name("geneName1"));
+CDS g1(.SEQUENCE("AAAAGAGGGGACAA"), .name("geneName2"));
+CDS g2(.SEQUENCE("CCAAGAGGGGACAA"), .name("geneName3"));
 
 //==========================================
 // Input-dependent
@@ -18,17 +18,17 @@ CDS g3(.SEQUENCE("CCAAGAGGGGACAA"), .name("geneName3"));
 num N = 3;
 
 
-Promoter pBla(.SEQUENCE("TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG"), .name("BBa_I14018"));
-Promoter p2(.SEQUENCE("TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC"), .name("BBa_J23100"));
+Promoter p0(.SEQUENCE("TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG"), .name("BBa_I14018"));
+Promoter p1(.SEQUENCE("TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC"), .name("BBa_J23100"));
 
-RBS rbs1(.SEQUENCE("GAAAGAGGGGACAA"), .name("rbs1"));
-RBS rbs2(.SEQUENCE("GAAAGACAGGACCC"), .name("rbs2"));
-RBS rbs3(.SEQUENCE("GAAAGATCCGATGT"), .name("rbs3"));
-RBS rbs4(.SEQUENCE("GAAAGATTAGACAA"), .name("rbs4"));
+RBS rbs0(.SEQUENCE("GAAAGAGGGGACAA"), .name("rbs1"));
+RBS rbs1(.SEQUENCE("GAAAGACAGGACCC"), .name("rbs2"));
+RBS rbs2(.SEQUENCE("GAAAGATCCGATGT"), .name("rbs3"));
+RBS rbs3(.SEQUENCE("GAAAGATTAGACAA"), .name("rbs4"));
 
-Terminator t1(.SEQUENCE("TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA"), .name("BBa_B0012"));
+Terminator t0(.SEQUENCE("TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA"), .name("BBa_B0012"));
 
-Insulator ri(.SEQUENCE("AAAAAAAAAAAAA"), .name("Rybozyme_insulator"), .PIGEON("z ri 13"));
+Insulator r0(.SEQUENCE("AAAAAAAAAAAAA"), .name("Rybozyme_insulator"), .PIGEON("z ri 13"));
 
 
 // Rybozyme (TRUE is with; FALSE is without); Default is TRUE.
@@ -51,7 +51,7 @@ Rule r1(on Exhaustive: ALL_FORWARD);
 //this example is for 3 genes:
 
 
-for(num i=1; i<=N; i=i+1) {
+for(num i=0; i<N; i=i+1) {
   if(rybozyme == false) {
   	Exhaustive = Exhaustive + Promoter + RBS + CDS + Terminator;
   } else {

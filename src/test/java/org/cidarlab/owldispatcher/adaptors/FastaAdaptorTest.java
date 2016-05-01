@@ -9,6 +9,7 @@ import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
 import org.cidarlab.owldispatcher.Utilities;
@@ -78,18 +79,12 @@ public class FastaAdaptorTest {
         System.out.println("\n\n######################## Get all DNA Component - Names");
         System.out.println(FastaAdaptor.getAllDNAComponents(username, password, project,dnacomponentNames));
         
-    }
-    
-    //@Test
-    public void testGetAllDNAComponents(){
-        String username = user;
-        String password = pass;
-        List<DNAcomponent> components = new ArrayList<DNAcomponent>();
-        components = FastaAdaptor.getAllDNAComponents(username, password,proj);
-        for(DNAcomponent component:components){
-            System.out.println(component.getJSON().toString(4));
-            System.out.println("\n");
-        }
+        
+        System.out.println("\n\n######################## Eugene Script");
+        
+        List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project);
+        EugeneCollection collection = EugeneAdaptor.runEugene(EugeneAdaptor.createEugeneScript(genes));
+        System.out.println("Collection :: \n" + collection.toString());
         
     }
     

@@ -157,7 +157,12 @@ public class Utilities {
     public static String getDefautltEugeneRootDirectory(){
         String _filepath = getResourcesFilepath();
         
-        
+        if(Utilities.isWindows()){
+            _filepath += "sampleEugene\\";
+        }
+        else{
+            _filepath += "sampleEugene/";
+        }
         return _filepath;
     }
     
