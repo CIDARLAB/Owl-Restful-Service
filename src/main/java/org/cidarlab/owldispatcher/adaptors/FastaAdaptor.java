@@ -249,7 +249,8 @@ public class FastaAdaptor {
             
             if(line.startsWith(">") && (line.trim().length()>1)){
                 if(!seq.isEmpty() && !name.isEmpty()){
-                    DNAcomponent comp = new DNAcomponent(name,ComponentType.gene,seq);
+                    String dnaSeq = ReverseTranslate.translate(seq);
+                    DNAcomponent comp = new DNAcomponent(name,ComponentType.gene,dnaSeq);
                     list.add(comp);
                     seq = "";
                 }

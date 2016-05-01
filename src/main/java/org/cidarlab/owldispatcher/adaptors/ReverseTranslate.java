@@ -37,7 +37,8 @@ public class ReverseTranslate {
             .build();
 
 
-    // this method is using java 8 FP elements
+    // this method is using java 8 FP elements. Java 8 Style.
+    /*
     public static String translate(final String protein) {
         Stream<Character> streamOfProtein = protein.chars().mapToObj(i -> (char)i);
 
@@ -54,10 +55,10 @@ public class ReverseTranslate {
                 .map(CODONS_TO_AMINO_ACIDS::get)
                 .collect(Collectors.joining(""));
 
-    }
+    }*/
 
-    // this method is using java 8 FP elements
-    public static String translateJava7Style(final String protein) {
+    // Java 7 Style!
+    public static String translate(final String protein) {
 
         String result = "";
         String badElements = "";
@@ -80,7 +81,7 @@ public class ReverseTranslate {
 
         System.out.println(translate(p));
 
-        System.out.println(translateJava7Style(p));
+        System.out.println(translate(p));
     }
 
 }
