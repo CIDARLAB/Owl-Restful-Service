@@ -10,5 +10,8 @@ package org.cidarlab.owldispatcher;
  * @author prash
  */
 public class Args {
+    
     public static final String clothoLocation = "wss://localhost:8443/websocket";
+    public static String eugeneRootDirectory = "";
+
 }

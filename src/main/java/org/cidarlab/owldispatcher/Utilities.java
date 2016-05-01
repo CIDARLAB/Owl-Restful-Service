@@ -154,4 +154,15 @@ public class Utilities {
         return _filepath;
     }
     
+    public static String getDefautltEugeneRootDirectory(){
+        String _filepath = getResourcesFilepath();
+        
+        
+        return _filepath;
+    }
+    
+    public static void setEugeneRootDirectory(String filepath){
+        Args.eugeneRootDirectory = filepath;
+    }
+    
 }
