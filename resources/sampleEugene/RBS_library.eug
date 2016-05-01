@@ -1,0 +1,4 @@
+RBS rbs1(.SEQUENCE("GAAAGAGGGGACAA"), .name("rbs1"));
+RBS rbs2(.SEQUENCE("GAAAGACAGGACCC"), .name("rbs2"));
+RBS rbs3(.SEQUENCE("GAAAGATCCGATGT"), .name("rbs3"));
+RBS rbs4(.SEQUENCE("GAAAGATTAGACAA"), .name("rbs4"));
