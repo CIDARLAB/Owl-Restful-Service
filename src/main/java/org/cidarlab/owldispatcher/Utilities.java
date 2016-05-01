@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cidarlab.flows;
+package org.cidarlab.owldispatcher;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -22,6 +24,23 @@ import java.util.logging.Logger;
  * @author prash
  */
 public class Utilities {
+    
+    public static List<String> getFileLines(InputStream inp){
+        BufferedReader br = new BufferedReader(new InputStreamReader(inp));
+        List<String> lines = new ArrayList<String>();
+        String line = "";
+        try {
+            while((line = br.readLine()) != null){
+                if(!line.trim().equals("")){
+                    lines.add(line);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lines;
+    }
+    
     public static List<String> getFileLines(String filepath){
         List<String> lines = new ArrayList<String>();
         File file = new File(filepath);

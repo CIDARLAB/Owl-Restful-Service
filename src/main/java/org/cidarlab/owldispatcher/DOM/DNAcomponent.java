@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cidarlab.flows.DOM;
+package org.cidarlab.owldispatcher.DOM;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +29,10 @@ public class DNAcomponent {
     @Setter
     private String sequence;
     
+    @Getter
+    @Setter
+    private String clothoId;
+    
     public DNAcomponent(String _name,ComponentType _type, String _sequence){
         this.name = _name;
         this.type = _type;
@@ -41,6 +45,11 @@ public class DNAcomponent {
         obj.put("schema", DNAcomponent.class.getCanonicalName());
         obj.put("sequence", this.sequence);
         obj.put("type", this.type.toString());
+        if(this.clothoId != null){
+            if(!this.clothoId.isEmpty()){
+                obj.put("id", this.clothoId);
+            }
+        }
         return obj;
     }
     
@@ -50,11 +59,27 @@ public class DNAcomponent {
         map.put("schema", DNAcomponent.class.getCanonicalName());
         map.put("sequence", this.sequence);
         map.put("type", this.type.toString());
+        if(this.clothoId != null){
+            if(!this.clothoId.isEmpty()){
+                map.put("id", this.clothoId);
+            }
+        }
         return map;
+    }
+    
+    @Override
+    public String toString(){
+        String str = "";
+        str += "Name : " + this.name + "\n";
+        str += "Sequence :\n" + this.sequence;
+        return str;
     }
     
     public static DNAcomponent fromMap(Map map){        
         DNAcomponent comp = new DNAcomponent((String)map.get("name"),ComponentType.valueOf((String)map.get("type")),(String)map.get("sequence"));
+        if(map.containsKey("id")){
+            comp.clothoId = (String)map.get("id");
+        }
         return comp;
     }
 }

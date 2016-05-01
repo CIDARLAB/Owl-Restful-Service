@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cidarlab.flows.adaptors;
+package org.cidarlab.owldispatcher.DOM;
 
 /**
  *
  * @author prash
  */
-public class EugeneAdaptor {
-    
+public enum ComponentType {
+    protein,
+    gene
 }
