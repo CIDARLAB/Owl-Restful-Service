@@ -26,7 +26,7 @@ public class EugeneAdaptor {
         
         try {
             Eugene eugene = new Eugene();
-            eugene.setRootDirectory(Args.eugeneRootDirectory);
+            //eugene.setRootDirectory(Args.eugeneRootDirectory);
             return eugene.executeScript(script);
         } catch (EugeneException ex) {
             Logger.getLogger(EugeneAdaptor.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,14 +112,6 @@ public class EugeneAdaptor {
                 + "println(lod);";
         
         return script;
-    }
-    
-    public static void main(String[] args) {
-        Utilities.setEugeneRootDirectory(Utilities.getDefautltEugeneRootDirectory());
-        String filepath = Utilities.getDefautltEugeneRootDirectory() + "app.eug";
-        System.out.println("File path :: " + filepath);
-        EugeneCollection collection = runEugene(filepath);
-        System.out.println("Result :: " + collection.toString());
     }
     
 }
