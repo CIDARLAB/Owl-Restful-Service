@@ -75,7 +75,51 @@ public class FastaAdaptor {
         return true;
     }
     
-            
+    
+    public static boolean fastaToClotho(String username, String password, InputStream fasta,String projectId, ComponentType type){
+        
+        ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
+        Clotho clothoObject = new Clotho(conn);
+        Object loginRet = clothoObject.login(username,password);
+        if(loginRet == null){
+            conn.closeConnection();
+            return false;
+        }
+        if(loginRet.toString().equals("null")){
+            conn.closeConnection();
+            return false;
+        }
+        if (loginRet.toString().startsWith("Authentication attempt failed for username")) {
+            conn.closeConnection();
+            return false;
+        }
+        
+        
+        Object projObj = clothoObject.get(projectId);
+        if(projObj != null){
+            System.out.println("PROJECT EXISTS!!!");
+            clothoObject.logout();
+            conn.closeConnection();
+            return false;
+        }
+        
+
+        //System.out.println("Proj :: " + projObj.toString());
+        
+        List<DNAcomponent> list = new ArrayList<>();
+        list = fastaToComponents(Utilities.getFileLines(fasta));
+        List<String> dnacompids = new ArrayList<String>();
+        for(DNAcomponent comp:list){
+            dnacompids.add((String)clothoObject.create(comp.getMap()));
+        }
+        Project proj = new Project(projectId,dnacompids);
+        clothoObject.create(proj.getMap());
+        clothoObject.logout();
+        conn.closeConnection();
+        return true;
+    }
+    
+    
     public static boolean fastaToClotho(String username, String password, String filepath,String projectId){
         
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
