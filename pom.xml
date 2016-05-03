@@ -164,41 +164,37 @@
             <version>5.6.0.Final</version>
         </dependency>
                 
-                
-        
-        <!-- Local Jars NOT A GOOD IDEA-->
-        <!--
         <dependency>
-            <groupId>org</groupId>
-            <artifactId>jacop</artifactId>
-            <version>4.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/lib/jacop-4.1.0.jar</systemPath>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.0</version>
         </dependency>
+		
         <dependency>
-            <groupId>org.clothocad</groupId>
-            <artifactId>Clotho3JavaAPI</artifactId>
-            <version>3.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/lib/clotho3api-jar-with-dependencies.jar</systemPath>
+            <groupId>uk.com.robust-it</groupId>
+            <artifactId>cloning</artifactId>
+            <version>1.7.4</version>
         </dependency>
+		
         <dependency>
-            <groupId>org.cidarlab</groupId>
-            <artifactId>miniEugene-core</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/lib/miniEugene-core-1.0.0-jar-with-dependencies.jar</systemPath>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.cidarlab</groupId>
-            <artifactId>eugene</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/lib/eugene-2.0.0-SNAPSHOT.jar</systemPath>
-        </dependency>
-        -->
-        
     </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>Sonatype OSS Snapshot Repository</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        
+        <repository>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>           
+        </repository>
+    </repositories>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
