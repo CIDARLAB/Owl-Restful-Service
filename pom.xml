@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.biojava</groupId>
             <artifactId>biojava3-core</artifactId>
-            <version>3.1.0</version>
+            <version>3.0</version>
         </dependency>
       		
         <dependency>
@@ -129,6 +129,11 @@
             <groupId>org.sbolstandard</groupId>
             <artifactId>libSBOLj</artifactId>
             <version>0.7.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cidarlab</groupId>
+            <artifactId>miniEugene</artifactId>
+            <version>1.0</version>
         </dependency>
         
         <!--  JUNit -->
