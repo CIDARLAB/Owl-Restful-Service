@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.cidarlab.eugene.Eugene;
@@ -26,10 +28,13 @@ import org.cidarlab.owldispatcher.Utilities;
  */
 public class EugeneAdaptor {
     
+    @Getter @Setter
+    private EugeneCollection collection;
+    
     
     // The XML-RPC client
     private XmlRpcClient client;
-
+    
     // The configuration of the XML-RPC client
     private XmlRpcClientConfigImpl config;
     
@@ -87,10 +92,10 @@ public class EugeneAdaptor {
             // the received object, is actually a EugeneCollection object
             if (object instanceof EugeneCollection) {
 
-                EugeneCollection results
+                this.collection
                         = (EugeneCollection) object;
-                if(results != null)
-                    System.out.println("Eugene Collection :: " + results.toString());
+                if(this.collection != null)
+                    System.out.println("Eugene Collection :: " + this.collection.toString());
                 else
                     System.out.println("Some problem here..");
                 
