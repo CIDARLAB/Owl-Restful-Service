@@ -6,10 +6,14 @@
 package org.cidarlab.owldispatcher.adaptors;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.cidarlab.eugene.Eugene;
+import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
@@ -21,7 +25,88 @@ import org.cidarlab.owldispatcher.Utilities;
  * @author prash
  */
 public class EugeneAdaptor {
+    
+    
+    // The XML-RPC client
+    private XmlRpcClient client;
 
+    // The configuration of the XML-RPC client
+    private XmlRpcClientConfigImpl config;
+    
+    public EugeneAdaptor()
+            throws Exception {
+
+        /*
+         * we instantiate a configuration for the XML-RPC client
+         */
+        this.config = new XmlRpcClientConfigImpl();
+
+        /*
+         * we configure the URL of the miniEugene XML-RPC Web service
+         */
+        this.config.setServerURL(new URL("http://cidar.bu.edu/miniEugeneXmlRpc/xmlrpc"));
+    
+        /*
+         * we enable extensions
+         */
+        this.config.setEnabledForExtensions(true);
+        this.config.setEnabledForExceptions(true);
+
+        /*
+         * then we instantiate the XML-RPC Client
+         * and configure it 
+         */
+        this.client = new XmlRpcClient();
+        this.client.setConfig(config);
+    }
+    
+    public void startEugeneXmlRpc(String script) throws Exception{
+        this.synchronousCall(script);
+    }
+    
+    /**
+     * The synchronousCall method invokes the miniEugene XML-RPC web service in
+     * a synchronous way. That is, we the client is blocked until the web
+     * service response.
+     *
+     * @param rules ... a set of miniEugene constraints
+     */
+    private void synchronousCall(String script)
+            throws Exception {
+
+        /*
+         * here, we invoke the executeEugene/1 method of 
+         * the miniEugene XML-RPC Web service
+         */
+        Object object = client.execute(
+                "MiniEugeneXmlRpc.executeEugene",
+                new Object[]{script});
+
+        if (null != object) {
+
+            // the received object, is actually a EugeneCollection object
+            if (object instanceof EugeneCollection) {
+
+                EugeneCollection results
+                        = (EugeneCollection) object;
+                if(results != null)
+                    System.out.println("Eugene Collection :: " + results.toString());
+                else
+                    System.out.println("Some problem here..");
+                
+                /*EugeneArray result
+                        = (EugeneArray) results.get("result");
+
+                // process the result array
+                System.out.println(result.size());
+                */
+            }
+
+        }
+
+    }
+	
+    
     public static EugeneCollection runEugene(String script) {
 
         try {

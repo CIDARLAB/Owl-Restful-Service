@@ -9,6 +9,8 @@ import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.ComponentType;
@@ -104,9 +106,16 @@ public class FastaAdaptorTest {
         String script = EugeneAdaptor.createEugeneScript(promoters,ribozymes,rbs,genes,terminators);
         System.out.println("\n\n######################## Script");
         System.out.println(script);
-        EugeneCollection collection = EugeneAdaptor.runEugene(script);
-        System.out.println("Collection :: \n" + collection.toString());
-
+        //System.out.println("\n\n######################## Run Eugene Locally");
+        //EugeneCollection collection = EugeneAdaptor.runEugene(script);
+        //System.out.println("Collection :: \n" + collection.toString());
+        
+        System.out.println("\n\n######################## Run Eugene via XmlRpc");
+        try {
+            new EugeneAdaptor().startEugeneXmlRpc(script);
+        } catch (Exception ex) {
+            Logger.getLogger(FastaAdaptorTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
