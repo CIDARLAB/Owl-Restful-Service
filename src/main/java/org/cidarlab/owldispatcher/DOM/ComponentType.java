@@ -11,5 +11,9 @@ package org.cidarlab.owldispatcher.DOM;
  */
 public enum ComponentType {
     protein,
-    gene
+    gene,
+    promoter,
+    ribozyme,
+    rbs,
+    terminator
 }

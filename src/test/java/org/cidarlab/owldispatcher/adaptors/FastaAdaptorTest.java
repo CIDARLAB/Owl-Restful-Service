@@ -27,13 +27,13 @@ import static org.junit.Assert.*;
  * @author prash
  */
 public class FastaAdaptorTest {
-    
+
     private static String user;
     private static String pass = "pass";
     private static String proj;
     public FastaAdaptorTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
@@ -44,19 +44,19 @@ public class FastaAdaptorTest {
         clothoObject.logout();
         conn.closeConnection();
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
-    
+
     @Test
     public void testFastaToClotho(){
         String username = user;
@@ -65,9 +65,10 @@ public class FastaAdaptorTest {
         String filepath = Utilities.getResourcesFilepath() + "test.fasta";
         String project = proj;
         List<String> dnacomponentNames = new ArrayList<String>();
+// can you pass a Sting name here instead of typing gene names?
         dnacomponentNames.add("gene1");
         dnacomponentNames.add("gene2");
-        
+
         System.out.println("\n\n######################## Fasta To Clotho");
         System.out.println(FastaAdaptor.fastaToClotho(username, password, filepath,project));
         System.out.println("\n\n######################## Fasta To Clotho");
@@ -78,14 +79,14 @@ public class FastaAdaptorTest {
         System.out.println(FastaAdaptor.getAllDNAComponents(username, password, project));
         System.out.println("\n\n######################## Get all DNA Component - Names");
         System.out.println(FastaAdaptor.getAllDNAComponents(username, password, project,dnacomponentNames));
-        
-        
+
+
         System.out.println("\n\n######################## Eugene Script");
-        
+
         List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project);
         EugeneCollection collection = EugeneAdaptor.runEugene(EugeneAdaptor.createEugeneScript(genes));
         System.out.println("Collection :: \n" + collection.toString());
-        
+
     }
-    
+
 }
