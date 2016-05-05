@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
+import org.cidarlab.owldispatcher.adaptors.ReverseTranslate;
 import org.json.JSONObject;
 
 /**
@@ -67,6 +68,17 @@ public class DNAcomponent {
         return map;
     }
     
+    public DNAcomponent reverseTranslate(){
+    
+        if(this.type.equals(ComponentType.PROTEIN)){
+            String geneSeq = ReverseTranslate.translate(this.sequence);
+            return new DNAcomponent(this.name,ComponentType.GENE,geneSeq);
+        }
+        else{
+            return null;
+        }
+    }
+    
     @Override
     public String toString(){
         String str = "";
@@ -82,4 +94,5 @@ public class DNAcomponent {
         }
         return comp;
     }
+    
 }

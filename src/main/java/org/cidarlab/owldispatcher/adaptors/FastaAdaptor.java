@@ -8,8 +8,10 @@ package org.cidarlab.owldispatcher.adaptors;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import net.sf.json.JSONArray;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.ComponentType;
@@ -20,7 +22,6 @@ import org.clothoapi.clotho3javaapi.Clotho;
 import org.clothoapi.clotho3javaapi.ClothoConnection;
 import org.json.JSONObject;
 
-
 /**
  *
  * @author prash
@@ -28,20 +29,44 @@ import org.json.JSONObject;
 public class FastaAdaptor {
     
     
-    /*private static void storeDNAcomponentInClotho(List<DNAcomponent> list, Clotho clothoObject){
-        
-    }*/
+    private static void setProjCompIds(List<String> finalIdList, ComponentType type, Project proj){
+        switch (type) {
+            case PROMOTER:
+                proj.setPromoters(finalIdList);
+                break;
+            case RIBOZYME:
+                proj.setRibozymes(finalIdList);
+                break;
+            case RBS:
+                proj.setRbs(finalIdList);
+                break;
+            case GENE:
+                proj.setGenes(finalIdList);
+                break;
+            case TERMINATOR:
+                proj.setTerminators(finalIdList);
+                break;
+            default:
+                break;
+        }
+    }
     
-    public static boolean fastaToClotho(String username, String password, InputStream fasta,String projectId){
+    public static boolean fastaToClotho(String username, String password, List<DNAcomponent> list, String projectId, ComponentType type) {
+        ComponentType modifiedType;
+        if(type.equals(ComponentType.PROTEIN)){
+            modifiedType = ComponentType.GENE;
+        }else{
+            modifiedType = type;
+        }
         
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
         Clotho clothoObject = new Clotho(conn);
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
+        Object loginRet = clothoObject.login(username, password);
+        if (loginRet == null) {
             conn.closeConnection();
             return false;
         }
-        if(loginRet.toString().equals("null")){
+        if (loginRet.toString().equals("null")) {
             conn.closeConnection();
             return false;
         }
@@ -49,131 +74,104 @@ public class FastaAdaptor {
             conn.closeConnection();
             return false;
         }
-        
-        
-        Object projObj = clothoObject.get(projectId);
-        if(projObj != null){
-            System.out.println("PROJECT EXISTS!!!");
-            clothoObject.logout();
-            conn.closeConnection();
+        Map projQuery = new HashMap();
+        projQuery.put("name", projectId);
+        projQuery.put("owner", username);
+        projQuery.put("schema", Project.class.getCanonicalName());
+        JSONArray projQueryResults = (JSONArray) clothoObject.query(projQuery);
+
+        if (projQueryResults == null) {
+            //Is this supposed to happen?
+            System.out.println("Project Query Returned a null in fasta To Clotho");
             return false;
         }
-        
-
-        //System.out.println("Proj :: " + projObj.toString());
-        
-        List<DNAcomponent> list = new ArrayList<>();
-        list = fastaToComponents(Utilities.getFileLines(fasta));
-        List<String> dnacompids = new ArrayList<String>();
-        for(DNAcomponent comp:list){
-            dnacompids.add((String)clothoObject.create(comp.getMap()));
+        if (projQueryResults.size() > 1) {
+            System.out.println("User has more than 1 project with the same Project Id. Please provide a unique project name");
+            return false;
         }
-        Project proj = new Project(projectId,dnacompids);
-        clothoObject.create(proj.getMap());
+        boolean newProject = false;
+        if (projQueryResults.isEmpty()) {
+            newProject = true;
+        }
+
+        boolean typeExists = false;
+        List<DNAcomponent> existingComponents = new ArrayList<DNAcomponent>();
+        Set<String> existingNames = new HashSet<String>();
+        Set<String> existingIds = new HashSet<String>();
+        if (!newProject) {
+            List<String> typeIds = new ArrayList<String>();
+            typeIds = (List<String>) (((Map) projQueryResults.get(0)).get(modifiedType.toString().toLowerCase()));
+            if (!typeIds.isEmpty()) {
+                for (String id : typeIds) {
+                    Map compMap = new HashMap();
+                    compMap = (Map) clothoObject.get(id);
+                    existingComponents.add(DNAcomponent.fromMap(compMap));
+                    existingNames.add((String) compMap.get("name"));
+                    existingIds.add((String)compMap.get("id"));
+                }
+                typeExists = true;
+            }
+        }
+        
+        if(newProject){
+            Project proj = new Project(projectId,username);
+            List<String> finalIdList = new ArrayList<String>();
+            for (DNAcomponent comp : list) {
+                finalIdList.add((String) clothoObject.create(comp.getMap()));
+            }
+            setProjCompIds(finalIdList, modifiedType,proj);
+            clothoObject.create(proj.getMap());
+        }
+        else{
+            Project proj = Project.fromMap((Map)(projQueryResults.get(0)));
+            List<String> dnacompids = new ArrayList<String>();
+            List<String> finalIdList = new ArrayList<String>();
+            if (typeExists) {
+                for (DNAcomponent comp : list) {
+                    if (!existingNames.contains(comp.getName())) {
+                        dnacompids.add((String) clothoObject.create(comp.getMap()));
+                    }
+                }
+                finalIdList.addAll(dnacompids);
+                finalIdList.addAll(existingIds);
+            } else {
+                for (DNAcomponent comp : list) {
+                    finalIdList.add((String) clothoObject.create(comp.getMap()));
+                }
+            }
+            setProjCompIds(finalIdList, modifiedType,proj);
+            clothoObject.set(proj.getMap());
+        }
+        
         clothoObject.logout();
         conn.closeConnection();
         return true;
     }
-    
-    
-    public static boolean fastaToClotho(String username, String password, InputStream fasta,String projectId, ComponentType type){
-        
-        ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
-        Clotho clothoObject = new Clotho(conn);
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
-            conn.closeConnection();
-            return false;
-        }
-        if(loginRet.toString().equals("null")){
-            conn.closeConnection();
-            return false;
-        }
-        if (loginRet.toString().startsWith("Authentication attempt failed for username")) {
-            conn.closeConnection();
-            return false;
-        }
-        
-        
-        Object projObj = clothoObject.get(projectId);
-        if(projObj != null){
-            System.out.println("PROJECT EXISTS!!!");
-            clothoObject.logout();
-            conn.closeConnection();
-            return false;
-        }
-        
 
-        //System.out.println("Proj :: " + projObj.toString());
+    public static boolean fastaToClotho(String username, String password, InputStream fasta, String projectId, ComponentType type) {
+
+        List<DNAcomponent> list = new ArrayList<>();
+        list = fastaToComponents(Utilities.getFileLines(fasta), type);
+        return fastaToClotho(username, password, list, projectId, type);
+    }
+
+    public static boolean fastaToClotho(String username, String password, String filepath, String projectId, ComponentType type) {
         
         List<DNAcomponent> list = new ArrayList<>();
-        list = fastaToComponents(Utilities.getFileLines(fasta));
-        List<String> dnacompids = new ArrayList<String>();
-        for(DNAcomponent comp:list){
-            dnacompids.add((String)clothoObject.create(comp.getMap()));
-        }
-        Project proj = new Project(projectId,dnacompids);
-        clothoObject.create(proj.getMap());
-        clothoObject.logout();
-        conn.closeConnection();
-        return true;
+        list = fastaToComponents(Utilities.getFileLines(filepath), type);
+        return fastaToClotho(username, password, list, projectId, type);
     }
-    
-    
-    public static boolean fastaToClotho(String username, String password, String filepath,String projectId){
-        
-        ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
-        Clotho clothoObject = new Clotho(conn);
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
-            conn.closeConnection();
-            return false;
-        }
-        if(loginRet.toString().equals("null")){
-            conn.closeConnection();
-            return false;
-        }
-        if (loginRet.toString().startsWith("Authentication attempt failed for username")) {
-            conn.closeConnection();
-            return false;
-        }
-        
-        
-        Object projObj = clothoObject.get(projectId);
-        if(projObj != null){
-            System.out.println("PROJECT EXISTS!!!");
-            clothoObject.logout();
-            conn.closeConnection();
-            return false;
-        }
-        
 
-        //System.out.println("Proj :: " + projObj.toString());
-        
-        List<DNAcomponent> list = new ArrayList<>();
-        list = fastaToComponents(Utilities.getFileLines(filepath));
-        List<String> dnacompids = new ArrayList<String>();
-        for(DNAcomponent comp:list){
-            dnacompids.add((String)clothoObject.create(comp.getMap()));
-        }
-        Project proj = new Project(projectId,dnacompids);
-        clothoObject.create(proj.getMap());
-        clothoObject.logout();
-        conn.closeConnection();
-        return true;
-    }
-    
-    
-    public static List<DNAcomponent> getAllDNAComponents(String username, String password,String projectId,List<String> DNAcomponentNames){
+    public static List<DNAcomponent> getAllDNAComponents(String username, String password, String projectId, List<String> DNAcomponentNames) {
         List<DNAcomponent> components = new ArrayList<DNAcomponent>();
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
         Clotho clothoObject = new Clotho(conn);
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
+        Object loginRet = clothoObject.login(username, password);
+        if (loginRet == null) {
             conn.closeConnection();
             return null;
         }
-        if(loginRet.toString().equals("null")){
+        if (loginRet.toString().equals("null")) {
             conn.closeConnection();
             return null;
         }
@@ -182,8 +180,12 @@ public class FastaAdaptor {
             return null;
         }
         
-        Map projObj = (Map)clothoObject.get(projectId);
-        if(projObj == null){
+        Map projQuery = new HashMap();
+        projQuery.put("name", projectId);
+        projQuery.put("owner",username);
+        projQuery.put("schema", Project.class.getCanonicalName());
+        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
             conn.closeConnection();
@@ -192,30 +194,45 @@ public class FastaAdaptor {
         
         //System.out.println("Project Object :: " + projObj.toString());
         List<String> componentids = new ArrayList<String>();
-        componentids = (List<String>)projObj.get("dnacomponentIds");
+        List<String> promoterIds = new ArrayList<String>();
+        List<String> ribozymeIds = new ArrayList<String>();
+        List<String> rbsIds = new ArrayList<String>();
+        List<String> geneIds = new ArrayList<String>();
+        List<String> terminatorIds = new ArrayList<String>();
+        promoterIds = (List<String>) projObj.get(ComponentType.PROMOTER.toString().toLowerCase());
+        ribozymeIds = (List<String>) projObj.get(ComponentType.RIBOZYME.toString().toLowerCase());
+        rbsIds = (List<String>) projObj.get(ComponentType.RBS.toString().toLowerCase());
+        geneIds = (List<String>) projObj.get(ComponentType.GENE.toString().toLowerCase());
+        terminatorIds = (List<String>) projObj.get(ComponentType.TERMINATOR.toString().toLowerCase());
         
-        for(String componentid:componentids){
-            Map dnaObj = (Map)clothoObject.get(componentid);
-            if(DNAcomponentNames.contains((String)dnaObj.get("name"))){
-                    components.add(DNAcomponent.fromMap(dnaObj));
+        componentids.addAll(promoterIds);
+        componentids.addAll(ribozymeIds);
+        componentids.addAll(rbsIds);
+        componentids.addAll(geneIds);
+        componentids.addAll(terminatorIds);
+        
+        
+        for (String componentid : componentids) {
+            Map dnaObj = (Map) clothoObject.get(componentid);
+            if (DNAcomponentNames.contains((String) dnaObj.get("name"))) {
+                components.add(DNAcomponent.fromMap(dnaObj));
             }
         }
         clothoObject.logout();
         conn.closeConnection();
         return components;
     }
-    
-    
-    public static List<DNAcomponent> getAllDNAComponents(String username, String password,String projectId){
+
+    public static List<DNAcomponent> getAllDNAComponents(String username, String password, String projectId, ComponentType type) {
         List<DNAcomponent> components = new ArrayList<DNAcomponent>();
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
         Clotho clothoObject = new Clotho(conn);
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
+        Object loginRet = clothoObject.login(username, password);
+        if (loginRet == null) {
             conn.closeConnection();
             return null;
         }
-        if(loginRet.toString().equals("null")){
+        if (loginRet.toString().equals("null")) {
             conn.closeConnection();
             return null;
         }
@@ -224,8 +241,12 @@ public class FastaAdaptor {
             return null;
         }
         
-        Map projObj = (Map)clothoObject.get(projectId);
-        if(projObj == null){
+        Map projQuery = new HashMap();
+        projQuery.put("name", projectId);
+        projQuery.put("owner",username);
+        projQuery.put("schema", Project.class.getCanonicalName());
+        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
             conn.closeConnection();
@@ -234,28 +255,85 @@ public class FastaAdaptor {
         
         //System.out.println("Project Object :: " + projObj.toString());
         List<String> componentids = new ArrayList<String>();
-        componentids = (List<String>)projObj.get("dnacomponentIds");
+        componentids = (List<String>) projObj.get(type.toString().toLowerCase());
         
-        for(String componentid:componentids){
-            Map dnaObj = (Map)clothoObject.get(componentid);
+        for (String componentid : componentids) {
+            Map dnaObj = (Map) clothoObject.get(componentid);
+                components.add(DNAcomponent.fromMap(dnaObj));
+        }
+        clothoObject.logout();
+        conn.closeConnection();
+        return components;
+    }
+    
+    public static List<DNAcomponent> getAllDNAComponents(String username, String password, String projectId) {
+        List<DNAcomponent> components = new ArrayList<DNAcomponent>();
+        ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
+        Clotho clothoObject = new Clotho(conn);
+        Object loginRet = clothoObject.login(username, password);
+        if (loginRet == null) {
+            conn.closeConnection();
+            return null;
+        }
+        if (loginRet.toString().equals("null")) {
+            conn.closeConnection();
+            return null;
+        }
+        if (loginRet.toString().startsWith("Authentication attempt failed for username")) {
+            conn.closeConnection();
+            return null;
+        }
+
+        Map projQuery = new HashMap();
+        projQuery.put("name", projectId);
+        projQuery.put("owner",username);
+        projQuery.put("schema", Project.class.getCanonicalName());
+        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        if (projObj == null) {
+            System.out.println("PROJECT DOES NOT EXIST!!!");
+            clothoObject.logout();
+            conn.closeConnection();
+            return null;
+        }
+
+        //System.out.println("Project Object :: " + projObj.toString());
+        List<String> componentids = new ArrayList<String>();
+        List<String> promoterIds = new ArrayList<String>();
+        List<String> ribozymeIds = new ArrayList<String>();
+        List<String> rbsIds = new ArrayList<String>();
+        List<String> geneIds = new ArrayList<String>();
+        List<String> terminatorIds = new ArrayList<String>();
+        promoterIds = (List<String>) projObj.get(ComponentType.PROMOTER.toString().toLowerCase());
+        ribozymeIds = (List<String>) projObj.get(ComponentType.RIBOZYME.toString().toLowerCase());
+        rbsIds = (List<String>) projObj.get(ComponentType.RBS.toString().toLowerCase());
+        geneIds = (List<String>) projObj.get(ComponentType.GENE.toString().toLowerCase());
+        terminatorIds = (List<String>) projObj.get(ComponentType.TERMINATOR.toString().toLowerCase());
+        
+        componentids.addAll(promoterIds);
+        componentids.addAll(ribozymeIds);
+        componentids.addAll(rbsIds);
+        componentids.addAll(geneIds);
+        componentids.addAll(terminatorIds);
+
+        for (String componentid : componentids) {
+            Map dnaObj = (Map) clothoObject.get(componentid);
             components.add(DNAcomponent.fromMap(dnaObj));
         }
         clothoObject.logout();
         conn.closeConnection();
         return components;
     }
-    
-    public static List<String> listAllDNAComponents(String username, String password,String projectId){
-        List<String> componentids = new ArrayList<String>();
+
+    public static List<String> listAllDNAComponents(String username, String password, String projectId) {
         ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
         Clotho clothoObject = new Clotho(conn);
-        
-        Object loginRet = clothoObject.login(username,password);
-        if(loginRet == null){
+
+        Object loginRet = clothoObject.login(username, password);
+        if (loginRet == null) {
             conn.closeConnection();
             return null;
         }
-        if(loginRet.toString().equals("null")){
+        if (loginRet.toString().equals("null")) {
             conn.closeConnection();
             return null;
         }
@@ -263,51 +341,85 @@ public class FastaAdaptor {
             conn.closeConnection();
             return null;
         }
-        
-        Map projObj = (Map)clothoObject.get(projectId);
-        if(projObj == null){
+
+        Map projQuery = new HashMap();
+        projQuery.put("name", projectId);
+        projQuery.put("owner",username);
+        projQuery.put("schema", Project.class.getCanonicalName());
+        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
             conn.closeConnection();
             return null;
         }
-        
+
         //System.out.println("Project Object :: " + projObj.toString());
-        componentids = (List<String>)projObj.get("dnacomponentIds");
-        List<String> componentNames = new ArrayList<String>();
+        List<String> componentids = new ArrayList<String>();
+        List<String> promoterIds = new ArrayList<String>();
+        List<String> ribozymeIds = new ArrayList<String>();
+        List<String> rbsIds = new ArrayList<String>();
+        List<String> geneIds = new ArrayList<String>();
+        List<String> terminatorIds = new ArrayList<String>();
+        promoterIds = (List<String>) projObj.get(ComponentType.PROMOTER.toString().toLowerCase());
+        ribozymeIds = (List<String>) projObj.get(ComponentType.RIBOZYME.toString().toLowerCase());
+        rbsIds = (List<String>) projObj.get(ComponentType.RBS.toString().toLowerCase());
+        geneIds = (List<String>) projObj.get(ComponentType.GENE.toString().toLowerCase());
+        terminatorIds = (List<String>) projObj.get(ComponentType.TERMINATOR.toString().toLowerCase());
         
-        for(String componentid:componentids){
-            Map dnaObj = (Map)clothoObject.get(componentid);
-            componentNames.add((String)dnaObj.get("name"));
+        componentids.addAll(promoterIds);
+        componentids.addAll(ribozymeIds);
+        componentids.addAll(rbsIds);
+        componentids.addAll(geneIds);
+        componentids.addAll(terminatorIds);
+        List<String> componentNames = new ArrayList<String>();
+
+        for (String componentid : componentids) {
+            Map dnaObj = (Map) clothoObject.get(componentid);
+            componentNames.add((String) dnaObj.get("name"));
         }
         clothoObject.logout();
         conn.closeConnection();
         return componentNames;
     }
-    
-    public static List<DNAcomponent> fastaToComponents(List<String> lines){
+
+    public static List<DNAcomponent> fastaToComponents(List<String> lines, ComponentType type) {
         List<DNAcomponent> list = new ArrayList();
-        String name="";
-        String seq="";
-        for(String line:lines){
-            
-            if(line.startsWith(">") && (line.trim().length()>1)){
-                if(!seq.isEmpty() && !name.isEmpty()){
-                    String dnaSeq = ReverseTranslate.translate(seq);
-                    DNAcomponent comp = new DNAcomponent(name,ComponentType.gene,dnaSeq);
-                    list.add(comp);
+        String name = "";
+        String seq = "";
+        for (String line : lines) {
+
+            if (line.startsWith(">") && (line.trim().length() > 1)) {
+                if (!seq.isEmpty() && !name.isEmpty()) {
+                    if (type.equals(ComponentType.PROTEIN)) {
+                        String dnaSeq = ReverseTranslate.translate(seq);
+                        DNAcomponent comp = new DNAcomponent(name, ComponentType.GENE, dnaSeq);
+                        list.add(comp);
+                    }
+                    else{
+                        DNAcomponent comp = new DNAcomponent(name, type, seq);
+                        list.add(comp);
+                    
+                    }
                     seq = "";
                 }
                 name = line.substring(1);
-            }else{
+            } else {
                 seq += line;
             }
         }
-        if(!name.isEmpty() && !seq.isEmpty()){
-            DNAcomponent comp = new DNAcomponent(name,ComponentType.gene,seq);
-            list.add(comp);
+        if (!name.isEmpty() && !seq.isEmpty()) {
+            if (type.equals(ComponentType.PROTEIN)) {
+                String dnaSeq = ReverseTranslate.translate(seq);
+                DNAcomponent comp = new DNAcomponent(name, ComponentType.GENE, dnaSeq);
+                list.add(comp);
+            } else {
+                DNAcomponent comp = new DNAcomponent(name, type, seq);
+                list.add(comp);
+
+            }
         }
         return list;
-    } 
-    
+    }
+
 }

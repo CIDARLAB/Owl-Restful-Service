@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.owldispatcher.Args;
+import org.cidarlab.owldispatcher.DOM.ComponentType;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
 import org.cidarlab.owldispatcher.Utilities;
 import org.clothoapi.clotho3javaapi.Clotho;
@@ -62,17 +63,27 @@ public class FastaAdaptorTest {
         String username = user;
         String password = pass;
         System.out.println("Username :: " + user + "\nPassword :: " + password);
-        String filepath = Utilities.getResourcesFilepath() + "test.fasta";
+        String promoterfilepath = Utilities.getResourcesFilepath() + "promoters.fasta";
+        String ribozymefilepath = Utilities.getResourcesFilepath() + "ribozymes.fasta";
+        String rbsfilepath = Utilities.getResourcesFilepath() + "rbs.fasta";
+        String genefilepath = Utilities.getResourcesFilepath() + "proteins.fasta";
+        String terminatorfilepath = Utilities.getResourcesFilepath() + "terminators.fasta";
         String project = proj;
+
         List<String> dnacomponentNames = new ArrayList<String>();
-// can you pass a Sting name here instead of typing gene names?
         dnacomponentNames.add("gene1");
         dnacomponentNames.add("gene2");
 
-        System.out.println("\n\n######################## Fasta To Clotho");
-        System.out.println(FastaAdaptor.fastaToClotho(username, password, filepath,project));
-        System.out.println("\n\n######################## Fasta To Clotho");
-        System.out.println(FastaAdaptor.fastaToClotho(username, password, filepath,project));
+        System.out.println("\n\n######################## Fasta To Clotho Promoters");
+        System.out.println(FastaAdaptor.fastaToClotho(username, password, promoterfilepath,project,ComponentType.PROMOTER));
+        System.out.println("\n\n######################## Fasta To Clotho Ribozymes");
+        System.out.println(FastaAdaptor.fastaToClotho(username, password, ribozymefilepath,project,ComponentType.RIBOZYME));
+        System.out.println("\n\n######################## Fasta To Clotho RBS");
+        System.out.println(FastaAdaptor.fastaToClotho(username, password, rbsfilepath,project,ComponentType.RBS));
+        System.out.println("\n\n######################## Fasta To Clotho Proteins");
+        System.out.println(FastaAdaptor.fastaToClotho(username, password, genefilepath,project,ComponentType.PROTEIN));
+        System.out.println("\n\n######################## Fasta To Clotho Terminators");
+        System.out.println(FastaAdaptor.fastaToClotho(username, password, terminatorfilepath,project,ComponentType.TERMINATOR));
         System.out.println("\n\n######################## List all DNA Components");
         System.out.println(FastaAdaptor.listAllDNAComponents(username, password, project));
         System.out.println("\n\n######################## Get all DNA Components");
@@ -82,9 +93,18 @@ public class FastaAdaptorTest {
 
 
         System.out.println("\n\n######################## Eugene Script");
-
-        List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project);
-        EugeneCollection collection = EugeneAdaptor.runEugene(EugeneAdaptor.createEugeneScript(genes));
+        
+        List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
+        List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
+        List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
+        List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
+        List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
+        
+        
+        String script = EugeneAdaptor.createEugeneScript(promoters,ribozymes,rbs,genes,terminators);
+        System.out.println("\n\n######################## Script");
+        System.out.println(script);
+        EugeneCollection collection = EugeneAdaptor.runEugene(script);
         System.out.println("Collection :: \n" + collection.toString());
 
     }

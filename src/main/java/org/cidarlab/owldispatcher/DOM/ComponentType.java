@@ -10,10 +10,10 @@ package org.cidarlab.owldispatcher.DOM;
  * @author prash
  */
 public enum ComponentType {
-    protein,
-    gene,
-    promoter,
-    ribozyme,
-    rbs,
-    terminator
+    PROTEIN,
+    GENE,
+    PROMOTER,
+    RIBOZYME,
+    RBS,
+    TERMINATOR
 }

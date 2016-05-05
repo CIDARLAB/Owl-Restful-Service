@@ -22,7 +22,7 @@ import org.cidarlab.owldispatcher.Utilities;
  */
 public class EugeneAdaptor {
 
-    public static EugeneCollection runEugene(String script){
+    public static EugeneCollection runEugene(String script) {
 
         try {
             Eugene eugene = new Eugene();
@@ -36,7 +36,8 @@ public class EugeneAdaptor {
 
 // pass Boolean withRybozyme
 // pass String dropdownList
-    public static String createEugeneScript(List<DNAcomponent> genes, List<DNAcomponent> promoters, List<DNAcomponent> ribozymes, List<DNAcomponent> rbses, List<DNAcomponent> terminators){
+    
+    public static String createEugeneScript(List<DNAcomponent> promoters,  List<DNAcomponent> ribozymes, List<DNAcomponent> rbsList,  List<DNAcomponent> genes, List<DNAcomponent> terminators) {
         String script = "";
         script += "//COMMON PARTS AND PROPERTIES\n"
                 + "Property name(txt);\n"
@@ -47,81 +48,76 @@ public class EugeneAdaptor {
                 + "PartType CDS(name);\n"
                 + "PartType Terminator(name);\n";
 
-        int count =1;
-        for(DNAcomponent gene:genes){
-            String cds = "CDS g" + count++ +"(.SEQUENCE(\""+gene.getSequence()+"\"), .name(\""+gene.getName()+"\"));";
-            cds += "\n";
-            script += cds;
+        int count = 1;
+        for (DNAcomponent gene : genes) {
+            script += "CDS g" + count++ + "(.SEQUENCE(\"" + gene.getSequence() + "\"), .name(\"" + gene.getName() + "\"));";
+            script += "\n";
         }
 
         script += "num N = " + genes.size() + ";\n";
 
-        count =1;
-        for(DNAcomponent promoter:promoters){
-            String prom = "Promoter p" + count++ +"(.SEQUENCE(\""+promoter.getSequence()+"\"), .name(\""+promoter.getName()+"\"));";
-            prom += "\n";
-            script += prom;
+        count = 1;
+        for (DNAcomponent promoter : promoters) {
+            script += "Promoter p" + count++ + "(.SEQUENCE(\"" + promoter.getSequence() + "\"), .name(\"" + promoter.getName() + "\"));";
+            script += "\n";
         }
 
-// Ribozyme is optional and may not be in the project! Needs a check to see if components exist in Clotho?
-        count =1;
-        for(DNAcomponent ribozyme:ribozymes){
-            String ri = "Ribozyme ri" + count++ +"(.SEQUENCE(\""+ribozyme.getSequence()+"\"), .name(\""+ribozyme.getName()+"\"));";
-            ri += "\n";
-            script += ri;
+        // Ribozyme is optional and may not be in the project! Needs a check to see if components exist in Clotho?
+        count = 1;
+        for (DNAcomponent ribozyme : ribozymes) {
+            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"));";
+            script += "\n";
         }
 
-        count =1;
-        for(DNAcomponent rbs:rbses){
-            String _rbs = "RBS rbs" + count++ +"(.SEQUENCE(\""+rbs.getSequence()+"\"), .name(\""+rbs.getName()+"\"));";
-            _rbs += "\n";
-            script += _rbs;
+        count = 1;
+        for (DNAcomponent rbs : rbsList) {
+            script += "RBS rbs" + count++ + "(.SEQUENCE(\"" + rbs.getSequence() + "\"), .name(\"" + rbs.getName() + "\"));";
+            script += "\n";
         }
 
-        count =1;
-        for(DNAcomponent terminator:terminators){
-            String arnold = "Terminator t" + count++ +"(.SEQUENCE(\""+terminator.getSequence()+"\"), .name(\""+terminator.getName()+"\"));";
-            arnold += "\n";
-            script += arnold;
+        count = 1;
+        for (DNAcomponent terminator : terminators) {
+            script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"" + terminator.getName() + "\"));";
+            script += "\n";
         }
-/*
-        script += "Promoter pBla(.SEQUENCE(\"TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG\"), .name(\"BBa_I14018\"));\n"
-                + "Promoter p2(.SEQUENCE(\"TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC\"), .name(\"BBa_J23100\"));\n"
-                + "\n"
-                + "RBS rbs1(.SEQUENCE(\"GAAAGAGGGGACAA\"), .name(\"rbs1\"));\n"
-                + "RBS rbs2(.SEQUENCE(\"GAAAGACAGGACCC\"), .name(\"rbs2\"));\n"
-                + "RBS rbs3(.SEQUENCE(\"GAAAGATCCGATGT\"), .name(\"rbs3\"));\n"
-                + "RBS rbs4(.SEQUENCE(\"GAAAGATTAGACAA\"), .name(\"rbs4\"));\n"
-                + "\n"
-                + "Terminator t1(.SEQUENCE(\"TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA\"), .name(\"BBa_B0012\"));\n"
-                + "\n"
-                + "Insulator ri(.SEQUENCE(\"AAAAAAAAAAAAA\"), .name(\"Rybozyme_insulator\"), .PIGEON(\"z ri 13\"));\n"
-                + "\n"
-                + "\n"
-*/
-                + "// Ribozyme (TRUE is with; FALSE is without); Default is TRUE.\n"
-//=============================================================================
-// DMITRY will pass Boolean withRybozyme, from JIRA, instead of the word "true" here.
-//              + "boolean riboz = " + withRibozyme + ";\n"
+        /*
+         script += "Promoter pBla(.SEQUENCE(\"TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG\"), .name(\"BBa_I14018\"));\n"
+         + "Promoter p2(.SEQUENCE(\"TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC\"), .name(\"BBa_J23100\"));\n"
+         + "\n"
+         + "RBS rbs1(.SEQUENCE(\"GAAAGAGGGGACAA\"), .name(\"rbs1\"));\n"
+         + "RBS rbs2(.SEQUENCE(\"GAAAGACAGGACCC\"), .name(\"rbs2\"));\n"
+         + "RBS rbs3(.SEQUENCE(\"GAAAGATCCGATGT\"), .name(\"rbs3\"));\n"
+         + "RBS rbs4(.SEQUENCE(\"GAAAGATTAGACAA\"), .name(\"rbs4\"));\n"
+         + "\n"
+         + "Terminator t1(.SEQUENCE(\"TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA\"), .name(\"BBa_B0012\"));\n"
+         + "\n"
+         + "Insulator ri(.SEQUENCE(\"AAAAAAAAAAAAA\"), .name(\"Rybozyme_insulator\"), .PIGEON(\"z ri 13\"));\n"
+         + "\n"
+         + "\n"
+         */
+        script += "// Ribozyme (TRUE is with; FALSE is without); Default is TRUE.\n"
+                //=============================================================================
+                // DMITRY will pass Boolean withRybozyme, from JIRA, instead of the word "true" here.
+                //              + "boolean riboz = " + withRibozyme + ";\n"
                 + "boolean riboz = true;\n"
-//=============================================================================
+                //=============================================================================
                 + "//==========================================\n"
                 + "//==========================================\n"
                 + "\n"
-/*
-                + "// Define partTypes. \n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/common.h\";\n"
-                + "// PART LIBRARY\n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/promoter_library.eug\";\n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/insulator_library.eug\";\n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/RBS_library.eug\";\n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/gene_library.eug\";\n"
-                + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/terminator_library.eug\";\n"
-                + "\n"
-*/
-//==============================================================================
-// TO_DO: This is the place where we will have to check for dropdownList
-//==============================================================================
+                /*
+                 + "// Define partTypes. \n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/common.h\";\n"
+                 + "// PART LIBRARY\n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/promoter_library.eug\";\n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/insulator_library.eug\";\n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/RBS_library.eug\";\n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/gene_library.eug\";\n"
+                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/terminator_library.eug\";\n"
+                 + "\n"
+                 */
+                //==============================================================================
+                // TO_DO: This is the place where we will have to check for dropdownList
+                //==============================================================================
                 + "Device Exhaustive();\n"
                 + "Rule r1(on Exhaustive: ALL_FORWARD);\n"
                 + "\n"
@@ -141,8 +137,8 @@ public class EugeneAdaptor {
                 + "  Terminator${\"t\"+i};\n"
                 + "}\n"
                 + "\n"
-// pass String dropdownList instead of "Exhaustive"
-//              + "lod = product(" + dropdownList + ");\n"
+                // pass String dropdownList instead of "Exhaustive"
+                //              + "lod = product(" + dropdownList + ");\n"
                 + "lod = product(Exhaustive);\n"
                 + "//for (num i=0; i<sizeof(lod); i=i+1) {\n"
                 + "//  println(sequence_of(lod[i]));\n"
