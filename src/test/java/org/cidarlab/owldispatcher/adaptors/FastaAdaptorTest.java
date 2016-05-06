@@ -110,8 +110,8 @@ public class FastaAdaptorTest {
         map.put(ComponentType.GENE, genes);
         map.put(ComponentType.TERMINATOR, terminators);
         
-        
-        String script = EugeneAdaptor.createEugeneScript(map);
+ 
+        String script = EugeneAdaptor.createEugeneScript(map,ribozymes.size() > 0);
         System.out.println("\n\n######################## Script");
         System.out.println(script);
         //System.out.println("\n\n######################## Run Eugene Locally");
