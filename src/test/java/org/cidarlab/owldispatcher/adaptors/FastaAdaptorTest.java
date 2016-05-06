@@ -7,6 +7,7 @@ package org.cidarlab.owldispatcher.adaptors;
 
 import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -102,17 +103,26 @@ public class FastaAdaptorTest {
         List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
         List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
         
+        Map<ComponentType,List<DNAcomponent>> map = new HashMap<ComponentType,List<DNAcomponent>>();
+        map.put(ComponentType.PROMOTER, promoters);
+        map.put(ComponentType.RIBOZYME, ribozymes);
+        map.put(ComponentType.RBS, rbs);
+        map.put(ComponentType.GENE, genes);
+        map.put(ComponentType.TERMINATOR, terminators);
         
-        String script = EugeneAdaptor.createEugeneScript(promoters,ribozymes,rbs,genes,terminators);
+        
+        String script = EugeneAdaptor.createEugeneScript(map);
         System.out.println("\n\n######################## Script");
         System.out.println(script);
         //System.out.println("\n\n######################## Run Eugene Locally");
         //EugeneCollection collection = EugeneAdaptor.runEugene(script);
         //System.out.println("Collection :: \n" + collection.toString());
-        
+        EugeneAdaptor eugAdp;
         System.out.println("\n\n######################## Run Eugene via XmlRpc");
         try {
-            new EugeneAdaptor().startEugeneXmlRpc(script);
+            eugAdp = new EugeneAdaptor();
+            eugAdp.startEugeneXmlRpc(script);
+            System.out.println(eugAdp.getCollection());
         } catch (Exception ex) {
             Logger.getLogger(FastaAdaptorTest.class.getName()).log(Level.SEVERE, null, ex);
         }

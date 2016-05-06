@@ -8,6 +8,7 @@ package org.cidarlab.owldispatcher.adaptors;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
+import org.cidarlab.owldispatcher.DOM.ComponentType;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
 import org.cidarlab.owldispatcher.Utilities;
 
@@ -94,11 +96,11 @@ public class EugeneAdaptor {
 
                 this.collection
                         = (EugeneCollection) object;
-                if(this.collection != null)
+                /*if(this.collection != null)
                     System.out.println("Eugene Collection :: " + this.collection.toString());
                 else
                     System.out.println("Some problem here..");
-                
+                */
                 /*EugeneArray result
                         = (EugeneArray) results.get("result");
 
@@ -126,6 +128,12 @@ public class EugeneAdaptor {
 
 // pass Boolean withRybozyme
 // pass String dropdownList
+    
+    
+    public static String createEugeneScript(Map<ComponentType,List<DNAcomponent>> componentmap){
+        return createEugeneScript(componentmap.get(ComponentType.PROMOTER),componentmap.get(ComponentType.RIBOZYME),componentmap.get(ComponentType.RBS),componentmap.get(ComponentType.GENE),componentmap.get(ComponentType.TERMINATOR));
+    }
+    
     
     public static String createEugeneScript(List<DNAcomponent> promoters,  List<DNAcomponent> ribozymes, List<DNAcomponent> rbsList,  List<DNAcomponent> genes, List<DNAcomponent> terminators) {
         String script = "";
