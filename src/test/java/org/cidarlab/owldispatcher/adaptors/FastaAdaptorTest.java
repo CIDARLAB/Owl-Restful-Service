@@ -103,7 +103,7 @@ public class FastaAdaptorTest {
         List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
         
         
-        String script = EugeneAdaptor.createEugeneScript(promoters,ribozymes,rbs,genes,terminators);
+        String script = EugeneAdaptor.createEugeneScript(promoters,ribozymes,rbs,genes,terminators, ribozymes.size() > 0);
         System.out.println("\n\n######################## Script");
         System.out.println(script);
         //System.out.println("\n\n######################## Run Eugene Locally");

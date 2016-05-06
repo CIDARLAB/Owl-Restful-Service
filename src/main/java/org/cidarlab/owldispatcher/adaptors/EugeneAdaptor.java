@@ -127,7 +127,13 @@ public class EugeneAdaptor {
 // pass Boolean withRybozyme
 // pass String dropdownList
     
-    public static String createEugeneScript(List<DNAcomponent> promoters,  List<DNAcomponent> ribozymes, List<DNAcomponent> rbsList,  List<DNAcomponent> genes, List<DNAcomponent> terminators) {
+    public static String createEugeneScript(
+		List<DNAcomponent> promoters,  
+		List<DNAcomponent> ribozymes, 
+		List<DNAcomponent> rbsList,  
+		List<DNAcomponent> genes, 
+		List<DNAcomponent> terminators,
+		boolean withRibozyme) {
         String script = "";
         script += "//COMMON PARTS AND PROPERTIES\n"
                 + "Property name(txt);\n"
@@ -189,7 +195,7 @@ public class EugeneAdaptor {
                 //=============================================================================
                 // DMITRY will pass Boolean withRybozyme, from JIRA, instead of the word "true" here.
                 //              + "boolean riboz = " + withRibozyme + ";\n"
-                + "boolean riboz = true;\n"
+                + "boolean riboz = " + withRibozyme + ";\n"
                 //=============================================================================
                 + "//==========================================\n"
                 + "//==========================================\n"
