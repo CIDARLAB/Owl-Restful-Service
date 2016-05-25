@@ -29,17 +29,17 @@ import org.cidarlab.owldispatcher.Utilities;
  * @author prash
  */
 public class EugeneAdaptor {
-    
+
     @Getter @Setter
     private EugeneCollection collection;
-    
-    
+
+
     // The XML-RPC client
     private XmlRpcClient client;
-    
+
     // The configuration of the XML-RPC client
     private XmlRpcClientConfigImpl config;
-    
+
     public EugeneAdaptor()
             throws Exception {
 
@@ -52,7 +52,7 @@ public class EugeneAdaptor {
          * we configure the URL of the miniEugene XML-RPC Web service
          */
         this.config.setServerURL(new URL("http://cidar.bu.edu/miniEugeneXmlRpc/xmlrpc"));
-    
+
         /*
          * we enable extensions
          */
@@ -61,16 +61,16 @@ public class EugeneAdaptor {
 
         /*
          * then we instantiate the XML-RPC Client
-         * and configure it 
+         * and configure it
          */
         this.client = new XmlRpcClient();
         this.client.setConfig(config);
     }
-    
+
     public void startEugeneXmlRpc(String script) throws Exception{
         this.synchronousCall(script);
     }
-    
+
     /**
      * The synchronousCall method invokes the miniEugene XML-RPC web service in
      * a synchronous way. That is, we the client is blocked until the web
@@ -82,7 +82,7 @@ public class EugeneAdaptor {
             throws Exception {
 
         /*
-         * here, we invoke the executeEugene/1 method of 
+         * here, we invoke the executeEugene/1 method of
          * the miniEugene XML-RPC Web service
          */
         Object object = client.execute(
@@ -112,8 +112,8 @@ public class EugeneAdaptor {
         }
 
     }
-	
-    
+
+
     public static EugeneCollection runEugene(String script) {
 
         try {
@@ -128,19 +128,19 @@ public class EugeneAdaptor {
 
 // pass Boolean withRybozyme
 // pass String dropdownList
-    
-    
+
+
     public static String createEugeneScript(Map<ComponentType,List<DNAcomponent>> componentmap,boolean withRibozyme){
         return createEugeneScript(componentmap.get(ComponentType.PROMOTER),componentmap.get(ComponentType.RIBOZYME),componentmap.get(ComponentType.RBS),componentmap.get(ComponentType.GENE),componentmap.get(ComponentType.TERMINATOR),withRibozyme);
     }
-    
-    
+
+
 
     public static String createEugeneScript(
-		List<DNAcomponent> promoters,  
-		List<DNAcomponent> ribozymes, 
-		List<DNAcomponent> rbsList,  
-		List<DNAcomponent> genes, 
+		List<DNAcomponent> promoters,
+		List<DNAcomponent> ribozymes,
+		List<DNAcomponent> rbsList,
+		List<DNAcomponent> genes,
 		List<DNAcomponent> terminators,
 		boolean withRibozyme) {
         String script = "";
@@ -249,8 +249,8 @@ public class EugeneAdaptor {
                 + "//  println(sequence_of(lod[i]));\n"
                 + "//}\n"
                 + "\n"
-                + "println(\"The number of all possible devices: \" + SIZEOF(lod));\n"
-                + "println(lod);";
+                + "println(\"The number of all possible devices: \" + SIZEOF(lod));\n";
+//                + "println(lod);";
 
         return script;
     }
