@@ -146,16 +146,17 @@ public class EugeneAdaptor {
         String script = "";
         script += "//COMMON PARTS AND PROPERTIES\n"
                 + "Property name(txt);\n"
+                + "Property SO(txt);\n"
                 + "\n"
-                + "PartType Promoter(name);\n"
-                + "PartType Ribozyme(name);\n"
-                + "PartType RBS(name);\n"
-                + "PartType CDS(name);\n"
-                + "PartType Terminator(name);\n";
+                + "PartType Promoter(name, SO);\n"
+                + "PartType Ribozyme(name, SO);\n"
+                + "PartType RBS(name, SO);\n"
+                + "PartType CDS(name, SO);\n"
+                + "PartType Terminator(name, SO);\n";
 
         int count = 1;
         for (DNAcomponent gene : genes) {
-            script += "CDS g" + count++ + "(.SEQUENCE(\"" + gene.getSequence() + "\"), .name(\"" + gene.getName() + "\"));";
+            script += "CDS g" + count++ + "(.SEQUENCE(\"" + gene.getSequence() + "\"), .name(\"" + gene.getName() + "\"), .SO(\"SO_0000316\"));";
             script += "\n";
         }
 
@@ -163,26 +164,26 @@ public class EugeneAdaptor {
 
         count = 1;
         for (DNAcomponent promoter : promoters) {
-            script += "Promoter p" + count++ + "(.SEQUENCE(\"" + promoter.getSequence() + "\"), .name(\"" + promoter.getName() + "\"));";
+            script += "Promoter p" + count++ + "(.SEQUENCE(\"" + promoter.getSequence() + "\"), .name(\"" + promoter.getName() + "\"), .SO(\"SO_0000167\"));";
             script += "\n";
         }
 
         // Ribozyme is optional and may not be in the project! Needs a check to see if components exist in Clotho?
         count = 1;
         for (DNAcomponent ribozyme : ribozymes) {
-            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"));";
+            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"), .SO(\"SO_0000627\"));";
             script += "\n";
         }
 
         count = 1;
         for (DNAcomponent rbs : rbsList) {
-            script += "RBS rbs" + count++ + "(.SEQUENCE(\"" + rbs.getSequence() + "\"), .name(\"" + rbs.getName() + "\"));";
+            script += "RBS rbs" + count++ + "(.SEQUENCE(\"" + rbs.getSequence() + "\"), .name(\"" + rbs.getName() + "\"), .SO(\"SO_0000139\"));";
             script += "\n";
         }
 
         count = 1;
         for (DNAcomponent terminator : terminators) {
-            script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"" + terminator.getName() + "\"));";
+            script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"" + terminator.getName() + "\"), .SO(\"SO_0000141\"));";
             script += "\n";
         }
         /*
