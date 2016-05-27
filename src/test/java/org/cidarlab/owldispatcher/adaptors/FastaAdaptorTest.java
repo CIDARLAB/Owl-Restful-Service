@@ -96,21 +96,21 @@ public class FastaAdaptorTest {
 
 
         System.out.println("\n\n######################## Eugene Script");
-        
+
         List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
         List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
         List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
         List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
         List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
-        
+
         Map<ComponentType,List<DNAcomponent>> map = new HashMap<ComponentType,List<DNAcomponent>>();
         map.put(ComponentType.PROMOTER, promoters);
         map.put(ComponentType.RIBOZYME, ribozymes);
         map.put(ComponentType.RBS, rbs);
         map.put(ComponentType.GENE, genes);
         map.put(ComponentType.TERMINATOR, terminators);
-        
- 
+
+
         String script = EugeneAdaptor.createEugeneScript(map,ribozymes.size() > 0);
         System.out.println("\n\n######################## Script");
         System.out.println(script);
@@ -122,7 +122,7 @@ public class FastaAdaptorTest {
         try {
             eugAdp = new EugeneAdaptor();
             eugAdp.startEugeneXmlRpc(script);
-            System.out.println(eugAdp.getCollection());
+            //System.out.println(eugAdp.get("lod"));
         } catch (Exception ex) {
             Logger.getLogger(FastaAdaptorTest.class.getName()).log(Level.SEVERE, null, ex);
         }

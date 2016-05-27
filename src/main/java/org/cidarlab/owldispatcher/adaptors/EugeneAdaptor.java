@@ -11,13 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.cidarlab.eugene.dom.Component;
+import org.cidarlab.eugene.dom.Device;
+import org.cidarlab.eugene.dom.NamedElement;
+import org.cidarlab.eugene.dom.PartType;
 import org.cidarlab.eugene.Eugene;
 import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
+import org.cidarlab.eugene.dom.rules.ArrangementConstraint;
+import org.cidarlab.eugene.dom.rules.ArrangementOperand;
+import org.cidarlab.eugene.dom.rules.Rule;
 import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.ComponentType;
@@ -29,9 +35,6 @@ import org.cidarlab.owldispatcher.Utilities;
  * @author prash
  */
 public class EugeneAdaptor {
-
-    @Getter @Setter
-    private EugeneCollection collection;
 
 
     // The XML-RPC client
@@ -94,26 +97,37 @@ public class EugeneAdaptor {
             // the received object, is actually a EugeneCollection object
             if (object instanceof EugeneCollection) {
 
-                this.collection
+                //this.collection
+                EugeneCollection results
                         = (EugeneCollection) object;
-                /*if(this.collection != null)
-                    System.out.println("Eugene Collection :: " + this.collection.toString());
+
+                if(results != null)
+                    System.out.println("Eugene Collection :: " + results.toString());
                 else
-                    System.out.println("Some problem here..");
+                    System.out.println("Eugene Collection :: ERROR; collection is empty!!!");
+
+                EugeneArray result
+                        = (EugeneArray) results.get("lod");
+
+                // Would be nice to have something like this:
+                /*
+                EugeneSbol mySbol
+                        = (EugeneSbol) mySbol.get(sbol);
+
+                EugenePigeon image
+                        = (EugenePigeon) image.get(pigeon);
                 */
-                /*EugeneArray result
-                        = (EugeneArray) results.get("result");
 
                 // process the result array
-                System.out.println(result.size());
-                */
+                System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
+
             }
 
         }
 
     }
 
-
+/*
     public static EugeneCollection runEugene(String script) {
 
         try {
@@ -125,6 +139,7 @@ public class EugeneAdaptor {
         }
         return null;
     }
+*/
 
 // pass Boolean withRybozyme
 // pass String dropdownList
