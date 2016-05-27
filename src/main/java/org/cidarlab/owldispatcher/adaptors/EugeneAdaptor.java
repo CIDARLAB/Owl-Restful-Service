@@ -23,6 +23,7 @@ import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
 import org.cidarlab.eugene.dom.rules.ArrangementConstraint;
 import org.cidarlab.eugene.dom.rules.ArrangementOperand;
+import org.cidarlab.eugene.dom.rules.LogicalAnd;
 import org.cidarlab.eugene.dom.rules.Rule;
 import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
@@ -104,42 +105,98 @@ public class EugeneAdaptor {
                 if(results != null)
                     System.out.println("Eugene Collection :: " + results.toString());
                 else
-                    System.out.println("Eugene Collection :: ERROR; collection is empty!!!");
+                    System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
+
+                    Device exhaustive = (Device)results.get("Exhaustive");
+
+                    Rule ruleOnParts = (Rule)results.get("r1");
+
+                    Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(exhaustive);
+
+                    System.out.println(ruleOnParts);
+                    System.out.println(ruleOnPartTypePositioning);
+
+                    /*
+                     * concatenate both rules using a logical and
+                     */
+
+                    Rule concatenated = this.and(ruleOnParts, ruleOnPartTypePositioning);
+                    System.out.println(concatenated);
 
                 EugeneArray result
                         = (EugeneArray) results.get("lod");
 
-                // Would be nice to have something like this:
+                // Would be nice to get SBOL files and Pigeon images for each device in EugeneArray
                 /*
                 EugeneSbol mySbol
                         = (EugeneSbol) mySbol.get(sbol);
 
                 EugenePigeon image
                         = (EugenePigeon) image.get(pigeon);
+
                 */
 
                 // process the result array
                 System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
 
             }
-
-        }
-
+      	}
     }
 
-/*
-    public static EugeneCollection runEugene(String script) {
+    public Rule and(final Rule r1, final Rule r2) {
 
-        try {
-            Eugene eugene = new Eugene();
-            //eugene.setRootDirectory(Args.eugeneRootDirectory);
-            return eugene.executeScript(script);
-        } catch (EugeneException ex) {
-            Logger.getLogger(EugeneAdaptor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-*/
+  		LogicalAnd andR1 = r1.getPredicates();
+  		LogicalAnd andR2 = r2.getPredicates();
+
+  		LogicalAnd and = new LogicalAnd();
+  		and.getPredicates().addAll(andR1.getPredicates());
+  		and.getPredicates().addAll(andR2.getPredicates());
+
+  		Rule r = new Rule(r1.getName() + "_AND_" + r2.getName(), r1.getDevice());
+  		r.setLogicalAnd(and);
+  		return r;
+  	}
+
+  	public Rule deriveRuleFromStructure(Device device)
+  			throws EugeneException {
+
+  		/*
+  		 * Positioning Rule
+  		 *
+  		 * the i-th component must be positioned BEFORE the (i+1)-th component
+  		 *
+  		 * Assumption:
+  		 * -- the device consists of part types only
+  		 */
+
+  		// the constraints are conjuctive
+  		LogicalAnd positioning = new LogicalAnd();
+
+  		// iterate over the device's components
+  		for(int i=0; i<device.getComponents().size()-1; i++) {
+
+  			// get the i-th part type
+  			PartType ptLeftOp = (PartType)device.getComponents().get(i).get(0);
+
+  			// get the (i+1)-th part type
+  			PartType ptRightOp = (PartType)device.getComponents().get(i+1).get(0);
+
+  			// generate a new <i-th part type> BEFORE <(i+1)-th part type> predicate
+  			positioning.getPredicates().add(
+      				new ArrangementConstraint(
+      						new ArrangementOperand(ptLeftOp, 0, 0),
+      						"BEFORE",
+      						new ArrangementOperand(ptRightOp, 0, 0)));
+  		}
+
+  		// lastly, package the LogicalAnd into a Rule object
+  		Rule structuralRule = new Rule("deviceStructure", device);
+  		structuralRule.setLogicalAnd(positioning);
+
+  		// return the rule object
+  		return structuralRule;
+  	}
+
 
 // pass Boolean withRybozyme
 // pass String dropdownList
@@ -186,7 +243,7 @@ public class EugeneAdaptor {
         // Ribozyme is optional and may not be in the project! Needs a check to see if components exist in Clotho?
         count = 1;
         for (DNAcomponent ribozyme : ribozymes) {
-            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"), .SO(\"SO_0000627\"));";
+            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"), .SO(\"SO_0000627\"), .PIGEON(\"z ri 13\"));";
             script += "\n";
         }
 
@@ -201,21 +258,7 @@ public class EugeneAdaptor {
             script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"" + terminator.getName() + "\"), .SO(\"SO_0000141\"));";
             script += "\n";
         }
-        /*
-         script += "Promoter pBla(.SEQUENCE(\"TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG\"), .name(\"BBa_I14018\"));\n"
-         + "Promoter p2(.SEQUENCE(\"TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC\"), .name(\"BBa_J23100\"));\n"
-         + "\n"
-         + "RBS rbs1(.SEQUENCE(\"GAAAGAGGGGACAA\"), .name(\"rbs1\"));\n"
-         + "RBS rbs2(.SEQUENCE(\"GAAAGACAGGACCC\"), .name(\"rbs2\"));\n"
-         + "RBS rbs3(.SEQUENCE(\"GAAAGATCCGATGT\"), .name(\"rbs3\"));\n"
-         + "RBS rbs4(.SEQUENCE(\"GAAAGATTAGACAA\"), .name(\"rbs4\"));\n"
-         + "\n"
-         + "Terminator t1(.SEQUENCE(\"TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA\"), .name(\"BBa_B0012\"));\n"
-         + "\n"
-         + "Insulator ri(.SEQUENCE(\"AAAAAAAAAAAAA\"), .name(\"Rybozyme_insulator\"), .PIGEON(\"z ri 13\"));\n"
-         + "\n"
-         + "\n"
-         */
+
         script += "// Ribozyme (TRUE is with; FALSE is without); Default is TRUE.\n"
                 //=============================================================================
                 // DMITRY will pass Boolean withRybozyme, from JIRA, instead of the word "true" here.
@@ -223,19 +266,7 @@ public class EugeneAdaptor {
                 + "boolean riboz = " + withRibozyme + ";\n"
                 //=============================================================================
                 + "//==========================================\n"
-                + "//==========================================\n"
                 + "\n"
-                /*
-                 + "// Define partTypes. \n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/common.h\";\n"
-                 + "// PART LIBRARY\n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/promoter_library.eug\";\n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/insulator_library.eug\";\n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/RBS_library.eug\";\n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/gene_library.eug\";\n"
-                 + "//include \"/home/prash/cidar/owlDispatcher/resources/sampleEugene/terminator_library.eug\";\n"
-                 + "\n"
-                 */
                 //==============================================================================
                 // TO_DO: This is the place where we will have to check for dropdownList
                 //==============================================================================
@@ -251,7 +282,8 @@ public class EugeneAdaptor {
                 + "  Promoter${\"p\"+i};\n"
                 + "  Ribozyme${\"ri\"+i};\n"
                 + "  RBS${\"rbs\"+i};\n"
-                + "  CDS${\"g\"+i}; AND(r1, ${\"g\"+i} EXACTLY 1);\n"
+                + "  CDS${\"g\"+i};\n"
+                + "  AND(r1, ${\"g\"+i} EXACTLY 1);\n"
                 + "  if(i>=2) {\n"
                 + "    AND(r1, ${\"g\"+(i-1)} BEFORE ${\"g\"+i}); \n"
                 + "  } \n"
@@ -260,13 +292,8 @@ public class EugeneAdaptor {
                 + "\n"
                 // pass String dropdownList instead of "Exhaustive"
                 //              + "lod = product(" + dropdownList + ");\n"
-                + "lod = product(Exhaustive);\n"
-                + "//for (num i=0; i<sizeof(lod); i=i+1) {\n"
-                + "//  println(sequence_of(lod[i]));\n"
-                + "//}\n"
-                + "\n"
-                + "println(\"The number of all possible devices: \" + SIZEOF(lod));\n";
-//                + "println(lod);";
+                + "lod = product(Exhaustive);\n";
+
 
         return script;
     }
