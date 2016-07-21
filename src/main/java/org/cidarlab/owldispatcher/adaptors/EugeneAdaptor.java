@@ -102,19 +102,20 @@ public class EugeneAdaptor {
                 EugeneCollection results
                         = (EugeneCollection) object;
 
-                if(results != null)
+                if(results != null) {
                     System.out.println("Eugene Collection :: " + results.toString());
-                else
+                } else {
                     System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
+                }
 
-                    Device exhaustive = (Device)results.get("Exhaustive");
+                Device exhaustive = (Device)results.get("Exhaustive");
 
-                    Rule ruleOnParts = (Rule)results.get("r1");
+                Rule ruleOnParts = (Rule)results.get("r1");
 
-                    Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(exhaustive);
+                Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(exhaustive);
 
-                    System.out.println(ruleOnParts);
-                    System.out.println(ruleOnPartTypePositioning);
+                System.out.println(ruleOnParts);
+                System.out.println(ruleOnPartTypePositioning);
 
                     /*
                      * concatenate both rules using a logical and
@@ -125,16 +126,10 @@ public class EugeneAdaptor {
 
                 EugeneArray result
                         = (EugeneArray) results.get("lod");
+                
+                
 
                 // Would be nice to get SBOL files and Pigeon images for each device in EugeneArray
-                /*
-                EugeneSbol mySbol
-                        = (EugeneSbol) mySbol.get(sbol);
-
-                EugenePigeon image
-                        = (EugenePigeon) image.get(pigeon);
-
-                */
 
                 // process the result array
                 System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
@@ -199,11 +194,11 @@ public class EugeneAdaptor {
 
 
 // pass Boolean withRybozyme
-// pass String dropdownList
+// pass designMethod
 
 
-    public static String createEugeneScript(Map<ComponentType,List<DNAcomponent>> componentmap,boolean withRibozyme){
-        return createEugeneScript(componentmap.get(ComponentType.PROMOTER),componentmap.get(ComponentType.RIBOZYME),componentmap.get(ComponentType.RBS),componentmap.get(ComponentType.GENE),componentmap.get(ComponentType.TERMINATOR),withRibozyme);
+    public static String createEugeneScript(Map<ComponentType,List<DNAcomponent>> componentmap,boolean withRibozyme,String designMethod){
+        return createEugeneScript(componentmap.get(ComponentType.PROMOTER),componentmap.get(ComponentType.RIBOZYME),componentmap.get(ComponentType.RBS),componentmap.get(ComponentType.GENE),componentmap.get(ComponentType.TERMINATOR),withRibozyme,designMethod);
     }
 
 
@@ -214,7 +209,9 @@ public class EugeneAdaptor {
 		List<DNAcomponent> rbsList,
 		List<DNAcomponent> genes,
 		List<DNAcomponent> terminators,
-		boolean withRibozyme) {
+		boolean withRibozyme,
+		String designMethod) {
+    	
         String script = "";
         script += "//COMMON PARTS AND PROPERTIES\n"
                 + "Property name(txt);\n"
@@ -270,6 +267,9 @@ public class EugeneAdaptor {
                 //==============================================================================
                 // TO_DO: This is the place where we will have to check for dropdownList
                 //==============================================================================
+                
+             // pass String dropdownList instead of "Exhaustive"
+                //              + "lod = product(" + dropdownList + ");\n"
                 + "Device Exhaustive();\n"
                 + "Rule r1(on Exhaustive: ALL_FORWARD);\n"
                 + "\n"
@@ -290,12 +290,37 @@ public class EugeneAdaptor {
                 + "  Terminator${\"t\"+i};\n"
                 + "}\n"
                 + "\n"
-                // pass String dropdownList instead of "Exhaustive"
-                //              + "lod = product(" + dropdownList + ");\n"
-                + "lod = product(Exhaustive);\n";
 
+                //+ "lod = product(Exhaustive);\n";
+        
+     
 
-        return script;
-    }
+			    + "Device Fang10k(Promoter);\n"
+			
+			    + "Rule R(on Fang10k: ALL_FORWARD);\n"
+			
+			
+			    + "for(num i=1; i<=N; i=i+1) {\n"
+			    +   	"if (i == 10 || i == 20 || i == 30 || i == 40 || i == 50 || i == 60 || i == 70) {\n"
+			    +   	"Fang = Fang10k + RBS + CDS + Promoter;\n"
+			    +     "CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
+			    +     "RBS${\"rbs\" + i};\n"
+			    +     "Promoter${\"p\"+i};\n"
+			    +   "} else {\n"
+			    +   	"Fang = Fang10k + RBS + CDS;\n"
+			    + "     RBS${\"rbs\" + i};\n"
+			    + "     CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
+			    + "   }\n"
+			       
+			    + "   if(i>=2) {\n"
+			    + "     AND(R, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n"
+			    + "   }\n"
+			    + " }\n"
+			    + " Fang10k = Fang10k + Terminator;\n"
+			
+			    + " lod = product(" + designMethod + ");\n";			
+			
+			        return script;
+			    }
 
 }

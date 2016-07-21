@@ -7,31 +7,24 @@ package org.cidarlab.owldispatcher.DOM;
 
 import java.util.HashMap;
 import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
 import org.cidarlab.owldispatcher.adaptors.ReverseTranslate;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author prash
  */
+@Service
 public class DNAcomponent {
     
-    @Getter 
-    @Setter
+	public DNAcomponent(){
+		
+	}
+
     private String name;
-    
-    @Getter 
-    @Setter
     private ComponentType type;
-    
-    @Getter 
-    @Setter
     private String sequence;
-    
-    @Getter
-    @Setter
     private String clothoId;
     
     public DNAcomponent(String _name,ComponentType _type, String _sequence){
@@ -94,5 +87,37 @@ public class DNAcomponent {
         }
         return comp;
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ComponentType getType() {
+		return type;
+	}
+
+	public void setType(ComponentType type) {
+		this.type = type;
+	}
+
+	public String getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(String sequence) {
+		this.sequence = sequence;
+	}
+
+	public String getClothoId() {
+		return clothoId;
+	}
+
+	public void setClothoId(String clothoId) {
+		this.clothoId = clothoId;
+	}
     
 }

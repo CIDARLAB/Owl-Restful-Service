@@ -49,9 +49,11 @@ public class Utilities {
             String line = "";
             while((line = br.readLine()) != null){
                 if(!line.trim().equals("")){
-                    lines.add(line);
+                	System.out.println(line);
+                	lines.add(line);
                 }
             }
+            br.close();
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,10 +148,11 @@ public class Utilities {
     
     public static String getResourcesFilepath() {
         String _filepath = getFilepath();
+        System.out.println(_filepath);
         if (Utilities.isWindows()) {
-            _filepath += "\\resources\\";
+            _filepath += "\\src\\main\\resources\\";
         } else {
-            _filepath += "/resources/";
+            _filepath += "/src/main/resources/";
         }
         return _filepath;
     }

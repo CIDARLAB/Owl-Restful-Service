@@ -1,8 +1,7 @@
 package org.cidarlab.owldispatcher.adaptors;
-import com.google.common.collect.ImmutableMap;
-
-import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Created by dmitry on 5/1/16.
@@ -74,12 +73,12 @@ public class ReverseTranslate {
         return result;
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         String p = "MTYSRSNITLALLANICAFFLWSLATLIFNALSTIDNLQVLAFRIIFSM";
 
         System.out.println(translate(p));
 
         System.out.println(translate(p));
-    }
+    }*/
 
 }

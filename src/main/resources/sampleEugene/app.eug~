@@ -1,0 +1,75 @@
+//COMMON PARTS AND PROPERTIES
+Property name(txt);
+
+PartType Promoter(name);
+PartType Insulator(name);
+PartType RBS(name);
+PartType CDS(name);
+PartType Terminator(name);
+
+//This file has to be created for every .fasta file
+CDS g0(.SEQUENCE("GTAAGAGGGGACAA"), .name("geneName1"));
+CDS g1(.SEQUENCE("AAAAGAGGGGACAA"), .name("geneName2"));
+CDS g2(.SEQUENCE("CCAAGAGGGGACAA"), .name("geneName3"));
+
+//==========================================
+// Input-dependent
+// N is number of gene entries
+num N = 3;
+
+
+Promoter p0(.SEQUENCE("TGTAAGTTTATACATAGGCGAGTACTCTGTTATGG"), .name("BBa_I14018"));
+Promoter p1(.SEQUENCE("TTGACGGCTAGCTCAGTCCTAGGTACAGTGCTAGC"), .name("BBa_J23100"));
+
+RBS rbs0(.SEQUENCE("GAAAGAGGGGACAA"), .name("rbs1"));
+RBS rbs1(.SEQUENCE("GAAAGACAGGACCC"), .name("rbs2"));
+RBS rbs2(.SEQUENCE("GAAAGATCCGATGT"), .name("rbs3"));
+RBS rbs3(.SEQUENCE("GAAAGATTAGACAA"), .name("rbs4"));
+
+Terminator t0(.SEQUENCE("TCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATA"), .name("BBa_B0012"));
+
+Insulator r0(.SEQUENCE("AAAAAAAAAAAAA"), .name("Rybozyme_insulator"), .PIGEON("z ri 13"));
+
+
+// Rybozyme (TRUE is with; FALSE is without); Default is TRUE.
+boolean rybozyme = true;
+//==========================================
+//==========================================
+
+// Define partTypes. 
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/common.h";
+// PART LIBRARY
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/promoter_library.eug";
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/insulator_library.eug";
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/RBS_library.eug";
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/gene_library.eug";
+//include "/home/prash/cidar/owlDispatcher/resources/sampleEugene/terminator_library.eug";
+
+Device Exhaustive();
+Rule r1(on Exhaustive: ALL_FORWARD);
+
+//this example is for 3 genes:
+
+
+for(num i=0; i<N; i=i+1) {
+  if(rybozyme == false) {
+  	Exhaustive = Exhaustive + Promoter + RBS + CDS + Terminator;
+  } else {
+    Exhaustive = Exhaustive + Promoter + Insulator + RBS + CDS + Terminator;
+  }
+  Promoter${"p"+i};
+  Insulator${"ri"+i};
+  RBS${"rbs"+i};
+  CDS${"g"+i};
+  AND(r1, ${"g"+i} EXACTLY 1);
+  Terminator${"t"+i};
+}
+
+lod = product(Exhaustive);
+//for (num i=0; i<sizeof(lod); i=i+1) {
+//  println(sequence_of(lod[i]));
+//}
+
+println("The number of all possible devices: " + SIZEOF(lod));
+println(lod);
+

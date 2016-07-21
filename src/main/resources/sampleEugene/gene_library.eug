@@ -1,0 +1,4 @@
+//This file has to be created for every .fasta file
+CDS g1(.SEQUENCE("GTAAGAGGGGACAA"), .name("geneName1"));
+CDS g2(.SEQUENCE("AAAAGAGGGGACAA"), .name("geneName2"));
+CDS g3(.SEQUENCE("CCAAGAGGGGACAA"), .name("geneName3"));

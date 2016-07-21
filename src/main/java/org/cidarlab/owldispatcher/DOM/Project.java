@@ -9,23 +9,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author prash
  */
+
+@Service("clothoProject")
 public class Project {
+	
+	public Project(){
+		
+	}
     
-    @Getter @Setter
     private String projectName;
-    
-    @Getter @Setter
     private String clothoId;
-    
-    @Getter @Setter
     private String projectOwner;
     
     /*
@@ -37,23 +37,79 @@ public class Project {
     TERMINATOR
     */
     
-    @Getter @Setter
     private List<String> promoters;
-    
-    @Getter @Setter
     private List<String> ribozymes;
-    
-    @Getter @Setter
     private List<String> rbs;
-    
-    @Getter @Setter
     private List<String> genes;
-    
-    @Getter @Setter
     private List<String> terminators;
     
     
-    public Project(String projName, String owner){
+    
+    public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getClothoId() {
+		return clothoId;
+	}
+
+	public void setClothoId(String clothoId) {
+		this.clothoId = clothoId;
+	}
+
+	public String getProjectOwner() {
+		return projectOwner;
+	}
+
+	public void setProjectOwner(String projectOwner) {
+		this.projectOwner = projectOwner;
+	}
+
+	public List<String> getPromoters() {
+		return promoters;
+	}
+
+	public void setPromoters(List<String> promoters) {
+		this.promoters = promoters;
+	}
+
+	public List<String> getRibozymes() {
+		return ribozymes;
+	}
+
+	public void setRibozymes(List<String> ribozymes) {
+		this.ribozymes = ribozymes;
+	}
+
+	public List<String> getRbs() {
+		return rbs;
+	}
+
+	public void setRbs(List<String> rbs) {
+		this.rbs = rbs;
+	}
+
+	public List<String> getGenes() {
+		return genes;
+	}
+
+	public void setGenes(List<String> genes) {
+		this.genes = genes;
+	}
+
+	public List<String> getTerminators() {
+		return terminators;
+	}
+
+	public void setTerminators(List<String> terminators) {
+		this.terminators = terminators;
+	}
+
+	public Project(String projName, String owner){
         this.projectName = projName;
         this.projectOwner = owner;
         this.promoters = new ArrayList<String>();
