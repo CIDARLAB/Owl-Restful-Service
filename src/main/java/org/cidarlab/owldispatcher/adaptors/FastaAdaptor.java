@@ -38,7 +38,7 @@ import org.json.JSONObject;
  */
 public class FastaAdaptor {
     
-    
+    // extracts .name and .sequence properties from a Eugene device and creates a string representation of .fasta and returns these strings
     public static List<String> getFastaFileLines(Device device){
         List<String> lines = new ArrayList<String>();
         for(List<NamedElement> listnamedElement : device.getComponents()){
@@ -48,8 +48,8 @@ public class FastaAdaptor {
                     try {
                         String componentName = component.getPropertyValues().get("name").toString().replaceAll("\"", "");
                         System.out.println(componentName);
-                        lines.add(">" + componentName);
-                        lines.add(component.getSequence());
+                        lines.add(">" + componentName + "\n");
+                        lines.add(component.getSequence() + "\n");
                         
                     } catch (EugeneException ex) {
                         Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);

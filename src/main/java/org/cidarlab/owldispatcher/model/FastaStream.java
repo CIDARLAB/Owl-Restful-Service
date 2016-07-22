@@ -7,8 +7,6 @@ package org.cidarlab.owldispatcher.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -16,15 +14,28 @@ import lombok.Setter;
  */
 public class FastaStream {
     
-    @Getter
-    @Setter
+    // @Getter
+    // @Setter
     private String device;
     
-    @Getter
-    @Setter
+    // @Getter
+    // @Setter
     private String fastafile = "";
     
-    public FastaStream(String _device, List<String> fileLines){
+    
+    public String getDevice() {
+		return device;
+	}
+	public void setDevice(String device) {
+		this.device = device;
+	}
+	public String getFastafile() {
+		return fastafile;
+	}
+	public void setFastafile(String fastafile) {
+		this.fastafile = fastafile;
+	}
+	public FastaStream(String _device, List<String> fileLines){
         this.device = _device;
         for(int i=0;i<fileLines.size()-1;i++){
             this.fastafile += (fileLines.get(i) + "\n");

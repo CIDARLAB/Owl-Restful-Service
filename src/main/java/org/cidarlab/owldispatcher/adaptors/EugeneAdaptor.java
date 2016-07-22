@@ -45,10 +45,15 @@ public class EugeneAdaptor {
     // The configuration of the XML-RPC client
     private XmlRpcClientConfigImpl config;
     
-    @Getter
+    // @Getter
     private EugeneArray result;
     
-    public EugeneAdaptor()
+    
+    public EugeneArray getResult() {
+		return result;
+	}
+
+	public EugeneAdaptor()
             throws Exception {
 
         /*

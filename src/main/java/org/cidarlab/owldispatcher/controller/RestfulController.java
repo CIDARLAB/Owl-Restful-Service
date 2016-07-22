@@ -35,9 +35,9 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     @RestController
     public class RestfulController {
 
-        private static String user;
+/*        private static String user;
         private static String pass = "pass";
-        private static String proj;
+        private static String proj;*/
 
         private static String testUser = "testUserOwl";
         private static String testProject = "testProjectOwl";
@@ -65,7 +65,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             return "Username :: " + testUser + "\nPassword :: " + testPassword + "\nProject :: " + testProject;
         }
 
-        @RequestMapping(value = "/create-user")
+/*        @RequestMapping(value = "/create-user")
         public String st() {
             ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
             Clotho clothoObject = new Clotho(conn);
@@ -76,7 +76,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             clothoObject.logout();
             conn.closeConnection();
             return "Username :: " + user + "\nPassword :: " + pass + "\nProject :: " + proj;
-        }
+        }*/
 
         @RequestMapping(value = "/eugene")
         public ResponseEntity<DataStreamJira> jira() {
@@ -125,7 +125,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             map.put(ComponentType.GENE, genes);
             map.put(ComponentType.TERMINATOR, terminators);
 
-            String script = EugeneAdaptor.createEugeneScript(map, ribozymes.size() > 0, dataStreamJira.getDesignMethod());
+            String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRybozyme(), dataStreamJira.getDesignMethod());
             System.out.println("\n\n######################## Script");
             System.out.println(script);
             //System.out.println("\n\n######################## Run Eugene Locally");
@@ -148,11 +148,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             } catch (Exception ex) {
                 Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
             }
-                //System.out.println(eugAdp.get("lod"));
 
-           // EugeneCollection results = (EugeneCollection) object;
-            //EugeneArray result = (EugeneArray) results.get("lod");
-            //dataStreamJira.setArray(results.get("lod");
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
         }
 
