@@ -1,5 +1,8 @@
 package org.cidarlab.owldispatcher.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataStreamJira {
 
 
@@ -10,15 +13,40 @@ public class DataStreamJira {
 	private String inputRybozymesFasta;
 	private String inputProteinsFasta;
 	private String inputTerminatorsFasta;
-	private String[] array;
+	private String array;
+	private List<FastaStream> fastaFiles = new ArrayList<FastaStream>();
+        
+        public List<FastaStream> getFastaFiles(){
+            return fastaFiles;
+        }
+        
+        public void setFastaFiles(List<FastaStream> _fastaFiles){
+            this.fastaFiles = _fastaFiles;
+        }
+        
+        public void addFastaFile(FastaStream fasta){
+            this.fastaFiles.add(fasta);
+        }
+        
+        /*private List<String> fastaFiles = new ArrayList<String>();
 	
+        public List<String> getFastaFiles(){
+            return fastaFiles;
+        }
 	
-	
-	public String[] getArray() {
+        public void setFastaFiles(List<String> _fastaFiles){
+            this.fastaFiles = _fastaFiles;
+        }
+        
+        public void addFastaFile(String fastaFile){
+            this.fastaFiles.add(fastaFile);
+        }*/
+        
+	public String getArray() {
 		return array;
 	}
 
-	public void setArray(String[] array) {
+	public void setArray(String array) {
 		this.array = array;
 	}
 

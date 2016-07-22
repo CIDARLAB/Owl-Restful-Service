@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -43,7 +44,10 @@ public class EugeneAdaptor {
 
     // The configuration of the XML-RPC client
     private XmlRpcClientConfigImpl config;
-
+    
+    @Getter
+    private EugeneArray result;
+    
     public EugeneAdaptor()
             throws Exception {
 
@@ -103,7 +107,8 @@ public class EugeneAdaptor {
                         = (EugeneCollection) object;
 
                 if(results != null) {
-                    System.out.println("Eugene Collection :: " + results.toString());
+                    System.out.println("Works!");
+                    //System.out.println("Eugene Collection :: " + results.toString());
                 } else {
                     System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
                 }
@@ -124,7 +129,7 @@ public class EugeneAdaptor {
                     Rule concatenated = this.and(ruleOnParts, ruleOnPartTypePositioning);
                     System.out.println(concatenated);
 
-                EugeneArray result
+                result
                         = (EugeneArray) results.get("lod");
                 
                 

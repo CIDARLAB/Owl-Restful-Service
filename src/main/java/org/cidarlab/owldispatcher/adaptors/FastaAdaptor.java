@@ -5,6 +5,10 @@
  */
 package org.cidarlab.owldispatcher.adaptors;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +16,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.json.JSONArray;
+import org.cidarlab.eugene.dom.Component;
+import org.cidarlab.eugene.dom.Device;
+import org.cidarlab.eugene.dom.NamedElement;
+import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.ComponentType;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
@@ -28,6 +38,51 @@ import org.json.JSONObject;
  */
 public class FastaAdaptor {
     
+    
+    public static List<String> getFastaFileLines(Device device){
+        List<String> lines = new ArrayList<String>();
+        for(List<NamedElement> listnamedElement : device.getComponents()){
+                for(NamedElement ne : listnamedElement){
+                    Component component = (Component)ne;
+                    
+                    try {
+                        String componentName = component.getPropertyValues().get("name").toString().replaceAll("\"", "");
+                        System.out.println(componentName);
+                        lines.add(">" + componentName);
+                        lines.add(component.getSequence());
+                        
+                    } catch (EugeneException ex) {
+                        Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+        }
+        return lines;
+    }
+    
+    public static String createFastaFile(Device device,String filepath){
+        String fastafilepath = filepath + device.getName() + ".fasta";
+        File file = new File(fastafilepath);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            for(List<NamedElement> listnamedElement : device.getComponents()){
+                for(NamedElement ne : listnamedElement){
+                    Component component = (Component)ne;
+                    writer.write(">"+component.getPropertyValues().get("name"));
+                    writer.newLine();
+                    writer.write(component.getSequence());
+                    writer.newLine();
+                }
+            }
+            writer.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EugeneException ex) {
+            Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return fastafilepath;
+    }
     
     private static void setProjCompIds(List<String> finalIdList, ComponentType type, Project proj){
         switch (type) {
