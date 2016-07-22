@@ -35,14 +35,10 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     @RestController
     public class RestfulController {
 
-/*        private static String user;
-        private static String pass = "pass";
-        private static String proj;*/
-
         private static String testUser = "testUserOwl";
         private static String testProject = "testProjectOwl";
         private static String testPassword = "testPasswordOwl";
-
+        
         @RequestMapping(value = "/api")
         public ResponseEntity<DataStream> get() {
 
@@ -78,6 +74,35 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             return "Username :: " + user + "\nPassword :: " + pass + "\nProject :: " + proj;
         }*/
 
+        @RequestMapping(value = "/example")
+        public ResponseEntity<DataStreamJira> exampl() {
+
+            DataStreamJira dataStreamJira = new DataStreamJira();
+            dataStreamJira.setDesignMethod("Exhaustive");
+            dataStreamJira.setWithRybozyme(false);
+            dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
+            dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT>");
+            dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
+            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
+            dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
+            
+            return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+
+        }
+        
+        @RequestMapping(value = "/example", method = RequestMethod.POST)
+        public ResponseEntity<DataStreamJira> update(@RequestBody DataStreamJira dataStreamJira) {
+            if (dataStreamJira == null) {
+                throw new BadRequestException();
+            } else {
+            	
+            	//  TO-DO need to extend fastaToComponents to take fasta string 
+                //   FastaAdaptor.fastaToComponents(dataStreamJira.getInputPromotersFasta(), ComponentType.PROMOTER);
+            	
+            	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+            }
+        }
+        
         @RequestMapping(value = "/eugene")
         public ResponseEntity<DataStreamJira> jira() {
             String promoterfilepath = Utilities.getResourcesFilepath() + "promoters.fasta";
@@ -85,12 +110,6 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             String rbsfilepath = Utilities.getResourcesFilepath() + "rbs.fasta";
             String genefilepath = Utilities.getResourcesFilepath() + "proteins.fasta";
             String terminatorfilepath = Utilities.getResourcesFilepath() + "terminators.fasta";
-            
-            
-            
-    //        String username = "user1469123457304";
-    //        String project = "project1469123457304";
-    //        String password = "pass";
 
             String username = testUser;
             String project = testProject;

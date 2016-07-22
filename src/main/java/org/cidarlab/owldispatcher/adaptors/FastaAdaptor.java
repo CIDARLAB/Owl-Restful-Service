@@ -437,7 +437,7 @@ public class FastaAdaptor {
         conn.closeConnection();
         return componentNames;
     }
-
+    
     public static List<DNAcomponent> fastaToComponents(List<String> lines, ComponentType type) {
         List<DNAcomponent> list = new ArrayList();
         String name = "";

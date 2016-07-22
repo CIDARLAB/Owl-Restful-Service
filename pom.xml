@@ -9,17 +9,18 @@
 	<packaging>jar</packaging>
 
 	<name>OwlDispatch</name>
-	<description></description>
+	<description>SpringBootRest implementation for Combinatorial design</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.5.RELEASE</version>
+		<version>1.3.6.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 	
@@ -84,6 +85,7 @@
 			<version>3.0-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
+
 
 <!--          SLF4J
         <dependency>
