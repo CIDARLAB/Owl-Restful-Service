@@ -213,7 +213,8 @@ public class FastaAdaptor {
     public static boolean fastaToClotho(String username, String password, String filepath, String projectId, ComponentType type) {
         
         List<DNAcomponent> list = new ArrayList<>();
-        list = fastaToComponents(Utilities.getFileLines(filepath), type);
+        //list = fastaToComponents(Utilities.getFileLines(filepath), type);
+        list = fastaToComponents(Utilities.getFastaLines(filepath), type);
         return fastaToClotho(username, password, list, projectId, type);
     }
 

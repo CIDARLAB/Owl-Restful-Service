@@ -35,9 +35,9 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     @RestController
     public class RestfulController {
 
-        private static String testUser = "testUserOwl";
-        private static String testProject = "testProjectOwl";
-        private static String testPassword = "testPasswordOwl";
+        private static String testUser = "testUserNew";
+        private static String testProject = "testProjectNew";
+        private static String testPassword = "testPasswordNew";
         
         @RequestMapping(value = "/api")
         public ResponseEntity<DataStream> get() {
@@ -50,6 +50,21 @@ import org.cidarlab.owldispatcher.model.FastaStream;
 
         }
 
+        @RequestMapping(value = "/json")
+        public ResponseEntity<DataStreamJira> getJson() {
+        	DataStreamJira dataStreamJira = new DataStreamJira();
+            
+            dataStreamJira.setDesignMethod("Exhaustive");
+            dataStreamJira.setWithRybozyme(false);
+            dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
+            dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT>");
+            dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
+            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
+            dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
+            	
+            return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+            }
+        
         @RequestMapping(value = "/create-test-user")
         public String stTest() {
             ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
@@ -61,23 +76,12 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             return "Username :: " + testUser + "\nPassword :: " + testPassword + "\nProject :: " + testProject;
         }
 
-/*        @RequestMapping(value = "/create-user")
-        public String st() {
-            ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
-            Clotho clothoObject = new Clotho(conn);
-            user = "user" + System.currentTimeMillis();
-            proj = "project" + System.currentTimeMillis();
-            clothoObject.createUser(user, pass);
-            System.out.println("Username :: " + user + "\nPassword :: " + pass);
-            clothoObject.logout();
-            conn.closeConnection();
-            return "Username :: " + user + "\nPassword :: " + pass + "\nProject :: " + proj;
-        }*/
 
         @RequestMapping(value = "/example")
         public ResponseEntity<DataStreamJira> exampl() {
-
+        	
             DataStreamJira dataStreamJira = new DataStreamJira();
+            
             dataStreamJira.setDesignMethod("Exhaustive");
             dataStreamJira.setWithRybozyme(false);
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
@@ -85,6 +89,62 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
             dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
             dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
+            
+            String promoterfilepath = dataStreamJira.getInputPromotersFasta();
+            String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
+            String rbsfilepath = dataStreamJira.getInputRbsFasta();
+            String genefilepath = dataStreamJira.getInputProteinsFasta();
+            String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
+            
+            String username = testUser;
+            String project = testProject;
+            String password = testPassword;
+            
+            System.out.println("\n\n######################## Fasta To Clotho Promoters");
+            System.out.println(FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
+            System.out.println("\n\n######################## Fasta To Clotho Ribozymes");
+            System.out.println(FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
+            System.out.println("\n\n######################## Fasta To Clotho RBS");
+            System.out.println(FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
+            System.out.println("\n\n######################## Fasta To Clotho Proteins");
+            System.out.println(FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
+            System.out.println("\n\n######################## Fasta To Clotho Terminators");
+            System.out.println(FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
+            
+            List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
+            List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
+            List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
+            List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
+            List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
+
+            Map<ComponentType, List<DNAcomponent>> map = new HashMap<ComponentType, List<DNAcomponent>>();
+            map.put(ComponentType.PROMOTER, promoters);
+            map.put(ComponentType.RIBOZYME, ribozymes);
+            map.put(ComponentType.RBS, rbs);
+            map.put(ComponentType.GENE, genes);
+            map.put(ComponentType.TERMINATOR, terminators);
+
+            String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRybozyme(), dataStreamJira.getDesignMethod());
+            System.out.println("\n\n######################## Script");
+            System.out.println(script);
+
+            EugeneAdaptor eugAdp;
+            System.out.println("\n\n######################## Run Eugene via XmlRpc");
+            try {
+                eugAdp = new EugeneAdaptor();
+                eugAdp.startEugeneXmlRpc(script);
+                EugeneArray result = eugAdp.getResult();
+                dataStreamJira.setArray(result.toString());
+
+                for(NamedElement ne:result.getElements()){
+                    Device device = (Device)ne;
+                    dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
+                    //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
 
@@ -96,14 +156,67 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                 throw new BadRequestException();
             } else {
             	
-            	//  TO-DO need to extend fastaToComponents to take fasta string 
-                //   FastaAdaptor.fastaToComponents(dataStreamJira.getInputPromotersFasta(), ComponentType.PROMOTER);
+            	String promoterfilepath = dataStreamJira.getInputPromotersFasta();
+                String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
+                String rbsfilepath = dataStreamJira.getInputRbsFasta();
+                String genefilepath = dataStreamJira.getInputProteinsFasta();
+                String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
+                
+                String username = testUser;
+                String project = testProject;
+                String password = testPassword;
+                
+                System.out.println("\n\n######################## Fasta To Clotho Promoters");
+                System.out.println(FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
+                System.out.println("\n\n######################## Fasta To Clotho Ribozymes");
+                System.out.println(FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
+                System.out.println("\n\n######################## Fasta To Clotho RBS");
+                System.out.println(FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
+                System.out.println("\n\n######################## Fasta To Clotho Proteins");
+                System.out.println(FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
+                System.out.println("\n\n######################## Fasta To Clotho Terminators");
+                System.out.println(FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
+                
+                List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
+                List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
+                List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
+                List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
+                List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
+
+                Map<ComponentType, List<DNAcomponent>> map = new HashMap<ComponentType, List<DNAcomponent>>();
+                map.put(ComponentType.PROMOTER, promoters);
+                map.put(ComponentType.RIBOZYME, ribozymes);
+                map.put(ComponentType.RBS, rbs);
+                map.put(ComponentType.GENE, genes);
+                map.put(ComponentType.TERMINATOR, terminators);
+
+                String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRybozyme(), dataStreamJira.getDesignMethod());
+                System.out.println("\n\n######################## Script");
+                System.out.println(script);
+
+                EugeneAdaptor eugAdp;
+                System.out.println("\n\n######################## Run Eugene via XmlRpc");
+                try {
+                    eugAdp = new EugeneAdaptor();
+                    eugAdp.startEugeneXmlRpc(script);
+                    EugeneArray result = eugAdp.getResult();
+                    dataStreamJira.setArray(result.toString());
+
+                    for(NamedElement ne:result.getElements()){
+                        Device device = (Device)ne;
+                        dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
+                        //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
+                    }
+
+                } catch (Exception ex) {
+                    Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             	
             	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
             }
         }
         
-        @RequestMapping(value = "/eugene")
+       /* @RequestMapping(value = "/eugene")
         public ResponseEntity<DataStreamJira> jira() {
             String promoterfilepath = Utilities.getResourcesFilepath() + "promoters.fasta";
             String ribozymefilepath = Utilities.getResourcesFilepath() + "ribozymes.fasta";
@@ -169,7 +282,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             }
 
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
-        }
+        }*/
 
         @RequestMapping(value = "/reversetranslate")
         public ResponseEntity<DataStream> getReverse() {

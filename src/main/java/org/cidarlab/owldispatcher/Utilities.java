@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,6 +42,22 @@ public class Utilities {
         return lines;
     }
     
+    // takes string representations of fasta files in JSON request
+    public static List<String> getFastaLines(String filepath){
+        List<String> lines = new ArrayList<String>();
+        Scanner sc = new Scanner(filepath);
+		String line = "";
+		while (sc.hasNextLine()) {
+			  line = sc.nextLine();
+			  if(!line.trim().equals("")){
+		      	System.out.println(line);
+		      	lines.add(line);
+		      }
+			}
+			sc.close();
+        return lines;
+    }
+    
     public static List<String> getFileLines(String filepath){
         List<String> lines = new ArrayList<String>();
         File file = new File(filepath);
@@ -55,13 +72,14 @@ public class Utilities {
             }
             br.close();
             
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+/*        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);*/
         } catch (IOException ex) {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lines;
     }
+    
     public static boolean isSolaris() {
         String os = System.getProperty("os.name");
         return isSolaris(os);
