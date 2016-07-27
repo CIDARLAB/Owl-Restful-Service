@@ -34,9 +34,9 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     @RestController
     public class RestfulController {
 
-        private static String testUser = "testUserNew";
+        private static String testUser = "Foundry";
         private static String testProject = "testProjectNew";
-        private static String testPassword = "testPasswordNew";
+        private static String testPassword = "Broadies2016";
 
         @RequestMapping(value = "/json")
         public ResponseEntity<DataStreamJira> getJson() {
