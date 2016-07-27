@@ -6,6 +6,7 @@ import java.util.List;
 public class DataStreamJira {
 
 
+	private String myProjectId;
 	private Boolean withRybozyme;
 	private String designMethod;
 	private String inputPromotersFasta;
@@ -48,6 +49,14 @@ public class DataStreamJira {
 
 	public void setArray(String array) {
 		this.array = array;
+	}
+
+	public String getMyProjectId() {
+		return myProjectId;
+	}
+
+	public void setMyProjectId(String myProjectId) {
+		this.myProjectId = myProjectId;
 	}
 
 	public Boolean getWithRybozyme() {
