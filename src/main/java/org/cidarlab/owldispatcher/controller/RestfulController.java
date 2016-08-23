@@ -43,7 +43,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
         	DataStreamJira dataStreamJira = new DataStreamJira();
             
             dataStreamJira.setDesignMethod("Exhaustive");
-            dataStreamJira.setWithRybozyme(false);
+            dataStreamJira.setWithRibozyme(false);
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT");
             dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
@@ -178,7 +178,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                 map.put(ComponentType.GENE, genes);
                 map.put(ComponentType.TERMINATOR, terminators);
 
-                String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRybozyme(), dataStreamJira.getDesignMethod());
+                String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRibozyme(), dataStreamJira.getDesignMethod());
                 System.out.println("\n\n######################## Script");
                 System.out.println(script);
 

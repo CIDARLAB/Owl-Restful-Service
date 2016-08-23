@@ -112,7 +112,7 @@ public class FastaAdaptorTest {
         map.put(ComponentType.TERMINATOR, terminators);
 
         DataStreamJira dataStreamJira = new DataStreamJira();
-        dataStreamJira.setWithRybozyme(false);
+        dataStreamJira.setWithRibozyme(false);
         dataStreamJira.setDesignMethod("Exhaustive");
         String script = EugeneAdaptor.createEugeneScript(map,ribozymes.size() > 0,dataStreamJira.getDesignMethod());
         System.out.println("\n\n######################## Script");

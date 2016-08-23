@@ -7,7 +7,7 @@ public class DataStreamJira {
 
 
 	private String myProjectId;
-	private Boolean withRybozyme;
+	private Boolean withRibozyme;
 	private String designMethod;
 	private String inputPromotersFasta;
 	private String inputRbsFasta;
@@ -59,12 +59,12 @@ public class DataStreamJira {
 		this.myProjectId = myProjectId;
 	}
 
-	public Boolean getWithRybozyme() {
-		return withRybozyme;
+	public Boolean getWithRibozyme() {
+		return withRibozyme;
 	}
 
-	public void setWithRybozyme(Boolean withRybozyme) {
-		this.withRybozyme = withRybozyme;
+	public void setWithRibozyme(Boolean withRibozyme) {
+		this.withRibozyme = withRibozyme;
 	}
 
 	public String getDesignMethod() {
