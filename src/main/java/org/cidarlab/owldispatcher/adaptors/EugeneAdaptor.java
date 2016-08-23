@@ -267,27 +267,21 @@ public class EugeneAdaptor {
         }
 
         script += "// Ribozyme (TRUE is with; FALSE is without); Default is TRUE.\n"
-                //=============================================================================
-                // DMITRY will pass Boolean withRybozyme, from JIRA, instead of the word "true" here.
-                //              + "boolean riboz = " + withRibozyme + ";\n"
                 + "boolean riboz = " + withRibozyme + ";\n"
                 //=============================================================================
                 + "//==========================================\n"
                 + "\n"
-                //==============================================================================
-                // TO_DO: This is the place where we will have to check for dropdownList
-                //==============================================================================
+
+                //MONOCISTRONIC promoter-rbs-gene-terminator DEVICE TEMPLATE
                 
-             // pass String dropdownList instead of "Exhaustive"
-                //              + "lod = product(" + dropdownList + ");\n"
-                + "Device Exhaustive();\n"
-                + "Rule r1(on Exhaustive: ALL_FORWARD);\n"
+                + "Device Monocistronic_prgt();\n"
+                + "Rule r1(on Monocistronic_prgt: ALL_FORWARD);\n"
                 + "\n"
                 + "for(num i=1; i<=N; i=i+1) {\n"
                 + "  if(riboz == false) {\n"
-                + "  	Exhaustive = Exhaustive + Promoter + RBS + CDS + Terminator;\n"
+                + "  	Monocistronic_prgt = Monocistronic_prgt + Promoter + RBS + CDS + Terminator;\n"
                 + "  } else {\n"
-                + "   Exhaustive = Exhaustive + Promoter + Ribozyme + RBS + CDS + Terminator;\n"
+                + "   Monocistronic_prgt = Monocistronic_prgt + Promoter + Ribozyme + RBS + CDS + Terminator;\n"
                 + "  }\n"
                 + "  Promoter${\"p\"+i};\n"
                 + "  Ribozyme${\"ri\"+i};\n"
@@ -300,24 +294,41 @@ public class EugeneAdaptor {
                 + "  Terminator${\"t\"+i};\n"
                 + "}\n"
                 + "\n"
+                
+                // MONOCISTRONIC promoter-gene-terminator DEVICE TEMPLATE
+                
+                + "Device Monocistronic_pgt();\n"
+                + "Rule r1(on Monocistronic_pgt: ALL_FORWARD);\n"
 
-                //+ "lod = product(Exhaustive);\n";
-        
-     
-
-			    + "Device Fang10k(Promoter);\n"
+                + "for(num i=1; i<=N; i=i+1) {\n"
+                + "  if(rybozyme == false) {\n"
+                + "  	Monocistronic_pgt = Monocistronic_pgt + Promoter + CDS + Terminator;\n"
+                + "  } else {\n"
+                + "    Monocistronic_pgt = Monocistronic_pgt + Promoter + Insulator + CDS + Terminator;\n"
+                + "  }\n"
+                + "  Promoter${\"p\" + i};\n"
+                + "  Insulator${\"ri\"+i};\n"
+                + "  CDS${\"g\"+i}; AND(r1, ${\"g\"+i} EXACTLY 1);\n"
+                + "  if(i>=2) {\n"
+                + "    AND(r1, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n" 
+                + "  }\n"
+                + "  Terminator${\"t\"+i};\n"
+                + "}\n"
+			    
+			    //POLYCISTRONIC DEVICE TEMPLATE
+			    + "Device Polycistronic(Promoter);\n"
 			
-			    + "Rule R(on Fang10k: ALL_FORWARD);\n"
+			    + "Rule R(on Polycistronic: ALL_FORWARD);\n"
 			
 			
 			    + "for(num i=1; i<=N; i=i+1) {\n"
 			    +   	"if (i == 10 || i == 20 || i == 30 || i == 40 || i == 50 || i == 60 || i == 70) {\n"
-			    +   	"Fang = Fang10k + RBS + CDS + Promoter;\n"
+			    +   	"Polycistronic = Polycistronic + RBS + CDS + Promoter;\n"
 			    +     "CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
 			    +     "RBS${\"rbs\" + i};\n"
 			    +     "Promoter${\"p\"+i};\n"
 			    +   "} else {\n"
-			    +   	"Fang = Fang10k + RBS + CDS;\n"
+			    +   	"Polycistronic = Polycistronic + RBS + CDS;\n"
 			    + "     RBS${\"rbs\" + i};\n"
 			    + "     CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
 			    + "   }\n"
@@ -326,7 +337,7 @@ public class EugeneAdaptor {
 			    + "     AND(R, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n"
 			    + "   }\n"
 			    + " }\n"
-			    + " Fang10k = Fang10k + Terminator;\n"
+			    + " Polycistronic = Polycistronic + Terminator;\n"
 			
 			    + " lod = product(" + designMethod + ");\n";			
 			

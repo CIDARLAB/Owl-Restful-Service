@@ -42,7 +42,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
         public ResponseEntity<DataStreamJira> getJson() {
         	DataStreamJira dataStreamJira = new DataStreamJira();
             
-            dataStreamJira.setDesignMethod("Exhaustive");
+            dataStreamJira.setDesignMethod("Monocistronic_prgt");
             dataStreamJira.setWithRibozyme(false);
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT");
@@ -138,7 +138,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
 
         }*/
         
-        @RequestMapping(value = "/example", method = RequestMethod.POST)
+        @RequestMapping(value = "/run", method = RequestMethod.POST)
         public ResponseEntity<DataStreamJira> update(@RequestBody DataStreamJira dataStreamJira) {
             if (dataStreamJira == null) {
                 throw new BadRequestException();
