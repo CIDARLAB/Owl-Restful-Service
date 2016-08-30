@@ -338,7 +338,8 @@ public class EugeneAdaptor {
 			    + "   }\n"
 			    + " }\n"
 			    + " Polycistronic = Polycistronic + Terminator;\n"
-			
+	
+			    // GENERATE the DEVICE
 			    + " lod = product(" + designMethod + ");\n";			
 			
 			        return script;

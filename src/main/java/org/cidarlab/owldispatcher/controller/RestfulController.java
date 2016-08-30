@@ -1,6 +1,8 @@
     package org.cidarlab.owldispatcher.controller;
 
-    import java.util.HashMap;
+    import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
     import java.util.List;
     import java.util.Map;
     import java.util.logging.Level;
@@ -35,7 +37,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     public class RestfulController {
 
         private static String testUser = "Foundry";
-        private static String testProject = "testProjectNew";
+        //private static String testProject = "testProjectNew";
         private static String testPassword = "Broadies2016";
 
         @RequestMapping(value = "/json")
@@ -53,7 +55,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
             }
         
-        @RequestMapping(value = "/create-test-user")
+/*        @RequestMapping(value = "/create-test-user")
         public String stTest() {
             ClothoConnection conn = new ClothoConnection(Args.clothoLocation);
             Clotho clothoObject = new Clotho(conn);
@@ -63,7 +65,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             conn.closeConnection();
             return "Username :: " + testUser + "\nPassword :: " + testPassword + "\nProject :: " + testProject;
         }
-
+*/
 
 /*        @RequestMapping(value = "/example")
         public ResponseEntity<DataStreamJira> exampl() {
@@ -138,70 +140,90 @@ import org.cidarlab.owldispatcher.model.FastaStream;
 
         }*/
         
+        private static String getLogPrefix(String project) {
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+            return "[JIRA: " + project +"] " + formatter.format(new Date(System.currentTimeMillis())) + " ";
+
+        }
+        
         @RequestMapping(value = "/run", method = RequestMethod.POST)
         public ResponseEntity<DataStreamJira> update(@RequestBody DataStreamJira dataStreamJira) {
             if (dataStreamJira == null) {
                 throw new BadRequestException();
             } else {
-            	
-            	String promoterfilepath = dataStreamJira.getInputPromotersFasta();
-                String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
-                String rbsfilepath = dataStreamJira.getInputRbsFasta();
-                String genefilepath = dataStreamJira.getInputProteinsFasta();
-                String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
-                
-                String username = testUser;
-                String project = dataStreamJira.getMyProjectId();
-                String password = testPassword;
-                
-                System.out.println("\n\n######################## Fasta To Clotho Promoters");
-                System.out.println(FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
-                System.out.println("\n\n######################## Fasta To Clotho Ribozymes");
-                System.out.println(FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
-                System.out.println("\n\n######################## Fasta To Clotho RBS");
-                System.out.println(FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
-                System.out.println("\n\n######################## Fasta To Clotho Proteins");
-                System.out.println(FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
-                System.out.println("\n\n######################## Fasta To Clotho Terminators");
-                System.out.println(FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
-                
-                List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
-                List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
-                List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
-                List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
-                List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
+            	try {
+            		String promoterfilepath = dataStreamJira.getInputPromotersFasta();
+                    String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
+                    String rbsfilepath = dataStreamJira.getInputRbsFasta();
+                    String genefilepath = dataStreamJira.getInputProteinsFasta();
+                    String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
+                    
+                    String username = testUser;
+                    String project = dataStreamJira.getMyProjectId();
+                    String password = testPassword;
+                    
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Promoters");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Ribozymes");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho RBS");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Proteins");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Terminators");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
+                    
+                    List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
+                    List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
+                    List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
+                    List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
+                    List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
 
-                Map<ComponentType, List<DNAcomponent>> map = new HashMap<ComponentType, List<DNAcomponent>>();
-                map.put(ComponentType.PROMOTER, promoters);
-                map.put(ComponentType.RIBOZYME, ribozymes);
-                map.put(ComponentType.RBS, rbs);
-                map.put(ComponentType.GENE, genes);
-                map.put(ComponentType.TERMINATOR, terminators);
+                    Map<ComponentType, List<DNAcomponent>> map = new HashMap<ComponentType, List<DNAcomponent>>();
+                    map.put(ComponentType.PROMOTER, promoters);
+                    map.put(ComponentType.RIBOZYME, ribozymes);
+                    map.put(ComponentType.RBS, rbs);
+                    map.put(ComponentType.GENE, genes);
+                    map.put(ComponentType.TERMINATOR, terminators);
 
-                String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRibozyme(), dataStreamJira.getDesignMethod());
-                System.out.println("\n\n######################## Script");
-                System.out.println(script);
+                    String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRibozyme(), dataStreamJira.getDesignMethod());
+                    System.out.println("\n\n######################## Script");
+                    System.out.println(script);
 
-                EugeneAdaptor eugAdp;
-                System.out.println("\n\n######################## Run Eugene via XmlRpc");
-                try {
-                    eugAdp = new EugeneAdaptor();
-                    eugAdp.startEugeneXmlRpc(script);
-                    EugeneArray result = eugAdp.getResult();
-                    dataStreamJira.setArray(result.toString());
+                    EugeneAdaptor eugAdp;
+                    System.out.println("\n\n######################## Run Eugene via XmlRpc");
+                    try {
+                        eugAdp = new EugeneAdaptor();
+                        System.out.println(getLogPrefix(project) + "Eugene Adaptor before execution");
+                        eugAdp.startEugeneXmlRpc(script);
+                        System.out.println(getLogPrefix(project) + "Eugene Adaptor finished");
+                        EugeneArray result = eugAdp.getResult();
+                        
+                        dataStreamJira.setArray(result.toString());
+                        
+                        System.out.println(getLogPrefix(project) + "Parsing Eugene array begin");
+                        for(NamedElement ne:result.getElements()){
+                            Device device = (Device)ne;
+                            dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
+                            //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
+                        }
+                        System.out.println(getLogPrefix(project) + "Parsing Eugene array end");
 
-                    for(NamedElement ne:result.getElements()){
-                        Device device = (Device)ne;
-                        dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
-                        //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
-                    }
-
-                } catch (Exception ex) {
-                    Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            	
-            	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+                    } catch (Exception ex) {
+                    	System.out.println(getLogPrefix(project) + "Eugene failed with: " + ex.getMessage());
+                        Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
+                    }	 
+            	} catch (Throwable e){
+            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Eugene failed: " + e.getMessage());
             }
+            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Job is done");
+            	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+            	
+            	
+            }
+
         }
         
 
