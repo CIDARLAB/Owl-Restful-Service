@@ -323,21 +323,23 @@ public class EugeneAdaptor {
 			
 			    + "for(num i=1; i<=N; i=i+1) {\n"
 			    +   	"if (i == 10 || i == 20 || i == 30 || i == 40 || i == 50 || i == 60 || i == 70) {\n"
-			    +   	"Polycistronic = Polycistronic + RBS + CDS + Promoter;\n"
-			    +     "CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
-			    +     "RBS${\"rbs\" + i};\n"
-			    +     "Promoter${\"p\"+i};\n"
-			    +   "} else {\n"
-			    +   	"Polycistronic = Polycistronic + RBS + CDS;\n"
-			    + "     RBS${\"rbs\" + i};\n"
-			    + "     CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
-			    + "   }\n"
+			    +   	    "Polycistronic = Polycistronic + RBS + CDS + Promoter;\n"
+			    +           "CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
+			    +           "RBS${\"rbs\" + i};\n"
+			    +           "Promoter${\"p\"+i};\n"
+			    +       "} else {\n"
+			    +   	    "Polycistronic = Polycistronic + RBS + CDS;\n"
+			    + "         RBS${\"rbs\" + i};\n"
+			    + "         CDS${\"g\"+i}; AND(R, ${\"g\"+i} EXACTLY 1);\n"
+			    + "      }\n"
 			       
 			    + "   if(i>=2) {\n"
 			    + "     AND(R, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n"
 			    + "   }\n"
+			  
 			    + " }\n"
-			    + " Polycistronic = Polycistronic + Terminator;\n"
+			    + "   Polycistronic = Polycistronic + Terminator;\n"
+			    
 	
 			    // GENERATE the DEVICE
 			    + " lod = product(" + designMethod + ");\n";			

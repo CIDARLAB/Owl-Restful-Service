@@ -48,7 +48,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             dataStreamJira.setWithRibozyme(false);
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT");
-            dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
+            dataStreamJira.setInputRibozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
             dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
             dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
             	
@@ -155,7 +155,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             } else {
             	try {
             		String promoterfilepath = dataStreamJira.getInputPromotersFasta();
-                    String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
+                    String ribozymefilepath = dataStreamJira.getInputRibozymesFasta();
                     String rbsfilepath = dataStreamJira.getInputRbsFasta();
                     String genefilepath = dataStreamJira.getInputProteinsFasta();
                     String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();

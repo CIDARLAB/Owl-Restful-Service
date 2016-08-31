@@ -11,7 +11,7 @@ public class DataStreamJira {
 	private String designMethod;
 	private String inputPromotersFasta;
 	private String inputRbsFasta;
-	private String inputRybozymesFasta;
+	private String inputRibozymesFasta;
 	private String inputProteinsFasta;
 	private String inputTerminatorsFasta;
 	private String array;
@@ -91,12 +91,12 @@ public class DataStreamJira {
 		this.inputRbsFasta = inputRbsFasta;
 	}
 
-	public String getInputRybozymesFasta() {
-		return inputRybozymesFasta;
+	public String getInputRibozymesFasta() {
+		return inputRibozymesFasta;
 	}
 
-	public void setInputRybozymesFasta(String inputRybozymesFasta) {
-		this.inputRybozymesFasta = inputRybozymesFasta;
+	public void setInputRibozymesFasta(String inputRibozymesFasta) {
+		this.inputRibozymesFasta = inputRibozymesFasta;
 	}
 
 	public String getInputProteinsFasta() {
