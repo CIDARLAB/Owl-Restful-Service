@@ -307,7 +307,7 @@ public class EugeneAdaptor {
                 + "    Monocistronic_pgt = Monocistronic_pgt + Promoter + Insulator + CDS + Terminator;\n"
                 + "  }\n"
                 + "  Promoter${\"p\" + i};\n"
-                + "  Insulator${\"ri\"+i};\n"
+                + "  Ribozyme${\"ri\"+i};\n"
                 + "  CDS${\"g\"+i}; AND(r2, ${\"g\"+i} EXACTLY 1);\n"
                 + "  if(i>=2) {\n"
                 + "    AND(r2, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n" 
