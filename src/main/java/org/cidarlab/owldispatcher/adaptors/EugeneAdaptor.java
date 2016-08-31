@@ -118,7 +118,7 @@ public class EugeneAdaptor {
                     System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
                 }
 
-                Device monocistronic = (Device)results.get("Monocistronic_prgt");
+                /*Device monocistronic = (Device)results.get("Monocistronic_prgt");
 
                 Rule ruleOnParts = (Rule)results.get("r1");
 
@@ -127,9 +127,9 @@ public class EugeneAdaptor {
                 System.out.println(ruleOnParts);
                 System.out.println(ruleOnPartTypePositioning);
 
-                    /*
+                    
                      * concatenate both rules using a logical and
-                     */
+                     
 
                     Rule concatenated = this.and(ruleOnParts, ruleOnPartTypePositioning);
                     System.out.println(concatenated);
@@ -143,12 +143,12 @@ public class EugeneAdaptor {
 
                 // process the result array
                 System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
-
+*/
             }
       	}
     }
 
-    public Rule and(final Rule r1, final Rule r2) {
+    /*public Rule and(final Rule r1, final Rule r2) {
 
   		LogicalAnd andR1 = r1.getPredicates();
   		LogicalAnd andR2 = r2.getPredicates();
@@ -165,14 +165,14 @@ public class EugeneAdaptor {
   	public Rule deriveRuleFromStructure(Device device)
   			throws EugeneException {
 
-  		/*
+  		
   		 * Positioning Rule
   		 *
   		 * the i-th component must be positioned BEFORE the (i+1)-th component
   		 *
   		 * Assumption:
   		 * -- the device consists of part types only
-  		 */
+  		 
 
   		// the constraints are conjuctive
   		LogicalAnd positioning = new LogicalAnd();
@@ -201,7 +201,7 @@ public class EugeneAdaptor {
   		// return the rule object
   		return structuralRule;
   	}
-
+*/
 
 // pass Boolean withRybozyme
 // pass designMethod
