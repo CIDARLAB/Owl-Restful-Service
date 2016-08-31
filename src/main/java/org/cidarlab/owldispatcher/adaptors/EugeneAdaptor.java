@@ -301,7 +301,7 @@ public class EugeneAdaptor {
                 + "Rule r2(on Monocistronic_pgt: ALL_FORWARD);\n"
 
                 + "for(num i=1; i<=N; i=i+1) {\n"
-                + "  if(rybozyme == false) {\n"
+                + "  if(riboz == false) {\n"
                 + "  	Monocistronic_pgt = Monocistronic_pgt + Promoter + CDS + Terminator;\n"
                 + "  } else {\n"
                 + "    Monocistronic_pgt = Monocistronic_pgt + Promoter + Insulator + CDS + Terminator;\n"
