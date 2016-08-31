@@ -118,11 +118,11 @@ public class EugeneAdaptor {
                     System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
                 }
 
-                Device exhaustive = (Device)results.get("Exhaustive");
+                Device monocistronic = (Device)results.get("Monocistronic_prgt");
 
                 Rule ruleOnParts = (Rule)results.get("r1");
 
-                Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(exhaustive);
+                Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(monocistronic);
 
                 System.out.println(ruleOnParts);
                 System.out.println(ruleOnPartTypePositioning);
