@@ -298,7 +298,7 @@ public class EugeneAdaptor {
                 // MONOCISTRONIC promoter-gene-terminator DEVICE TEMPLATE
                 
                 + "Device Monocistronic_pgt();\n"
-                + "Rule r1(on Monocistronic_pgt: ALL_FORWARD);\n"
+                + "Rule r2(on Monocistronic_pgt: ALL_FORWARD);\n"
 
                 + "for(num i=1; i<=N; i=i+1) {\n"
                 + "  if(rybozyme == false) {\n"
@@ -308,9 +308,9 @@ public class EugeneAdaptor {
                 + "  }\n"
                 + "  Promoter${\"p\" + i};\n"
                 + "  Insulator${\"ri\"+i};\n"
-                + "  CDS${\"g\"+i}; AND(r1, ${\"g\"+i} EXACTLY 1);\n"
+                + "  CDS${\"g\"+i}; AND(r2, ${\"g\"+i} EXACTLY 1);\n"
                 + "  if(i>=2) {\n"
-                + "    AND(r1, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n" 
+                + "    AND(r2, ${\"g\"+(i-1)} BEFORE ${\"g\"+i});\n" 
                 + "  }\n"
                 + "  Terminator${\"t\"+i};\n"
                 + "}\n"

@@ -216,7 +216,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                         Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
                     }	 
             	} catch (Throwable e){
-            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Eugene failed: " + e.getMessage());
+            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
             }
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Job is done");
             	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
