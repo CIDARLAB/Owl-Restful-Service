@@ -304,7 +304,7 @@ public class EugeneAdaptor {
                 + "  if(riboz == false) {\n"
                 + "  	Monocistronic_pgt = Monocistronic_pgt + Promoter + CDS + Terminator;\n"
                 + "  } else {\n"
-                + "    Monocistronic_pgt = Monocistronic_pgt + Promoter + Insulator + CDS + Terminator;\n"
+                + "    Monocistronic_pgt = Monocistronic_pgt + Promoter + Ribozyme + CDS + Terminator;\n"
                 + "  }\n"
                 + "  Promoter${\"p\" + i};\n"
                 + "  Ribozyme${\"ri\"+i};\n"
