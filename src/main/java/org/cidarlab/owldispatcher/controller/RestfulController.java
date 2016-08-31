@@ -153,7 +153,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             if (dataStreamJira == null) {
                 throw new BadRequestException();
             } else {
-            	try {
+            	//try {
             		String promoterfilepath = dataStreamJira.getInputPromotersFasta();
                     String ribozymefilepath = dataStreamJira.getInputRibozymesFasta();
                     String rbsfilepath = dataStreamJira.getInputRbsFasta();
@@ -215,16 +215,16 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                     	System.out.println(getLogPrefix(project) + "Eugene failed with: " + ex.getMessage());
                         Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
                     }	 
-            	} catch (Throwable e){
-            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
-            }
+            	} //catch (Throwable e){
+            	//System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
+            //}
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Job is done");
             	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
             	
             	
             }
 
-        }
+       // }
         
 
  
