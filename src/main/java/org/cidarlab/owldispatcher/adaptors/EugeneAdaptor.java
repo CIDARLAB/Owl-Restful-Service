@@ -132,7 +132,7 @@ public class EugeneAdaptor {
                      
 
                     Rule concatenated = this.and(ruleOnParts, ruleOnPartTypePositioning);
-                    System.out.println(concatenated);
+                    System.out.println(concatenated);*/
 
                 result
                         = (EugeneArray) results.get("lod");
@@ -143,7 +143,7 @@ public class EugeneAdaptor {
 
                 // process the result array
                 System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
-*/
+
             }
       	}
     }
