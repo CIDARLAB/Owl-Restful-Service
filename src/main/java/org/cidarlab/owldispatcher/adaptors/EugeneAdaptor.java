@@ -49,6 +49,7 @@ public class EugeneAdaptor {
     // @Getter
     private EugeneArray result;
     
+    private OwlEugeneCallBack callback;
     
     public EugeneArray getResult() {
 		return result;
@@ -80,9 +81,14 @@ public class EugeneAdaptor {
         this.client = new XmlRpcClient();
         this.client.setConfig(config);
     }
-
-    public void startEugeneXmlRpc(String script) throws Exception{
-        this.asynchronousCall(script);
+	
+	public void startEugeneXmlRpc(String script) throws Exception{
+        this.synchronousCall(script);
+    }
+	
+    public void startEugeneXmlRpc(String script, OwlEugeneCallBack _callback) throws Exception{
+        this.callback = _callback;
+    	this.asynchronousCall(script);
     }
 
     /**
@@ -95,7 +101,7 @@ public class EugeneAdaptor {
     
     private void asynchronousCall(String script) throws Exception {
         OwlEugeneCallBack callbacknew = new OwlEugeneCallBack();
-        client.executeAsync("MiniEugeneXmlRpc.executeEugene", new Object[]{script}, callbacknew);
+        client.executeAsync("MiniEugeneXmlRpc.executeEugene", new Object[]{script}, this.callback);
         
     }
     

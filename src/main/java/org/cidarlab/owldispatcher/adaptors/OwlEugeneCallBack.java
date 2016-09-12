@@ -10,17 +10,19 @@ import org.apache.xmlrpc.client.AsyncCallback;
 import org.apache.xmlrpc.client.TimingOutCallback;
 import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
+import org.cidarlab.owldispatcher.controller.RestfulController;
 
-/**
- *
- * @author prash
- */
+
 public class OwlEugeneCallBack implements AsyncCallback {
 
     
     private EugeneArray result;
     
-    @Override
+    public EugeneArray getResult() {
+		return result;
+	}
+
+	@Override
     public void handleResult(XmlRpcRequest xrr, Object object) {
         System.out.println(object.toString());
         
@@ -68,14 +70,14 @@ public class OwlEugeneCallBack implements AsyncCallback {
 
             }
       	} else{
-            System.out.println("NULL!!!!!!");
+            System.out.println("ERROR: Eugene failed to execute async call. Some problem with the callback.");
         }
         
     }
 
     @Override
     public void handleError(XmlRpcRequest xrr, Throwable thrwbl) {
-        System.out.println("Error here.");
+        System.out.println("ERROR: XmlRpc throwable error. See OwlEugeneCallBack class");
     }
     
 }

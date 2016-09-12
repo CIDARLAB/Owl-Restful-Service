@@ -19,8 +19,8 @@ import java.util.HashMap;
     import org.cidarlab.owldispatcher.DOM.DNAcomponent;
     import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
     import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
-
-    import org.cidarlab.owldispatcher.adaptors.ReverseTranslate;
+import org.cidarlab.owldispatcher.adaptors.OwlEugeneCallBack;
+import org.cidarlab.owldispatcher.adaptors.ReverseTranslate;
     import org.cidarlab.owldispatcher.exception.BadRequestException;
     import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.FastaStream;
@@ -197,9 +197,13 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                     try {
                         eugAdp = new EugeneAdaptor();
                         System.out.println(getLogPrefix(project) + "Eugene Adaptor before execution");
-                        eugAdp.startEugeneXmlRpc(script);
+                        OwlEugeneCallBack callback = new OwlEugeneCallBack();
+                        
+                        eugAdp.startEugeneXmlRpc(script, callback);
                         System.out.println(getLogPrefix(project) + "Eugene Adaptor finished");
-                        EugeneArray result = eugAdp.getResult();
+                        //EugeneArray result = eugAdp.getResult();
+                        callback.wait(Args.callbacktime);
+                        EugeneArray result = callback.getResult();
                         
                         dataStreamJira.setArray(result.toString());
                         
