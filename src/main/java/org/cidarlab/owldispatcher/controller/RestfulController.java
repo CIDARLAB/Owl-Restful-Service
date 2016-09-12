@@ -202,7 +202,16 @@ import org.cidarlab.owldispatcher.model.FastaStream;
                         eugAdp.startEugeneXmlRpc(script, callback);
                         System.out.println(getLogPrefix(project) + "Eugene Adaptor finished");
                         //EugeneArray result = eugAdp.getResult();
-                        callback.wait(Args.callbacktime);
+                        
+                        
+                        
+                        if(callback.waitForResult(System.currentTimeMillis())){
+                            System.out.println("Got reply back from Eugene!");
+                        }
+                        else{
+                            System.out.println("Did not work :( ");
+                        }
+                        
                         EugeneArray result = callback.getResult();
                         
                         dataStreamJira.setArray(result.toString());

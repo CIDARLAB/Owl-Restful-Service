@@ -14,6 +14,6 @@ public class Args {
     public static final String clothoLocation = "wss://www.clothocad.org:8443/websocket";
     //public static final String clothoLocation = "wss://localhost:8443/websocket";
     public static String eugeneRootDirectory = "";
-    public static long callbacktime = 1000 * 1200;
+    public static long callbacktime = 1000 * 60;
 
 }
