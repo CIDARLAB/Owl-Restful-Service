@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
+import org.apache.xmlrpc.client.TimingOutCallback;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -81,7 +82,7 @@ public class EugeneAdaptor {
     }
 
     public void startEugeneXmlRpc(String script) throws Exception{
-        this.synchronousCall(script);
+        this.asynchronousCall(script);
     }
 
     /**
@@ -91,6 +92,13 @@ public class EugeneAdaptor {
      *
      * @param rules ... a set of miniEugene constraints
      */
+    
+    private void asynchronousCall(String script) throws Exception {
+        OwlEugeneCallBack callbacknew = new OwlEugeneCallBack();
+        client.executeAsync("MiniEugeneXmlRpc.executeEugene", new Object[]{script}, callbacknew);
+        
+    }
+    
     private void synchronousCall(String script)
             throws Exception {
 
@@ -98,10 +106,23 @@ public class EugeneAdaptor {
          * here, we invoke the executeEugene/1 method of
          * the miniEugene XML-RPC Web service
          */
+        
+        //TimingOutCallback callback = new TimingOutCallback(Args.callbacktime);
+        //OwlEugeneCallBack callbacknew = new OwlEugeneCallBack();
+        
         Object object = client.execute(
                 "MiniEugeneXmlRpc.executeEugene",
                 new Object[]{script});
-
+        
+//        client.executeAsync("MiniEugeneXmlRpc.executeEugene", new Object[]{script}, callbacknew);
+//        
+//        Object object = null;
+//        try {
+//            object = callback.waitForResponse();
+//        } catch (Throwable ex) {
+//            Logger.getLogger(EugeneAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
         if (null != object) {
 
             // the received object, is actually a EugeneCollection object
@@ -145,7 +166,9 @@ public class EugeneAdaptor {
                 System.out.println("\n\nThe total number of constraints-compliant devices is: " + result.size());
 
             }
-      	}
+      	} else{
+            System.out.println("NULL!!!!!!");
+        }
     }
 
     /*public Rule and(final Rule r1, final Rule r2) {
