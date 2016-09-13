@@ -47,9 +47,9 @@ public class FastaAdaptor {
                     
                     try {
                         String componentName = component.getPropertyValues().get("name").toString().replaceAll("\"", "");
-                        System.out.println(componentName);
-                        lines.add(">" + componentName + "\n");
-                        lines.add(component.getSequence() + "\n");
+                        //System.out.println(componentName);
+                        lines.add(">" + componentName/* + "\n"*/);
+                        lines.add(component.getSequence()/* + "\n"*/);
                         
                     } catch (EugeneException ex) {
                         Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,9 +68,9 @@ public class FastaAdaptor {
                 for(NamedElement ne : listnamedElement){
                     Component component = (Component)ne;
                     writer.write(">"+component.getPropertyValues().get("name"));
-                    writer.newLine();
+                    //writer.newLine();
                     writer.write(component.getSequence());
-                    writer.newLine();
+                    //writer.newLine();
                 }
             }
             writer.close();
