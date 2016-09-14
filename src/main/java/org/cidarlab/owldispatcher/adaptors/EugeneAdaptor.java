@@ -65,7 +65,8 @@ public class EugeneAdaptor {
          * we configure the URL of the miniEugene XML-RPC Web service
          */
         this.config.setServerURL(new URL("http://cidar.bu.edu/miniEugeneXmlRpc/xmlrpc"));
-
+        this.config.setConnectionTimeout(1000*60);
+        this.config.setReplyTimeout(1000*60*5);
         /*
          * we enable extensions
          */
@@ -107,7 +108,7 @@ public class EugeneAdaptor {
             // the received object, is actually a EugeneCollection object
             if (object instanceof EugeneCollection) {
 
-                //this.collection
+                 //this.collection
                 EugeneCollection results
                         = (EugeneCollection) object;
 
