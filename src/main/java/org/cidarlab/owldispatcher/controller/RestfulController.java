@@ -32,6 +32,7 @@ import org.cidarlab.owldispatcher.model.FastaStream;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
     @RestController
     public class RestfulController {
@@ -46,11 +47,14 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             
             dataStreamJira.setDesignMethod("Monocistronic_prgt");
             dataStreamJira.setWithRibozyme(false);
-            dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
-            dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT");
+            dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATCGTAGCTAGCTAGCTA");
+            dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA");
             dataStreamJira.setInputRibozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
-            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
-            dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
+            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC>gene3\nATGCTAGCTAGCTA\n>gene4\nTGATCGATCGATCAC\n"
+            									+ ">gene5\nATGCTAGCTAGCTA\n>gene6\nTGATCGATCGATCAC>gene7\nATGCTAGCTAGCTA\n>gene8\nTGATCGATCGATCAC\n"
+            									+ ">gene9\nATGCTAGCTAGCTA\n>gene10\nTGATCGATCGATCAC>gene11\nATGCTAGCTAGCTA\n>gene12\nTGATCGATCGATCAC\n"
+            									+ ">gene13\nATGCTAGCTAGCTA\n>gene14\nTGATCGATCGATCAC>gene15\nATGCTAGCTAGCTA");
+            dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT");
             	
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
             }
@@ -219,8 +223,9 @@ import org.cidarlab.owldispatcher.model.FastaStream;
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
             }
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Job is done");
-            	return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
-            	
+            	ResponseEntity<DataStreamJira> res = new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Returning result");
+            	return res;
             	
             }
 
