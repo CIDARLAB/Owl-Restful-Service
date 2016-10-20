@@ -1,38 +1,31 @@
     package org.cidarlab.owldispatcher.controller;
 
-    import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-    import java.util.List;
-    import java.util.Map;
-    import java.util.logging.Level;
-    import java.util.logging.Logger;
-    import org.cidarlab.eugene.dom.Component;
-    import org.cidarlab.eugene.dom.Device;
-    import org.cidarlab.eugene.dom.NamedElement;
-
-    import org.cidarlab.eugene.dom.imp.container.EugeneArray;
-    import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
-    import org.cidarlab.owldispatcher.Args;
-    import org.cidarlab.owldispatcher.Utilities;
-    import org.cidarlab.owldispatcher.DOM.ComponentType;
-    import org.cidarlab.owldispatcher.DOM.DNAcomponent;
-    import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
-    import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
-
-    import org.cidarlab.owldispatcher.adaptors.ReverseTranslate;
-    import org.cidarlab.owldispatcher.exception.BadRequestException;
-    import org.cidarlab.owldispatcher.model.DataStreamJira;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.cidarlab.eugene.dom.Device;
+import org.cidarlab.eugene.dom.NamedElement;
+import org.cidarlab.eugene.dom.imp.container.EugeneArray;
+import org.cidarlab.owldispatcher.Utilities;
+import org.cidarlab.owldispatcher.DOM.ComponentType;
+import org.cidarlab.owldispatcher.DOM.DNAcomponent;
+import org.cidarlab.owldispatcher.DOM.GenBankFeature;
+import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
+import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
+import org.cidarlab.owldispatcher.adaptors.GenBankImporter;
+import org.cidarlab.owldispatcher.exception.BadRequestException;
+import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.FastaStream;
-    import org.clothoapi.clotho3javaapi.Clotho;
-    import org.clothoapi.clotho3javaapi.ClothoConnection;
-    import org.springframework.http.HttpStatus;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.web.bind.annotation.RequestBody;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
     @RestController
     public class RestfulController {
@@ -249,5 +242,18 @@ import org.springframework.web.client.RestTemplate;
         @RequestMapping(value = "/", method = RequestMethod.POST)
         private String viaPost() {
             return "Hello from OwlDispatcher using POST request";
+        }
+        
+        // this is just an example how to parse GenBank file into separate parts
+        @RequestMapping(value = "/genbank")
+        private String genbank() {
+        	String filepath = Utilities.getResourcesFilepath() + "genbank.gb";
+    		List<String> _input = Utilities.getFileLines(filepath);
+    		String input = GenBankImporter.stringifyList(_input);
+    		System.out.println("==============INPUT STRING BEGINS=================");
+    		System.out.println(input);
+    		System.out.println("==============INPUT STRING ENDS=================");
+    		GenBankImporter.analyzeGenBank(input);
+            return "GenBank fie is parsed; see the terminal window in IDE";
         }
     }

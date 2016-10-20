@@ -72,10 +72,10 @@ public class Utilities {
             }
             br.close();
             
-/*        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);*/
-        } catch (IOException ex) {
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, e);
         }
         return lines;
     }
