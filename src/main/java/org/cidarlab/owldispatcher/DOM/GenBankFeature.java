@@ -1,6 +1,6 @@
 package org.cidarlab.owldispatcher.DOM;
 
-public class GenBankFeature {
+public class GenBankFeature extends GenBankFile {
 	private String name;
 	   private boolean reverseComplement;
 	   private boolean isSource;
@@ -19,7 +19,8 @@ public class GenBankFeature {
 	   }
 	   
 	   public GenBankFeature(String name, boolean reverseComplement, boolean isSource, String forwardColor, String reverseColor, int startx, int endx, String dnaSequence, String featureType, String sourceId, String genBankId, String partId) {
-	       this.name = name;
+	       super();
+		   this.name = name;
 	       this.reverseComplement = reverseComplement;
 	       this.isSource = isSource;
 	       this.forwardColor = forwardColor;

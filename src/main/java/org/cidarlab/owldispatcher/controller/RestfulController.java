@@ -15,6 +15,7 @@ import org.cidarlab.owldispatcher.DOM.ComponentType;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
 import org.cidarlab.owldispatcher.DOM.GenBankFeature;
 import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
+import org.cidarlab.owldispatcher.adaptors.ExportGenBank;
 import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import org.cidarlab.owldispatcher.adaptors.GenBankImporter;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
@@ -244,7 +245,7 @@ import org.springframework.web.bind.annotation.RestController;
             return "Hello from OwlDispatcher using POST request";
         }
         
-        // this is just an example how to parse GenBank file into separate parts
+        // this is just an example how to parse GenBank file into separate parts and assemble GenBank file from parts
         @RequestMapping(value = "/genbank")
         private String genbank() {
         	String filepath = Utilities.getResourcesFilepath() + "genbank.gb";
@@ -253,7 +254,18 @@ import org.springframework.web.bind.annotation.RestController;
     		System.out.println("==============INPUT STRING BEGINS=================");
     		System.out.println(input);
     		System.out.println("==============INPUT STRING ENDS=================");
-    		GenBankImporter.analyzeGenBank(input);
-            return "GenBank fie is parsed; see the terminal window in IDE";
+    		List<GenBankFeature> parts = GenBankImporter.analyzeGenBank(input);
+    		System.out.println("============parts imported=================");
+    		System.out.println("parsed a total of" + parts.size() + " parts");
+    		for(GenBankFeature part : parts){
+    			if(part.getDnaSequence().length() > 100){
+    				System.out.println("Name: " + part.getName() + "\t" + "Sequence_substring(1-100): " + part.getDnaSequence().substring(0, 100));
+    			} else{
+    				System.out.println("Name: " + part.getName() + "\t" + "Sequence: " + part.getDnaSequence());
+    			}
+    		};
+    		
+    		ExportGenBank.writeGenBank(parts);
+            return "GenBank export/import is complete; see the terminal window in IDE";
         }
     }

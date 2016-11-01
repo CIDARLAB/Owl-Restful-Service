@@ -187,6 +187,16 @@ public class Utilities {
         return _filepath;
     }
     
+    public static String getOutputFilepath() {
+        String _filepath = getFilepath();
+        if (Utilities.isWindows()) {
+            _filepath += "\\src\\main\\resources\\outputs\\";
+        } else {
+            _filepath += "/src/main/resources/outputs/";
+        }
+        return _filepath;
+    }
+    
     public static void setEugeneRootDirectory(String filepath){
         Args.eugeneRootDirectory = filepath;
     }
