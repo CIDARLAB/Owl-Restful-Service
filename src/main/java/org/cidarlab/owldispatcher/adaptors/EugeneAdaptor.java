@@ -33,7 +33,7 @@ import org.cidarlab.owldispatcher.DOM.DNAcomponent;
 import org.cidarlab.owldispatcher.Utilities;
 
 /**
- *
+ * @author Ernst Oberortner
  * @author prash
  */
 public class EugeneAdaptor {

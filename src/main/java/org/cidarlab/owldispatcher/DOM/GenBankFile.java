@@ -1,10 +1,26 @@
 package org.cidarlab.owldispatcher.DOM;
 
+/*
+ * @author Yury V. Ivanov
+*/
+
+
 public class GenBankFile {
 	
 	private String fullSequence;
 	private String accession;
+	private String oldAccession;
 	
+	
+	
+	public String getOldAccession() {
+		return oldAccession;
+	}
+
+	public void setOldAccession(String oldAccession) {
+		this.oldAccession = oldAccession;
+	}
+
 	public String getFullSequence() {
 		return fullSequence;
 	}

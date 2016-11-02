@@ -5,7 +5,6 @@
  */
 package org.cidarlab.owldispatcher.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,12 +13,8 @@ import java.util.List;
  */
 public class FastaStream {
     
-    // @Getter
-    // @Setter
     private String device;
     
-    // @Getter
-    // @Setter
     private String fastafile = "";
     
     

@@ -1,5 +1,10 @@
 package org.cidarlab.owldispatcher.DOM;
 
+/*
+ * @author Lloyd M.
+*/
+
+
 public class GenBankFeature extends GenBankFile {
 	private String name;
 	   private boolean reverseComplement;

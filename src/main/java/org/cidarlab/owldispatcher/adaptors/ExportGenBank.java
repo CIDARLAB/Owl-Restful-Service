@@ -1,5 +1,10 @@
 package org.cidarlab.owldispatcher.adaptors;
 
+/*
+ * @author Lloyd M.
+ * @author Yury V. Ivanov
+*/
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,22 +48,31 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         gbkFlatFile += "\n  ORGANISM  "+".";
         gbkFlatFile +="\nFEATURES             Location/Qualifiers";
         gbkFlatFile +="\n     source          1.."+sequenceLength;
-        gbkFlatFile +="\n                     /note=\"unknown device\"";
+        gbkFlatFile +="\n                     /note=\"unknown device; a derivative of the accession number: " + parts.get(0).getOldAccession() + "\"";
         for(GenBankFeature part : parts){
         	if(part.getFeatureType().matches("CDS")){
 	        	if(!part.getReverseComplement()){
 	        		gbkFlatFile +="\n     gene            " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        		gbkFlatFile +="\n     " + part.getFeatureType() + "             " + part.getStartx() + ".." + part.getEndx();
 	        	} else{
 	        		gbkFlatFile +="\n     gene            complement(" + part.getStartx() + ".." + part.getEndx() + ")";
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        		gbkFlatFile +="\n     " + part.getFeatureType() + "             complement(" + part.getStartx() + ".." + part.getEndx() + ")";
 	        	}
         		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
         		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+        		if(part.getGenBankId() != null){
+        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+        		}
 	        	gbkFlatFile +="\n                     /product=\"gp" + part.getName() +"\"";
 	        	
 	        	//translate nucleotide sequence into protein and print into CDS annotation in genBank file
@@ -90,30 +104,48 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        		gbkFlatFile +="\n     promoter        " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	} else{
 	        		gbkFlatFile +="\n     promoter        complement(" + part.getStartx() + ".." + part.getEndx() + ")";
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	}        	
         	} else if (part.getFeatureType().matches("terminator")){
 	        	if(!part.getReverseComplement()){
 	        		gbkFlatFile +="\n     terminator      " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	} else{
 	        		gbkFlatFile +="\n     terminator      complement(" + part.getStartx() + ".." + part.getEndx() + ")";
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	}  
         	} else if (part.getFeatureType().matches("ncRNA")){
 	        	if(!part.getReverseComplement()){
 	        		gbkFlatFile +="\n     ncRNA           " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	} else{
 	        		gbkFlatFile +="\n     ncRNA           complement(" + part.getStartx() + ".." + part.getEndx() + ")";
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
 	        	}  
         	}
         } 
@@ -156,7 +188,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         file.mkdir();
     	try (FileWriter locFile = new FileWriter(pathToFile);){
     		locFile.write(genBank);
-    		System.out.println(pathToFile + " file was successfully created");
+    		System.out.println(pathToFile + " file was successfully created.");
     	}
     }
 }

@@ -1,5 +1,11 @@
 package org.cidarlab.owldispatcher.adaptors;
 
+/*
+ * @author Lloyd M.
+ * @author Yury V. Ivanov
+*/
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -24,10 +30,10 @@ public class GenBankImporter {
             gbkData.put(nameValue[0].trim(), nameValue[1].trim());
         }
         
-        // to check gbk hashmap
+        /*// to check gbk hashmap
         for(String key: gbkData.keySet()){
         	System.out.println(key + "    ->    " + gbkData.get(key));
-        }
+        }*/
 
         String featureSection = gbkData.get("FEATURES"); //Gets the text in the features section
         //System.out.println(featureSection);
@@ -55,7 +61,7 @@ public class GenBankImporter {
         //System.out.println("=========================================");
         
         if (dnaSEQUENCE.isEmpty()) {
-            System.out.println("ERROR: File " + Utilities.getResourcesFilepath() + "<fileName>.gb does not contain a sequence!");
+            System.out.println("ERROR: File " + Utilities.getResourcesFilepath() + "genbank.gb file does not contain a sequence!");
             return null;
         }
         
@@ -65,7 +71,7 @@ public class GenBankImporter {
             
             //gbFeature.setForwardColor(SequenceViewerView.familyColorMap.get(SequenceViewerView.FAMILY.unknown));
             //gbFeature.setReverseColor(SequenceViewerView.familyColorMap.get(SequenceViewerView.FAMILY.unknown));
-            gbFeature.setGenBankId(gbkId);
+            gbFeature.setOldAccession(gbkId);
             gbFeature.setFullSequence(dnaSEQUENCE.toUpperCase());
             
             String featureName = null;
@@ -85,6 +91,12 @@ public class GenBankImporter {
             } else {
                 featureName = featureType;
                 gbFeature.setName(featureName);
+            }
+            
+            //check for old locus_tag in the annotation and save its value.
+            if (feature.contains("/locus_tag=")) {
+                featureName = feature.split("/locus_tag=\"")[1].split("\"")[0];
+                gbFeature.setGenBankId(featureName);
             }
             
             featureLengthString = featureLengthString.replaceAll("[<>]", ""); //gets rid of extraneous notation

@@ -1,5 +1,10 @@
     package org.cidarlab.owldispatcher.controller;
 
+    /*
+     * @author Yury V. Ivanov
+    */
+
+    
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -256,7 +261,7 @@ import org.springframework.web.bind.annotation.RestController;
     		System.out.println("==============INPUT STRING ENDS=================");
     		List<GenBankFeature> parts = GenBankImporter.analyzeGenBank(input);
     		System.out.println("============parts imported=================");
-    		System.out.println("parsed a total of" + parts.size() + " parts");
+    		System.out.println(getLogPrefix("Owl") + "parsed a total of" + parts.size() + " parts");
     		for(GenBankFeature part : parts){
     			if(part.getDnaSequence().length() > 100){
     				System.out.println("Name: " + part.getName() + "\t" + "Sequence_substring(1-100): " + part.getDnaSequence().substring(0, 100));
@@ -265,7 +270,9 @@ import org.springframework.web.bind.annotation.RestController;
     			}
     		};
     		
+    		System.out.println(getLogPrefix("Owl") + "writing GenBank file...");
     		ExportGenBank.writeGenBank(parts);
+    		System.out.println(getLogPrefix("Owl") + "GenBank file was created. Job is done.");
             return "GenBank export/import is complete; see the terminal window in IDE";
         }
     }
