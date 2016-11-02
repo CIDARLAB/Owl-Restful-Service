@@ -1,6 +1,6 @@
-LOCUS       F1478104475109          9294 bp    DNA     linear   UNK 02-NOV-2016
+LOCUS       F1478113525687          9294 bp    DNA     linear   UNK 02-NOV-2016
 DEFINITION  .
-ACCESSION   F1478104475109
+ACCESSION   F1478113525687
 VERSION     .
 KEYWORDS    .
 SOURCE      .
@@ -10,21 +10,21 @@ FEATURES             Location/Qualifiers
                      /note="unknown device; a derivative of the accession number: NC_000913.3"
      gene            complement(1..295)
                      /gene="ydcO"
-                     /locus_tag="F1478104475109_2"
+                     /locus_tag="F1478113525687_2"
                      /db_xref="b1433"
      CDS             complement(1..295)
                      /gene="ydcO"
-                     /locus_tag="F1478104475109_2"
+                     /locus_tag="F1478113525687_2"
                      /db_xref="b1433"
                      /product="gpydcO"
                      /translation="MRLFSIPPPTLLAGFLAVLIGYASSAAIIWQAAIVAGATTAQIS
      gene            387..923
                      /gene="ydcN"
-                     /locus_tag="F1478104475109_4"
+                     /locus_tag="F1478113525687_4"
                      /db_xref="b1434"
      CDS             387..923
                      /gene="ydcN"
-                     /locus_tag="F1478104475109_4"
+                     /locus_tag="F1478113525687_4"
                      /db_xref="b1434"
                      /product="gpydcN"
                      /translation="MENLARFLSTTLKQLRQQRGWSLSRLAEATGVSKAMLGQIERNE
@@ -33,11 +33,11 @@ FEATURES             Location/Qualifiers
                      NGGEQTVHFHSLIHYPRS"
      gene            996..2957
                      /gene="ydcP"
-                     /locus_tag="F1478104475109_6"
+                     /locus_tag="F1478113525687_6"
                      /db_xref="b1435"
      CDS             996..2957
                      /gene="ydcP"
-                     /locus_tag="F1478104475109_6"
+                     /locus_tag="F1478113525687_6"
                      /db_xref="b1435"
                      /product="gpydcP"
                      /translation="VTVSSHRLELLSPARDAAIAREAILHGADAVYIGGPGFGARHNA
@@ -54,42 +54,42 @@ FEATURES             Location/Qualifiers
                      HILKMPLPGSVVASVSPDELLKTLPKRKG"
      gene            complement(3049..3279)
                      /gene="yncJ"
-                     /locus_tag="F1478104475109_9"
+                     /locus_tag="F1478113525687_9"
                      /db_xref="b1436"
      CDS             complement(3049..3279)
                      /gene="yncJ"
-                     /locus_tag="F1478104475109_9"
+                     /locus_tag="F1478113525687_9"
                      /db_xref="b1436"
                      /product="gpyncJ"
                      /translation="MFTKALSVVLLTCALFSGQLMAGHKGHEFVWVKNVDHQLRHEAD
      gene            3501..3677
                      /gene="hicA"
-                     /locus_tag="F1478104475109_11"
+                     /locus_tag="F1478113525687_11"
                      /db_xref="b4532"
      CDS             3501..3677
                      /gene="hicA"
-                     /locus_tag="F1478104475109_11"
+                     /locus_tag="F1478113525687_11"
                      /db_xref="b4532"
                      /product="gphicA"
                      /translation="VKQSEFRRWLESQGVDVANGSNHLKLRFHGRRSVMPRHPCDEIK
      gene            3723..4139
                      /gene="hicB"
-                     /locus_tag="F1478104475109_13"
+                     /locus_tag="F1478113525687_13"
                      /db_xref="b1438"
      CDS             3723..4139
                      /gene="hicB"
-                     /locus_tag="F1478104475109_13"
+                     /locus_tag="F1478113525687_13"
                      /db_xref="b1438"
                      /product="gphicB"
                      /translation="MRYPVTLTPAPEGGYMVSFVDIPEALTQGETVAEAMEAAKDALL
                      TAFDFYFEDNELIPLPSPLNSHDHFIEVPLSVASKVLLLNAFLQSEITQQELARRIGK
      gene            4218..5624
                      /gene="ydcR"
-                     /locus_tag="F1478104475109_15"
+                     /locus_tag="F1478113525687_15"
                      /db_xref="b1439"
      CDS             4218..5624
                      /gene="ydcR"
-                     /locus_tag="F1478104475109_15"
+                     /locus_tag="F1478113525687_15"
                      /db_xref="b1439"
                      /product="gpydcR"
                      /translation="MKKYQQLAEQLREQIASGIWQPGDRLPSLRDQVALSGMSFMTVS
@@ -103,11 +103,11 @@ FEATURES             Location/Qualifiers
                      EREEQAVKQLGKLIQERL"
      gene            5869..7014
                      /gene="ydcS"
-                     /locus_tag="F1478104475109_17"
+                     /locus_tag="F1478113525687_17"
                      /db_xref="b1440"
      CDS             5869..7014
                      /gene="ydcS"
-                     /locus_tag="F1478104475109_17"
+                     /locus_tag="F1478113525687_17"
                      /db_xref="b1440"
                      /product="gpydcS"
                      /translation="MSKTFARSSLCALSMTIMTAHAAEPPTNLDKPEGRLDIIAWPGY
@@ -119,11 +119,11 @@ FEATURES             Location/Qualifiers
                      LGEKGCETNGFNYFDKIAFWKTPIAEGGKFVPYSRWTQDYIAIMGGR"
      gene            7032..8045
                      /gene="ydcT"
-                     /locus_tag="F1478104475109_19"
+                     /locus_tag="F1478113525687_19"
                      /db_xref="b1441"
      CDS             7032..8045
                      /gene="ydcT"
-                     /locus_tag="F1478104475109_19"
+                     /locus_tag="F1478113525687_19"
                      /db_xref="b1441"
                      /product="gpydcT"
                      /translation="MTYAVEFDNVSRLYGDVRAVDGVSIAIKDGEFFSMLGPSGSGKT
@@ -135,11 +135,11 @@ FEATURES             Location/Qualifiers
                      EER"
      gene            8046..8987
                      /gene="ydcU"
-                     /locus_tag="F1478104475109_21"
+                     /locus_tag="F1478113525687_21"
                      /db_xref="b1442"
      CDS             8046..8987
                      /gene="ydcU"
-                     /locus_tag="F1478104475109_21"
+                     /locus_tag="F1478113525687_21"
                      /db_xref="b1442"
                      /product="gpydcU"
                      /translation="MAMNVLQSPSRPGLGKVSGFFWHNPGLGLFLLLLGPLMWFGIVY
@@ -150,11 +150,11 @@ FEATURES             Location/Qualifiers
                      QGAIGNMPMAAAFTLVPIILIALYLAFVKRLGAFDAL"
      gene            8977..9294
                      /gene="ydcV"
-                     /locus_tag="F1478104475109_23"
+                     /locus_tag="F1478113525687_23"
                      /db_xref="b1443"
      CDS             8977..9294
                      /gene="ydcV"
-                     /locus_tag="F1478104475109_23"
+                     /locus_tag="F1478113525687_23"
                      /db_xref="b1443"
                      /product="gpydcV"
                      /translation="MHSERAPFFLKLAAWGGVVFLHFPILIIAAYAFNTEDAAFSFPP

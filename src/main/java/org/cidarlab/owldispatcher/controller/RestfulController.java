@@ -1,6 +1,9 @@
     package org.cidarlab.owldispatcher.controller;
 
-    /*
+    import java.io.File;
+import java.io.IOException;
+
+/*
      * @author Yury V. Ivanov
     */
 
@@ -23,6 +26,7 @@ import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
 import org.cidarlab.owldispatcher.adaptors.ExportGenBank;
 import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import org.cidarlab.owldispatcher.adaptors.GenBankImporter;
+import org.cidarlab.owldispatcher.adaptors.ZipFileUtil;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.FastaStream;
@@ -232,22 +236,22 @@ import org.springframework.web.bind.annotation.RestController;
         
 
  
-        // example of senfing key / value pairs with optional parameters
+        // example of sending key / value pairs with optional parameters
         /*	@RequestMapping(value = "/api2", method = RequestMethod.POST)
-         public Map<String, Boolean> in(@RequestParam(value="rybozyme", required=false, defaultValue = "false") boolean rybozyme){
+         public Map<String, Boolean> in(@RequestParam(value="ribozyme", required=false, defaultValue = "false") boolean ribozyme){
          Map<String, Boolean> result = new HashMap<String, Boolean>();
-         result.put("withRybozyme", rybozyme);
+         result.put("withRibozyme", ribozyme);
          return result;
          }*/
     //Simple greeting tests
         @RequestMapping(value = "/")
         private String viaGet() {
-            return "Hello from OwlDispatcher using GET request";
+            return "Hello from OwlDispatcher via GET request";
         }
 
         @RequestMapping(value = "/", method = RequestMethod.POST)
         private String viaPost() {
-            return "Hello from OwlDispatcher using POST request";
+            return "Hello from OwlDispatcher via POST request";
         }
         
         // this is just an example how to parse GenBank file into separate parts and assemble GenBank file from parts
@@ -272,7 +276,16 @@ import org.springframework.web.bind.annotation.RestController;
     		
     		System.out.println(getLogPrefix("Owl") + "writing GenBank file...");
     		ExportGenBank.writeGenBank(parts);
-    		System.out.println(getLogPrefix("Owl") + "GenBank file was created. Job is done.");
+    		System.out.println(getLogPrefix("Owl") + "GenBank file was created.");
+    		
+    		System.out.println(getLogPrefix("Owl") + "is attempting to zip " + Utilities.getOutputFilepath() + " folder.");
+    		try{
+    			ZipFileUtil.zipDirectory(new File(Utilities.getOutputFilepath()), new File("output.zip"));
+    		} catch (IOException ex) {
+    			System.out.println(getLogPrefix("Owl") + "Something went wrong while attempting to zip files.");
+    			ex.printStackTrace();
+    		}
+    			
             return "GenBank export/import is complete; see the terminal window in IDE";
         }
     }
