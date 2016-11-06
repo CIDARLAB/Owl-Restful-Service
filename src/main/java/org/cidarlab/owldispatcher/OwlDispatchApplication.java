@@ -30,6 +30,6 @@ public class OwlDispatchApplication {
 			System.out.println(name);
 		}
 		
-		PigeonClient.requestPigeon();
+		PigeonClient.requestPigeon("p p1 2%0D%0Ar r2 3%0d%0ag g3 6%0D%0At t4 13%0d%0a# Arcs");
 	}
 }
