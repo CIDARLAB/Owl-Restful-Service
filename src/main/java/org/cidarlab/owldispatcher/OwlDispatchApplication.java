@@ -1,5 +1,6 @@
 package org.cidarlab.owldispatcher;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.cidarlab.owldispatcher.adaptors.PigeonClient;
@@ -30,6 +31,11 @@ public class OwlDispatchApplication {
 			System.out.println(name);
 		}
 		
-		PigeonClient.requestPigeon("p p1 2%0D%0Ar r2 3%0d%0ag g3 6%0D%0At t4 13%0d%0a# Arcs");
+		try {
+			PigeonClient.requestPigeon("p p1 2%0D%0Ar r2 3%0d%0ag g3 6%0D%0At t4 13%0d%0a# Arcs");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
