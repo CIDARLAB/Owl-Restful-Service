@@ -1,6 +1,7 @@
 package org.cidarlab.owldispatcher.adaptors;
 
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -14,6 +15,11 @@ public class PigeonClient {
 		
 		System.out.println("============testing Pigeon API=============");
 		System.out.println(response.getBody().toString());
-		return response.getBody().toString();
+		
+		JsonNode body = new JsonNode(response.getBody());
+		String pigeonImageUrl = body.getObject().get("fileURL").toString();
+		
+		System.out.println(pigeonImageUrl);
+		return pigeonImageUrl;
 	}
 }

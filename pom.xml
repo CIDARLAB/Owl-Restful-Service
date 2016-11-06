@@ -216,6 +216,10 @@
 		<artifactId>unirest-java</artifactId>
 		<version>1.4.9</version>
 	</dependency>
+	<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+</dependency>
     </dependencies>
 
     <build>
