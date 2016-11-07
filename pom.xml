@@ -72,6 +72,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.6</version>
+                        <type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
