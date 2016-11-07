@@ -6,9 +6,11 @@
 package org.cidarlab.owldispatcher;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +27,23 @@ import java.util.logging.Logger;
  * @author prash
  */
 public class Utilities {
+    
+    
+    public static void writeToFile(String filepath, String content){
+        try {
+            FileWriter fr = new FileWriter(new File(filepath));
+            try (BufferedWriter br = new BufferedWriter(fr)) {
+                br.write(content);
+                br.flush();
+            }
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("File " + filepath + " not found.");
+            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public static List<String> getFileLines(InputStream inp){
         BufferedReader br = new BufferedReader(new InputStreamReader(inp));
@@ -126,6 +145,14 @@ public class Utilities {
             return true;
         }
         return false;
+    }
+    
+    public static String getFileDivider(){
+        
+        if(isWindows()){
+            return "\\";
+        }
+        return "/";
     }
     
     public static String getFilepath() {

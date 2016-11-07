@@ -209,7 +209,6 @@ import org.springframework.web.bind.annotation.RestController;
                         System.out.println(getLogPrefix(project) + "Eugene Adaptor finished");
                         EugeneArray result = eugAdp.getResult();
                         
-                        dataStreamJira.setArray(result.toString());
                         
                         //Generates Pigeon images and saves them in the output folder
                         System.out.println(getLogPrefix(project) + "Generating Pigeon images...");
