@@ -85,7 +85,7 @@ public class FastaAdaptor {
     
     public static String createDeviceFastaFile(Device device, String projectName){
     	final String pathToFolder = Utilities.getOutputFilepath() + projectName;
-    	final String pathToFile = pathToFolder + "\\" + device.getName() + ".fasta";
+    	final String pathToFile = pathToFolder + Utilities.getFileDivider() + device.getName() + ".fasta";
         File file = new File(pathToFolder);
         file.mkdir();
         try {

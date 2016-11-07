@@ -107,7 +107,7 @@ public class PigeonClient {
             URL url = new URL(pigeonImageUrl);
             image = ImageIO.read(url);
             final String pathToFolder = Utilities.getOutputFilepath() + projectName;
-            final String pathToFile = pathToFolder + "\\" + key + ".png";
+            final String pathToFile = pathToFolder + Utilities.getFileDivider() + key + ".png";
             File file = new File(pathToFolder);
             file.mkdir();
             File outputFile = new File(pathToFile);

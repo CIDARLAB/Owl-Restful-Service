@@ -5,6 +5,10 @@
  */
 package org.cidarlab.owldispatcher.adaptors;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.OwlData;
@@ -24,8 +28,9 @@ public class LatexAdaptor {
                 + "\\usepackage[usenames, dvipsnames]{color}\n"
                 + "\\usepackage{adjustbox}\n"
                 + "\\usepackage[section]{placeins}\n";
+        String newProjectName = project.getMyProjectId().replaceAll("_", Matcher.quoteReplacement("\\_"));
         
-        latex += "\\title{Datasheet summary - Project " + project.getMyProjectId() + "}\n";
+        latex += "\\title{Datasheet summary - Project " + newProjectName + "}\n";
         
         latex += "\\begin{document}\n"
                 + "\\maketitle\n"
@@ -33,7 +38,8 @@ public class LatexAdaptor {
                 + "\\begin{itemize}\n";
 
         for(String deviceName:project.getPigeonFilepath().keySet()){
-            latex += "\\item " + deviceName.replaceAll("_", "\\_") + "\\\\\n";
+            String newDeviceName = deviceName.replaceAll("_", Matcher.quoteReplacement("\\_"));
+            latex += "\\item " + newDeviceName + "\\\\\n";
             latex += "Blah blah blah\\\\\n";
             latex += getImageMinibox(project.getPigeonFilepath().get(deviceName));
         }
@@ -46,7 +52,7 @@ public class LatexAdaptor {
     
     private static String getImageMinibox(String filepath){
         String latex = "";
-        latex += "\\begin{minipage}[t]{1.2\\linewidth}\n"
+        latex += "\\begin{minipage}[t]{\\linewidth}\n"
                 + "          \\adjustbox{valign=t}{\n";
         latex += "           \\includegraphics[width=\\linewidth]{" + filepath + "}\n";
         latex += "          }\n"
@@ -58,6 +64,32 @@ public class LatexAdaptor {
         String filepath = Utilities.getOutputFilepath() + project.getMyProjectId() + Utilities.getFileDivider() + project.getMyProjectId() + ".tex";
         Utilities.writeToFile(filepath, generateLatexCode(project));
         return filepath;
+    }
+    
+    public static void runPDFlatex(OwlData project){
+        String texPath = getLatexFilepath(project);
+        String outputDir = Utilities.getOutputFilepath() + project.getMyProjectId();
+        
+        String command = "";
+        if(Utilities.isWindows()){
+            
+        }
+        if(Utilities.isMac()){
+            
+        }
+        if(Utilities.isLinux()){
+            command += "pdflatex -aux-directory=" + outputDir + " -output-directory=" + outputDir + " " + texPath;
+        }
+        Runtime runtime = Runtime.getRuntime();
+        Process proc = null;
+        try {
+            proc = runtime.exec(command);
+            proc.waitFor();
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(LatexAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    
     }
     
 }
