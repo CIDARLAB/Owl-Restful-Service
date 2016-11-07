@@ -30,7 +30,6 @@ import org.cidarlab.owldispatcher.DOM.Project;
 import org.cidarlab.owldispatcher.Utilities;
 import org.clothoapi.clotho3javaapi.Clotho;
 import org.clothoapi.clotho3javaapi.ClothoConnection;
-import org.json.JSONObject;
 
 /**
  *
@@ -84,6 +83,34 @@ public class FastaAdaptor {
         return fastafilepath;
     }
     
+    public static String createDeviceFastaFile(Device device, String projectName){
+    	final String pathToFolder = Utilities.getOutputFilepath() + projectName;
+    	final String pathToFile = pathToFolder + "\\" + device.getName() + ".fasta";
+        File file = new File(pathToFolder);
+        file.mkdir();
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile));
+            writer.write(">"+device.getName());
+            writer.newLine();
+            for(List<NamedElement> listnamedElement : device.getComponents()){
+            	for(NamedElement ne : listnamedElement){
+                    Component component = (Component)ne;
+                    writer.write(component.getSequence());
+                    
+                }
+            }
+            writer.newLine();
+            writer.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EugeneException ex) {
+            Logger.getLogger(FastaAdaptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return pathToFile;
+    }
+    
     private static void setProjCompIds(List<String> finalIdList, ComponentType type, Project proj){
         switch (type) {
             case PROMOTER:
@@ -129,7 +156,7 @@ public class FastaAdaptor {
             conn.closeConnection();
             return false;
         }
-        Map projQuery = new HashMap();
+        Map<String, String> projQuery = new HashMap<String, String>();
         projQuery.put("name", projectId);
         projQuery.put("owner", username);
         projQuery.put("schema", Project.class.getCanonicalName());

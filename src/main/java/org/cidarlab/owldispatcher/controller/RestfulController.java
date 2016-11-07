@@ -9,8 +9,10 @@ import java.io.IOException;
 
     
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -26,6 +28,7 @@ import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
 import org.cidarlab.owldispatcher.adaptors.ExportGenBank;
 import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import org.cidarlab.owldispatcher.adaptors.GenBankImporter;
+import org.cidarlab.owldispatcher.adaptors.PigeonClient;
 import org.cidarlab.owldispatcher.adaptors.ZipFileUtil;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
@@ -53,10 +56,8 @@ import org.springframework.web.bind.annotation.RestController;
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATCGTAGCTAGCTAGCTA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA");
             dataStreamJira.setInputRibozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
-            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC>gene3\nATGCTAGCTAGCTA\n>gene4\nTGATCGATCGATCAC\n"
-            									+ ">gene5\nATGCTAGCTAGCTA\n>gene6\nTGATCGATCGATCAC>gene7\nATGCTAGCTAGCTA\n>gene8\nTGATCGATCGATCAC\n"
-            									+ ">gene9\nATGCTAGCTAGCTA\n>gene10\nTGATCGATCGATCAC>gene11\nATGCTAGCTAGCTA\n>gene12\nTGATCGATCGATCAC\n"
-            									+ ">gene13\nATGCTAGCTAGCTA\n>gene14\nTGATCGATCGATCAC>gene15\nATGCTAGCTAGCTA");
+            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC\n>gene3\nATGCTAGCTAGCTA\n>gene4\nTGATCGATCGATCAC\n"
+            									+ ">gene5\nATGCTAGCTAGCTA\n>gene6\nTGATCGATCGATCAC\n>gene7\nATGCTAGCTAGCTA\n>gene8\nTGATCGATCGATCAC\n");
             dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT");
             	
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
@@ -210,13 +211,26 @@ import org.springframework.web.bind.annotation.RestController;
                         
                         dataStreamJira.setArray(result.toString());
                         
-                        System.out.println(getLogPrefix(project) + "Parsing Eugene array begin");
+                        //Generates Pigeon images and saves them in the output folder
+                        System.out.println(getLogPrefix(project) + "Generating Pigeon images...");
+                        Map<String,String> pigeonMap = new LinkedHashMap<>();
+                    	pigeonMap = PigeonClient.generatePigeonScript(result);
+                    	PigeonClient.generateFile(pigeonMap, project);
+                        
+                        System.out.println(getLogPrefix(project) + "Parsing Eugene array begin...");
+                        
+                        
+                        //Generates fasta files for each device and saves them in output/projectName/ folder
                         for(NamedElement ne:result.getElements()){
                             Device device = (Device)ne;
-                            dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
-                            //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
+                            System.out.println(device.getName());
+                            System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
+                            
+                            //used to create fasta file and put it in JSON response<DataStreamJira>.
+                            //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
+                            
                         }
-                        System.out.println(getLogPrefix(project) + "Parsing Eugene array end");
+                        System.out.println(getLogPrefix(project) + "Parsing Eugene array end.");
 
                     } catch (Exception ex) {
                     	System.out.println(getLogPrefix(project) + "Eugene failed with: " + ex.getMessage());

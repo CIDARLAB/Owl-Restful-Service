@@ -31,11 +31,12 @@ public class OwlDispatchApplication {
 			System.out.println(name);
 		}
 		
-		try {
-			PigeonClient.requestPigeon("p p1 2%0D%0Ar r2 3%0d%0ag g3 6%0D%0At t4 13%0d%0a# Arcs");
+		/*try {
+			//PigeonClient.requestPigeon("p p1 2%0D%0Ar r2 3%0d%0ag g3 6%0D%0At t4 13%0d%0a# Arcs");
+			PigeonClient.requestPigeon("p p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0Ap p 13%0D%0Ar rbs 13%0D%0Ac g 13%0D%0At t 13%0D%0A# Arcs");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 }

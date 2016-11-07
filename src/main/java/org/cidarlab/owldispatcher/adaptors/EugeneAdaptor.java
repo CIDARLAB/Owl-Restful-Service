@@ -7,6 +7,8 @@ package org.cidarlab.owldispatcher.adaptors;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,6 +21,8 @@ import org.cidarlab.eugene.dom.Component;
 import org.cidarlab.eugene.dom.Device;
 import org.cidarlab.eugene.dom.NamedElement;
 import org.cidarlab.eugene.dom.PartType;
+import org.cidarlab.eugene.dom.Property;
+import org.cidarlab.eugene.dom.PropertyValue;
 import org.cidarlab.eugene.Eugene;
 import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
@@ -30,6 +34,7 @@ import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Args;
 import org.cidarlab.owldispatcher.DOM.ComponentType;
 import org.cidarlab.owldispatcher.DOM.DNAcomponent;
+
 import org.cidarlab.owldispatcher.Utilities;
 
 /**
@@ -119,17 +124,18 @@ public class EugeneAdaptor {
                     System.out.println("Eugene Collection :: ERROR; the collection is empty!!!");
                 }
 
-                /*Device monocistronic = (Device)results.get("Monocistronic_prgt");
+                Device myDevice = (Device)results.get("Monocistronic_prgt");
 
-                Rule ruleOnParts = (Rule)results.get("r1");
+                //Rule ruleOnParts = (Rule)results.get("r1");
 
-                Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(monocistronic);
+                //Rule ruleOnPartTypePositioning = this.deriveRuleFromStructure(myDevice);
 
-                System.out.println(ruleOnParts);
-                System.out.println(ruleOnPartTypePositioning);
+                //System.out.println(ruleOnParts);
+                //System.out.println(myDevice.toString());
+                //System.out.println(ruleOnPartTypePositioning);
 
                     
-                     * concatenate both rules using a logical and
+/*                     * concatenate both rules using a logical and
                      
 
                     Rule concatenated = this.and(ruleOnParts, ruleOnPartTypePositioning);
@@ -138,7 +144,15 @@ public class EugeneAdaptor {
                 result
                         = (EugeneArray) results.get("lod");
                 
-                
+        
+                	//System.out.println(result.getElement(0)); // 1st device Monocistronic_prgt1
+                	//String part = result.getElement(0).getElement(0).toString();// 1st part with all properties
+                	//System.out.println(part);
+                	
+                //GENERATES PIGEON IMAGES AND SAVES THEM IN THE OUTPUT FOLDEER
+                	/*Map<String,String> pigeonMap = new LinkedHashMap<>();
+                	pigeonMap = PigeonClient.generatePigeonScript(result);
+                	PigeonClient.requestPigeon(pigeonMap);*/
 
                 // Would be nice to get SBOL files and Pigeon images for each device in EugeneArray
 
