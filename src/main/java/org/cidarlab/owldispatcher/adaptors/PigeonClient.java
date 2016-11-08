@@ -88,7 +88,7 @@ public class PigeonClient {
 
     public static Map<String,String> generateFile(Map<String, String> devicePigeonMap, String projectName) throws UnirestException, IOException {
         
-        Map<String,String> pigeonFilepath = new HashMap<String,String>();
+        Map<String,String> pigeonFilepath = new LinkedHashMap<String,String>();
         
         for (String key : devicePigeonMap.keySet()) {
             System.out.println(key + " : " + devicePigeonMap.get(key));

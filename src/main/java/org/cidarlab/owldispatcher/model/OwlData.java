@@ -5,7 +5,7 @@
  */
 package org.cidarlab.owldispatcher.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class OwlData extends AbstractData{
     }
     
     public OwlData(){
-        pigeonFilepath = new HashMap<String,String>();
+        pigeonFilepath = new LinkedHashMap<String,String>();
         
     }
     
