@@ -54,7 +54,12 @@ public class LatexAdaptor {
         String latex = "";
         latex += "\\begin{minipage}[t]{\\linewidth}\n"
                 + "          \\adjustbox{valign=t}{\n";
-        latex += "           \\includegraphics[width=\\linewidth]{" + filepath + "}\n";
+        if(Utilities.isWindows()){
+        	String newFilePath = filepath.replaceAll("\\\\","/");
+        	latex += "           \\includegraphics[width=\\linewidth]{" + newFilePath + "}\n";
+        }else {
+        	latex += "           \\includegraphics[width=\\linewidth]{" + filepath + "}\n";
+        }
         latex += "          }\n"
                 + "          \\end{minipage}\n";
         return latex;
@@ -72,7 +77,8 @@ public class LatexAdaptor {
         
         String command = "";
         if(Utilities.isWindows()){
-            
+        	command += "pdflatex -output-directory=" + outputDir + "\\ " + texPath;
+        	//command += "pdflatex -aux-directory=" + outputDir + " -output-directory=" + outputDir + " " + texPath;
         }
         if(Utilities.isMac()){
             
@@ -82,6 +88,7 @@ public class LatexAdaptor {
         }
         Runtime runtime = Runtime.getRuntime();
         Process proc = null;
+        System.out.println(command);
         try {
             proc = runtime.exec(command);
             proc.waitFor();
