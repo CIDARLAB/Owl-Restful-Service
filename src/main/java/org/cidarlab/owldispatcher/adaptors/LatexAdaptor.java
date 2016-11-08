@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import org.cidarlab.owldispatcher.Utilities;
-import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.OwlData;
 
 /**
@@ -76,10 +75,11 @@ public class LatexAdaptor {
         String outputDir = Utilities.getOutputFilepath() + project.getMyProjectId();
         
         String command = "";
+        
         if(Utilities.isWindows()){
-        	command += "pdflatex -output-directory=" + outputDir + "\\ " + texPath;
-        	//command += "pdflatex -aux-directory=" + outputDir + " -output-directory=" + outputDir + " " + texPath;
+        	
         }
+   	
         if(Utilities.isMac()){
             
         }
@@ -90,7 +90,7 @@ public class LatexAdaptor {
         Process proc = null;
         System.out.println(command);
         try {
-            proc = runtime.exec(command);
+        	proc = runtime.exec(command);
             proc.waitFor();
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(LatexAdaptor.class.getName()).log(Level.SEVERE, null, ex);
