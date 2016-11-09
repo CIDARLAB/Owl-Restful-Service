@@ -7,6 +7,9 @@ package org.cidarlab.owldispatcher.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.cidarlab.owldispatcher.Utilities;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,15 +23,24 @@ public class OwlData extends AbstractData{
     @Setter
     private Map<String,String> pigeonFilepath;
     
+    @Getter
+    private final String pathToTexFolder = Utilities.getOutputFilepath()+"tex";
+    
+    @Setter
+    @Getter
+    private String pathToTexFile;
+    
+    
     
     public void addPigeonFilepath(String filename, String filepath){
         pigeonFilepath.put(filename, filepath);
     }
     
     public OwlData(){
-        pigeonFilepath = new LinkedHashMap<String,String>();
-        
+        pigeonFilepath = new LinkedHashMap<String,String>();        
     }
     
-    
+    public OwlData(Map<String,String> pigeonFilepath){
+    	this.pigeonFilepath = pigeonFilepath;
+    }
 }

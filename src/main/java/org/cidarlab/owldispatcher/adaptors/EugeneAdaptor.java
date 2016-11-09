@@ -26,6 +26,7 @@ import org.cidarlab.eugene.dom.PropertyValue;
 import org.cidarlab.eugene.Eugene;
 import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.eugene.dom.imp.container.EugeneCollection;
+import org.cidarlab.eugene.dom.imp.container.EugeneReturnCollection;
 import org.cidarlab.eugene.dom.rules.ArrangementConstraint;
 import org.cidarlab.eugene.dom.rules.ArrangementOperand;
 import org.cidarlab.eugene.dom.rules.LogicalAnd;
@@ -125,6 +126,12 @@ public class EugeneAdaptor {
                 }
 
                 Device myDevice = (Device)results.get("Monocistronic_prgt");
+                
+                
+    			/*if(results instanceof EugeneReturnCollection) {
+    				System.out.println("visualized images: " + 
+    						((EugeneReturnCollection)results).getImages());								
+    			}*/
 
                 //Rule ruleOnParts = (Rule)results.get("r1");
 

@@ -28,11 +28,14 @@ import org.cidarlab.owldispatcher.adaptors.EugeneAdaptor;
 import org.cidarlab.owldispatcher.adaptors.ExportGenBank;
 import org.cidarlab.owldispatcher.adaptors.FastaAdaptor;
 import org.cidarlab.owldispatcher.adaptors.GenBankImporter;
+import org.cidarlab.owldispatcher.adaptors.LatexAdaptor;
 import org.cidarlab.owldispatcher.adaptors.PigeonClient;
+import org.cidarlab.owldispatcher.adaptors.ShellExec;
 import org.cidarlab.owldispatcher.adaptors.ZipFileUtil;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.FastaStream;
+import org.cidarlab.owldispatcher.model.OwlData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -167,6 +170,7 @@ import org.springframework.web.bind.annotation.RestController;
                     String rbsfilepath = dataStreamJira.getInputRbsFasta();
                     String genefilepath = dataStreamJira.getInputProteinsFasta();
                     String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
+                    Map<String,String> images = new LinkedHashMap<String, String>();
                     
                     String username = testUser;
                     String project = dataStreamJira.getMyProjectId();
@@ -213,32 +217,56 @@ import org.springframework.web.bind.annotation.RestController;
                         //Generates Pigeon images and saves them in the output folder
                         System.out.println(getLogPrefix(project) + "Generating Pigeon images...");
                         Map<String,String> pigeonMap = new LinkedHashMap<>();
-                    	pigeonMap = PigeonClient.generatePigeonScript(result);
-                    	PigeonClient.generateFile(pigeonMap, project);
+                    	//pigeonMap is a Map<String,String> with <deviceName>:<pigeonScript>
+                        pigeonMap = PigeonClient.generatePigeonScript(result);
+                    	images = PigeonClient.generateFile(pigeonMap, project);
                         
-                        System.out.println(getLogPrefix(project) + "Parsing Eugene array begin...");
+                        System.out.println(getLogPrefix(project) + "\n\n################Parsing Eugene array##################");
                         
                         
                         //Generates fasta files for each device and saves them in output/projectName/ folder
                         for(NamedElement ne:result.getElements()){
                             Device device = (Device)ne;
-                            System.out.println(device.getName());
+                            System.out.println(getLogPrefix(project) + "Generating FASTA file for " + device.getName() +" device");
                             System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
                             
                             //used to create fasta file and put it in JSON response<DataStreamJira>.
-                            //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
-                            
+                            //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));   
                         }
-                        System.out.println(getLogPrefix(project) + "Parsing Eugene array end.");
 
                     } catch (Exception ex) {
                     	System.out.println(getLogPrefix(project) + "Eugene failed with: " + ex.getMessage());
                         Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
-                    }	 
+                    }	
+                
+                 // PDF DATASHEET
+                    System.out.println(getLogPrefix(project) + "\n\n################ PDF Datasheet ###############");
+                    OwlData owl = new OwlData(images);
+                    owl.setMyProjectId(project);
+                    owl.setPathToTexFile(owl.getPathToTexFolder()+Utilities.getFileDivider()+owl.getMyProjectId()+".tex");
+                    String texFile = LatexAdaptor.makeTexFile(owl);
+                    System.out.println(texFile+" file was successfully created.");
+
+                    ShellExec exec = new ShellExec(true, false);
+                    try {
+                        exec.execute("pdflatex", Utilities.getProjectFolderPath(owl), true, owl.getPathToTexFile());
+                    } catch (IOException e) {
+                        System.out.println(getLogPrefix(project) + "PDFlatex failed. Reason: " + e.getMessage());
+                    }
+                    //System.out.println(exec.getOutput());
+                    
+                    Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".aux");
+                    Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".log");
+                    Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".out");
+                    
+                    System.out.println(getLogPrefix(project) + "Parsing Eugene array end.");    
+                    
             	} catch (Throwable e){
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
             }
-            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Job is done");
+            	
+            	
+            	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "\n\n########## Project is done");
             	ResponseEntity<DataStreamJira> res = new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Returning result");
             	return res;

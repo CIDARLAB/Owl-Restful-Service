@@ -5,9 +5,7 @@
  */
 package org.cidarlab.owldispatcher.adaptors;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
 import java.util.regex.Matcher;
 import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.model.OwlData;
@@ -64,39 +62,12 @@ public class LatexAdaptor {
         return latex;
     }
     
-    public static String getLatexFilepath(OwlData project){
-        String filepath = Utilities.getOutputFilepath() + project.getMyProjectId() + Utilities.getFileDivider() + project.getMyProjectId() + ".tex";
-        Utilities.writeToFile(filepath, generateLatexCode(project));
-        return filepath;
+    public static String makeTexFile(OwlData project){
+        File texFolder = new File(project.getPathToTexFolder());
+        texFolder.mkdir();
+        Utilities.writeToFile(project.getPathToTexFile(), generateLatexCode(project));
+        return project.getPathToTexFile();
     }
-    
-    public static void runPDFlatex(OwlData project){
-        String texPath = getLatexFilepath(project);
-        String outputDir = Utilities.getOutputFilepath() + project.getMyProjectId();
-        
-        String command = "";
-        
-        if(Utilities.isWindows()){
-        	
-        }
-   	
-        if(Utilities.isMac()){
-            
-        }
-        if(Utilities.isLinux()){
-            command += "pdflatex -aux-directory=" + outputDir + " -output-directory=" + outputDir + " " + texPath;
-        }
-        Runtime runtime = Runtime.getRuntime();
-        Process proc = null;
-        System.out.println(command);
-        try {
-        	proc = runtime.exec(command);
-            proc.waitFor();
-        } catch (IOException | InterruptedException ex) {
-            Logger.getLogger(LatexAdaptor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    
-    }
-    
+           
 }
+    

@@ -22,6 +22,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.cidarlab.owldispatcher.model.OwlData;
+
 /**
  *
  * @author prash
@@ -222,6 +224,28 @@ public class Utilities {
             _filepath += "/src/main/resources/outputs/";
         }
         return _filepath;
+    }
+    
+    public static String getProjectFolderPath(OwlData project) {
+        String _filepath = getFilepath();
+        if (Utilities.isWindows()) {
+            _filepath += "\\src\\main\\resources\\outputs\\"+project.getMyProjectId()+"\\";
+        } else {
+            _filepath += "/src/main/resources/outputs/"+project.getMyProjectId()+"/";
+        }
+        return _filepath;
+    }
+    
+    public static void removeFile(String pathToFile){
+    	File file = new File(pathToFile);
+    	String path = null;
+		try {
+			path = file.getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	File filePath = new File(path);
+    	filePath.delete();
     }
     
     public static void setEugeneRootDirectory(String filepath){

@@ -18,12 +18,20 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 
 /*
  * @author Yury V. Ivanov
  */
 public class PigeonClient {
+	
+	@Getter
+	@Setter
+	private static Map<String, Integer> colors = new HashMap<>();
 
     public static void requestPigeon(String pigeonCodeEncoded) throws UnirestException, IOException {
         HttpResponse<String> response = Unirest.post("http://synbiotools.bu.edu:5801/dev/perch2.php")
@@ -64,23 +72,26 @@ public class PigeonClient {
             for (int j = 0; j < myDevice.getComponents().size(); j++) {
                 String part = myDevice.getComponents().get(j).get(0).toString();
                 //System.out.println(part);
+                String partName = myDevice.getComponents().get(j).get(0).getElement("name").toString().replaceAll("\"", "");
+                //System.out.println(partName);
                 if (part.startsWith("Promoter")) {
-                    script += "p p 13%0D%0A";
+                    script += "p p " + getColor(partName) + "%0D%0A";
                 } else if (part.startsWith("RBS")) {
-                    script += "r rbs 13%0D%0A";
+                    script += "r rbs "+ getColor(partName) + "%0D%0A";
                 } else if (part.startsWith("Ribozyme")) {
-                    script += "z ri 13%0D%0A";
+                    script += "z ri "+ getColor(partName) + "%0D%0A";
                 } else if (part.startsWith("CDS")) {
-                    script += "c g 13%0D%0A";
+                    script += "c g "+ getColor(partName) + "%0D%0A";
                 } else if (part.startsWith("Terminator")) {
-                    script += "t t 13%0D%0A";
+                    script += "t t "+ getColor(partName) + "%0D%0A";
                 } else {
                     System.out.println("Urecognized part type: " + part);
                 }
             }
             script += "# Arcs";
+           
             pigeonMap.put(deviceName, script);
-
+            
             script = "";
         }
         return pigeonMap;
@@ -119,4 +130,36 @@ public class PigeonClient {
         }
         return pigeonFilepath;
     }
+     
+    /**
+	 * 
+	 * @param s  ... the name of a component
+	 * @return   the color code of the component
+	 */
+	private static int getColor(String s) {
+		if(colors.containsKey(s)) {
+			int color = colors.get(s);
+			if(color <= 1) {
+				return 1;
+			} else if(color >= 14) {
+				return 14;
+			}
+			return color;
+		}
+
+		/*
+		 * otherwise, we put the name into the coloring map
+		 */
+		int color = getRandomColor();
+		colors.put(s, color);
+		return color;
+	}
+	
+	private static final int COLOR_MIN = 1;
+	private static final int COLOR_MAX = 14;
+	
+	private static int getRandomColor() {
+		return COLOR_MIN + (int)(Math.random() * ((COLOR_MAX - COLOR_MIN) + 1));
+	}
+    
 }
