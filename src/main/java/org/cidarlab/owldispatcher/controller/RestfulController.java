@@ -1,6 +1,6 @@
     package org.cidarlab.owldispatcher.controller;
 
-    import java.io.File;
+import java.io.File;
 import java.io.IOException;
 
 /*
@@ -9,7 +9,6 @@ import java.io.IOException;
 
     
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,7 +33,6 @@ import org.cidarlab.owldispatcher.adaptors.ShellExec;
 import org.cidarlab.owldispatcher.adaptors.ZipFileUtil;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
-import org.cidarlab.owldispatcher.model.FastaStream;
 import org.cidarlab.owldispatcher.model.OwlData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,79 +75,6 @@ import org.springframework.web.bind.annotation.RestController;
             return "Username :: " + testUser + "\nPassword :: " + testPassword + "\nProject :: " + testProject;
         }
 */
-
-/*        @RequestMapping(value = "/example")
-        public ResponseEntity<DataStreamJira> exampl() {
-        	
-            DataStreamJira dataStreamJira = new DataStreamJira();
-            
-            dataStreamJira.setDesignMethod("Exhaustive");
-            dataStreamJira.setWithRybozyme(false);
-            dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATGCTAGCTAGCTAGCTTAA");
-            dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA\n>RBS_2\nATGCTGATCGATCGATCGAT>");
-            dataStreamJira.setInputRybozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
-            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC");
-            dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT\n>t2\nATCGATCGATCGATC");
-            
-            String promoterfilepath = dataStreamJira.getInputPromotersFasta();
-            String ribozymefilepath = dataStreamJira.getInputRybozymesFasta();
-            String rbsfilepath = dataStreamJira.getInputRbsFasta();
-            String genefilepath = dataStreamJira.getInputProteinsFasta();
-            String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
-            
-            String username = testUser;
-            String project = testProject;
-            String password = testPassword;
-            
-            System.out.println("\n\n######################## Fasta To Clotho Promoters");
-            System.out.println(FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
-            System.out.println("\n\n######################## Fasta To Clotho Ribozymes");
-            System.out.println(FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
-            System.out.println("\n\n######################## Fasta To Clotho RBS");
-            System.out.println(FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
-            System.out.println("\n\n######################## Fasta To Clotho Proteins");
-            System.out.println(FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
-            System.out.println("\n\n######################## Fasta To Clotho Terminators");
-            System.out.println(FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
-            
-            List<DNAcomponent> promoters = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.PROMOTER);
-            List<DNAcomponent> genes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.GENE);
-            List<DNAcomponent> ribozymes = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RIBOZYME);
-            List<DNAcomponent> rbs = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.RBS);
-            List<DNAcomponent> terminators = FastaAdaptor.getAllDNAComponents(username, password, project, ComponentType.TERMINATOR);
-
-            Map<ComponentType, List<DNAcomponent>> map = new HashMap<ComponentType, List<DNAcomponent>>();
-            map.put(ComponentType.PROMOTER, promoters);
-            map.put(ComponentType.RIBOZYME, ribozymes);
-            map.put(ComponentType.RBS, rbs);
-            map.put(ComponentType.GENE, genes);
-            map.put(ComponentType.TERMINATOR, terminators);
-
-            String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRybozyme(), dataStreamJira.getDesignMethod());
-            System.out.println("\n\n######################## Script");
-            System.out.println(script);
-
-            EugeneAdaptor eugAdp;
-            System.out.println("\n\n######################## Run Eugene via XmlRpc");
-            try {
-                eugAdp = new EugeneAdaptor();
-                eugAdp.startEugeneXmlRpc(script);
-                EugeneArray result = eugAdp.getResult();
-                dataStreamJira.setArray(result.toString());
-
-                for(NamedElement ne:result.getElements()){
-                    Device device = (Device)ne;
-                    dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));
-                    //dataStreamJira.addFastaFile(FastaAdaptor.createFastaFile(device, Utilities.getResourcesFilepath()));
-                }
-
-            } catch (Exception ex) {
-                Logger.getLogger(RestfulController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
-
-        }*/
         
         private static String getLogPrefix(String project) {
 
@@ -172,9 +97,11 @@ import org.springframework.web.bind.annotation.RestController;
                     String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
                     Map<String,String> images = new LinkedHashMap<String, String>();
                     
+                    //For Clotho
                     String username = testUser;
-                    String project = dataStreamJira.getMyProjectId();
                     String password = testPassword;
+                    
+                    String project = dataStreamJira.getMyProjectId();
                     
                     System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Promoters");
                     System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
@@ -201,27 +128,27 @@ import org.springframework.web.bind.annotation.RestController;
                     map.put(ComponentType.TERMINATOR, terminators);
 
                     String script = EugeneAdaptor.createEugeneScript(map, dataStreamJira.getWithRibozyme(), dataStreamJira.getDesignMethod());
-                    System.out.println("\n\n######################## Script");
+                    System.out.println("\n\n################### Eugene Specification ###################");
                     System.out.println(script);
 
                     EugeneAdaptor eugAdp;
-                    System.out.println("\n\n######################## Run Eugene via XmlRpc");
+                    System.out.println("\n\n################### Run Eugene via XmlRpc ##################");
                     try {
                         eugAdp = new EugeneAdaptor();
                         System.out.println(getLogPrefix(project) + "Eugene Adaptor before execution");
                         eugAdp.startEugeneXmlRpc(script);
-                        System.out.println(getLogPrefix(project) + "Eugene Adaptor finished");
+                        System.out.println("######################## " + getLogPrefix(project) + "Eugene Adaptor finished");
                         EugeneArray result = eugAdp.getResult();
                         
                         
                         //Generates Pigeon images and saves them in the output folder
-                        System.out.println(getLogPrefix(project) + "Generating Pigeon images...");
+                        System.out.println(getLogPrefix(project) + "################ Generating Pigeon code and requesting images ###############");
                         Map<String,String> pigeonMap = new LinkedHashMap<>();
                     	//pigeonMap is a Map<String,String> with <deviceName>:<pigeonScript>
                         pigeonMap = PigeonClient.generatePigeonScript(result);
                     	images = PigeonClient.generateFile(pigeonMap, project);
                         
-                        System.out.println(getLogPrefix(project) + "\n\n################Parsing Eugene array##################");
+                        System.out.println(getLogPrefix(project) + "\n\n################ Parsing Eugene array ##################");
                         
                         
                         //Generates fasta files for each device and saves them in output/projectName/ folder
@@ -229,7 +156,10 @@ import org.springframework.web.bind.annotation.RestController;
                             Device device = (Device)ne;
                             System.out.println(getLogPrefix(project) + "Generating FASTA file for " + device.getName() +" device");
                             System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
-                            
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+                            System.out.println(getLogPrefix(project) + "Generating GenBank file for " + device.getName() +" device");
+                            ExportGenBank.deviceToGenBank(project, device);
+                           
                             //used to create fasta file and put it in JSON response<DataStreamJira>.
                             //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));   
                         }
@@ -245,11 +175,16 @@ import org.springframework.web.bind.annotation.RestController;
                     owl.setMyProjectId(project);
                     owl.setPathToTexFile(owl.getPathToTexFolder()+Utilities.getFileDivider()+owl.getMyProjectId()+".tex");
                     String texFile = LatexAdaptor.makeTexFile(owl);
-                    System.out.println(texFile+" file was successfully created.");
-
+                    System.out.println(getLogPrefix(project) + texFile+" file was successfully created.");
+                    System.out.println(getLogPrefix(project) + "Generating PDF...");
                     ShellExec exec = new ShellExec(true, false);
                     try {
-                        exec.execute("pdflatex", Utilities.getProjectFolderPath(owl), true, owl.getPathToTexFile());
+                        int exitCode = exec.execute("pdflatex", Utilities.getProjectFolderPath(owl), true, owl.getPathToTexFile());
+                        if(exitCode == 0){
+                        	System.out.println(getLogPrefix(project) + Utilities.getProjectFolderPath(owl)+project+".pdf was successfully generated");
+                        } else {
+                        	System.out.println(getLogPrefix(project) + "pdflatex returned exit code = "+exitCode);
+                        }
                     } catch (IOException e) {
                         System.out.println(getLogPrefix(project) + "PDFlatex failed. Reason: " + e.getMessage());
                     }
@@ -259,7 +194,23 @@ import org.springframework.web.bind.annotation.RestController;
                     Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".log");
                     Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".out");
                     
-                    System.out.println(getLogPrefix(project) + "Parsing Eugene array end.");    
+                    System.out.println(getLogPrefix("Owl") + "is attempting to zip " + Utilities.getProjectFolderPath(owl) + " folder.");
+            		try{
+            			ZipFileUtil.zipDirectory(new File(Utilities.getProjectFolderPath(owl)), new File(Utilities.getOutputFilepath()+project+".zip"));
+            		} catch (IOException ex) {
+            			System.out.println(getLogPrefix(project) + "Something went wrong while attempting to zip the project folder.");
+            			ex.printStackTrace();
+            		}
+            		
+            		File folder = new File(Utilities.getOutputFilepath()+project);
+            		boolean deleted = Utilities.deleteFolder(folder);
+            		if(deleted){
+            			System.out.println(getLogPrefix(project) + folder.getCanonicalPath()+" was successfully deleted");
+            		} else {
+            			System.out.println("Something went wrong while deleting "+folder.getCanonicalPath()+" folder");
+            		}
+            		
+                    System.out.println(getLogPrefix(project) + "Wrapping up...");
                     
             	} catch (Throwable e){
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
@@ -275,8 +226,6 @@ import org.springframework.web.bind.annotation.RestController;
 
         }
         
-
- 
         // example of sending key / value pairs with optional parameters
         /*	@RequestMapping(value = "/api2", method = RequestMethod.POST)
          public Map<String, Boolean> in(@RequestParam(value="ribozyme", required=false, defaultValue = "false") boolean ribozyme){
@@ -284,16 +233,6 @@ import org.springframework.web.bind.annotation.RestController;
          result.put("withRibozyme", ribozyme);
          return result;
          }*/
-    //Simple greeting tests
-        @RequestMapping(value = "/")
-        private String viaGet() {
-            return "Hello from OwlDispatcher via GET request";
-        }
-
-        @RequestMapping(value = "/", method = RequestMethod.POST)
-        private String viaPost() {
-            return "Hello from OwlDispatcher via POST request";
-        }
         
         // this is just an example how to parse GenBank file into separate parts and assemble GenBank file from parts
         @RequestMapping(value = "/genbank")
@@ -301,11 +240,11 @@ import org.springframework.web.bind.annotation.RestController;
         	String filepath = Utilities.getResourcesFilepath() + "genbank.gb";
     		List<String> _input = Utilities.getFileLines(filepath);
     		String input = GenBankImporter.stringifyList(_input);
-    		System.out.println("==============INPUT STRING BEGINS=================");
+    		System.out.println("\n\n==============INPUT STRING BEGINS=================");
     		System.out.println(input);
-    		System.out.println("==============INPUT STRING ENDS=================");
+    		System.out.println("\n\n==============INPUT STRING ENDS=================");
     		List<GenBankFeature> parts = GenBankImporter.analyzeGenBank(input);
-    		System.out.println("============parts imported=================");
+    		System.out.println("\n\n============parts imported=================");
     		System.out.println(getLogPrefix("Owl") + "parsed a total of" + parts.size() + " parts");
     		for(GenBankFeature part : parts){
     			if(part.getDnaSequence().length() > 100){
@@ -328,5 +267,16 @@ import org.springframework.web.bind.annotation.RestController;
     		}
     			
             return "GenBank export/import is complete; see the terminal window in IDE";
+        }
+        
+        //Simple greeting tests
+        @RequestMapping(value = "/")
+        private String viaGet() {
+            return "Hello from OwlDispatcher via GET request";
+        }
+
+        @RequestMapping(value = "/", method = RequestMethod.POST)
+        private String viaPost() {
+            return "Hello from OwlDispatcher via POST request";
         }
     }

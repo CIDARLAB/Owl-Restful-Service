@@ -448,7 +448,7 @@ FEATURES             Location/Qualifiers
                      LLLLLPIALPGIVTGLALLTAFKTINLEPGFFTIVVGHATFCVVVVFNNVIARFRRTS
                      WSLVEASMDLGANGWQTFRYVVLPNLSSALLAGGMLAFALSFDEIIVTTFTAGHERTL
                      PLWLLNQLGRPRDVPVTNVVALLVMLVTTLPILGAWWLTREGDNGQ"
-ORIGIN      
+ORIGIN
         1 caataaaaac gccgatggct tcgttaagtg ttagtccctg caatccggtg accaacaaag
        61 ccgcgccagg cgttgaccat gcggtgagaa caggtacgcg ataccataat gtcagagtca
       121 gcgtactgac gcccattgcc agccccagcg ccgtcatcca gccagagatt tgtgcagtgg
@@ -605,4 +605,3 @@ ORIGIN
      9181 cttaaagtgg cggcgctggc gacattaatt gcgctggtgt tagggacgct ggcagctgcc
      9241 gcgctgtggc gacgagactt tttcggcaaa aacgccattt cgctgttact gctg
 //
-

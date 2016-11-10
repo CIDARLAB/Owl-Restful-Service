@@ -102,7 +102,7 @@ public class PigeonClient {
         Map<String,String> pigeonFilepath = new LinkedHashMap<String,String>();
         
         for (String key : devicePigeonMap.keySet()) {
-            System.out.println(key + " : " + devicePigeonMap.get(key));
+            //System.out.println(key + " : " + devicePigeonMap.get(key));
             HttpResponse<String> response = Unirest.post("http://synbiotools.bu.edu:5801/dev/perch2.php")
                     .header("content-type", "application/x-www-form-urlencoded")
                     .body("specification=" + devicePigeonMap.get(key))
@@ -125,7 +125,7 @@ public class PigeonClient {
 
             System.out.println("saving " + key + ".png image...");
             ImageIO.write(image, "png", outputFile);
-            System.out.println(outputFile.toString() + " was saved successfully.");
+            System.out.println(outputFile.toString() + " was saved successfully.\n");
             pigeonFilepath.put(key, outputFile.getAbsolutePath());
         }
         return pigeonFilepath;

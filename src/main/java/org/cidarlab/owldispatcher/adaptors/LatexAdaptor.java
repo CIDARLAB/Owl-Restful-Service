@@ -37,7 +37,8 @@ public class LatexAdaptor {
         for(String deviceName:project.getPigeonFilepath().keySet()){
             String newDeviceName = deviceName.replaceAll("_", Matcher.quoteReplacement("\\_"));
             latex += "\\item " + newDeviceName + "\\\\\n";
-            latex += "Blah blah blah\\\\\n";
+            latex += "Length of the device (bp):\\\\\n";
+            latex += "\\%GC = \\\\\n";
             latex += getImageMinibox(project.getPigeonFilepath().get(deviceName));
         }
         

@@ -9,12 +9,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.biojava3.core.sequence.DNASequence;
 import org.biojava3.core.sequence.ProteinSequence;
+import org.cidarlab.eugene.dom.Component;
+import org.cidarlab.eugene.dom.Device;
+import org.cidarlab.eugene.dom.NamedElement;
+import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.DOM.GenBankFeature;
 
@@ -24,19 +29,13 @@ public class ExportGenBank {
 public final static String uniqueId = "F" + System.currentTimeMillis();
 	
 	public static final String writeGenBank(List<GenBankFeature> parts) {
-
 		String sequence = parts.get(0).getFullSequence();
         String lowCasSeq = sequence.toLowerCase();
         String sequenceLength = Integer.toString(sequence.length());
         //String sanitizedName = name.replaceAll("[^a-zA-Z0-9.-]", "_");
         String gbkFlatFile = "";
         String desc = ".";
-/*        if (description.isEmpty()) {
-            desc = ".";
-        } else {
-            desc = description; 
-        }*/
-        
+
         int spaces = 28 - uniqueId.length() - sequenceLength.length();
         String spacer = String.format("%"+spaces+"s", "");
         gbkFlatFile += "LOCUS       " + uniqueId + spacer + sequenceLength + " bp    DNA     linear   UNK " + getDate();
@@ -48,7 +47,11 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         gbkFlatFile += "\n  ORGANISM  "+".";
         gbkFlatFile +="\nFEATURES             Location/Qualifiers";
         gbkFlatFile +="\n     source          1.."+sequenceLength;
-        gbkFlatFile +="\n                     /note=\"unknown device; a derivative of the accession number: " + parts.get(0).getOldAccession() + "\"";
+        if(parts.get(0).getAccession() != null){
+        	gbkFlatFile +="\n                     /note=\""+ parts.get(0).getAccession() + " device of the project " + parts.get(0).getOldAccession()+"\"";
+        } else {
+        	gbkFlatFile +="\n                     /note=\"an unknown device or a derivative of: " + parts.get(0).getOldAccession() + "\"";
+        }
         for(GenBankFeature part : parts){
         	if(part.getFeatureType().matches("CDS")){
 	        	if(!part.getReverseComplement()){
@@ -76,7 +79,11 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        	gbkFlatFile +="\n                     /product=\"gp" + part.getName() +"\"";
 	        	
 	        	//translate nucleotide sequence into protein and print into CDS annotation in genBank file
+	        	/*System.out.println("+++++++++++++++++++++++");
+	        	//System.out.println(part.getDnaSequence());
+	        	System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence());*/
 	        	ProteinSequence protein = new DNASequence(part.getDnaSequence()).getRNASequence().getProteinSequence();
+	        	/*System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence());*/
 	        	
 	        	if(protein.toString().contains("*")){
 	        		gbkFlatFile +="\n                     /partial";
@@ -147,6 +154,22 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
 	        		}
 	        	}  
+        	} else if (part.getFeatureType().matches("RBS")){
+	        	if(!part.getReverseComplement()){
+	        		gbkFlatFile +="\n     RBS             " + part.getStartx() + ".." + part.getEndx();
+	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
+	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
+	        	} else{
+	        		gbkFlatFile +="\n     RBS             complement(" + part.getStartx() + ".." + part.getEndx() + ")";
+	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
+	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
+	        		if(part.getGenBankId() != null){
+	        			gbkFlatFile +="\n                     /db_xref=\"" + part.getGenBankId() + "\"";
+	        		}
+	        	}  
         	}
         } 
         	
@@ -170,10 +193,78 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         try {
 			WriteGenBank(gbkFlatFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Cannot create GenBank file. Reason: "+e.getMessage());
 		}
         return gbkFlatFile;
     }
+	
+	public static String deviceToGenBank(String project, Device device) throws EugeneException{
+		List<GenBankFeature> gbList = new ArrayList<>();
+            String deviceName = device.getName();
+            
+            GenBankFeature gbf = new GenBankFeature();
+            gbf.setAccession(deviceName);
+            gbf.setOldAccession(project);
+            gbf.setFeatureType("source");
+            gbf.setStartx(1);
+            gbf.setDnaSequence(getDeviceDnaSequence(device));
+            gbf.setFullSequence(getDeviceDnaSequence(device));
+            gbf.setEndx(gbf.getFullSequence().length());
+            gbf.setReverseComplement(false);
+            gbList.add(gbf);
+            for (int j = 0; j < device.getComponents().size(); j++) {
+                String part = device.getComponents().get(j).get(0).toString();
+                GenBankFeature partFeature = new GenBankFeature(); 
+                
+                String partSequence = device.getComponents().get(j).get(0).getElement("SEQUENCE").toString().replaceAll("\"", "");
+                partFeature.setDnaSequence(partSequence);
+                
+                String partName = device.getComponents().get(j).get(0).getElement("name").toString().replaceAll("\"", "");
+                partFeature.setName(partName);
+                System.out.println(partFeature.getName() + "  :  "+partFeature.getDnaSequence());
+                if (part.startsWith("Promoter")) {
+                	partFeature.setFeatureType("promoter");
+                } else if (part.startsWith("RBS")) {
+                	partFeature.setFeatureType("RBS");
+                } else if (part.startsWith("Ribozyme")) {
+                	partFeature.setFeatureType("ncRNA");
+                } else if (part.startsWith("CDS")) {
+                	partFeature.setFeatureType("CDS");
+                } else if (part.startsWith("Terminator")) {
+                	partFeature.setFeatureType("terminator");
+                } else {
+                    System.out.println("Unrecognized part found  in EugeneArray: "+part);
+                }
+               
+                //TEST 
+               partFeature.setStartx(1);
+               partFeature.setEndx(102);
+               partFeature.setReverseComplement(false);
+               
+               gbList.add(partFeature);
+            }
+
+            String gbk = writeGenBank(gbList);
+  
+		return gbk;
+	}
+	
+	public static String getDeviceDnaSequence(Device device){
+        String sequence = "";
+		for(List<NamedElement> listnamedElement : device.getComponents()){
+                for(NamedElement ne : listnamedElement){
+                    Component component = (Component)ne;
+                    
+                    try {
+                        sequence = sequence.concat(component.getSequence());
+                    } catch (EugeneException ex) {
+                        System.out.println("ExportGenBank.java error: "+ ex.getMessage());
+                    }
+                }
+        }
+        return sequence;
+    }
+	
 	
     private static String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");

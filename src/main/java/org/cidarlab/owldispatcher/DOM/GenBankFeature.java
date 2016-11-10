@@ -7,18 +7,18 @@ package org.cidarlab.owldispatcher.DOM;
 
 public class GenBankFeature extends GenBankFile {
 	private String name;
-	   private boolean reverseComplement;
-	   private boolean isSource;
-	   private String forwardColor;
-	   private String reverseColor;
-	   private int startx;
-	   private int endx;
-	   private String dnaSequence;
-	   private String featureType;
-	   private String sourceId;
-	   private String genBankId;
-	   private String partId;
-	   
+	private boolean reverseComplement;
+	private boolean isSource;
+	private String forwardColor;
+	private String reverseColor;
+	private int startx;
+	private int endx;
+	private String dnaSequence;
+	private String featureType;
+	private String sourceId;
+	private String genBankId;
+	private String partId;
+   
 	   public GenBankFeature() {
 	       
 	   }

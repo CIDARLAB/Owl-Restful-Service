@@ -8,6 +8,7 @@ package org.cidarlab.owldispatcher.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.cidarlab.eugene.dom.imp.container.EugeneArray;
 import org.cidarlab.owldispatcher.Utilities;
 
 import lombok.Getter;

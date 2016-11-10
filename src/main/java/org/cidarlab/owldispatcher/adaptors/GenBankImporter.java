@@ -174,14 +174,14 @@ public class GenBankImporter {
             	gbFeature.setDnaSequence(dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase());
             
             
-            if(gbFeature.getDnaSequence().length() >= 2500 && !gbFeature.getReverseComplement()){
-            	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2500): " + gbFeature.getDnaSequence().substring(0, 2500));
-            } else if (gbFeature.getDnaSequence().length() >= 2500 && gbFeature.getReverseComplement()){
+            if(gbFeature.getDnaSequence().length() >= 2000 && !gbFeature.getReverseComplement()){
+            	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2000): " + gbFeature.getDnaSequence().substring(0, 2000));
+            } else if (gbFeature.getDnaSequence().length() >= 2000 && gbFeature.getReverseComplement()){
             	String seq = dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase();
             	DNASequence dnaS = new DNASequence(seq);
-            	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2500): " + dnaS.getReverseComplement().getSequenceAsString().substring(0, 2500));
+            	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2000): " + dnaS.getReverseComplement().getSequenceAsString().substring(0, 2000));
             	gbFeature.setDnaSequence(dnaS.getReverseComplement().getSequenceAsString());
-            } else if (gbFeature.getDnaSequence().length() < 2500 && gbFeature.getReverseComplement()){
+            } else if (gbFeature.getDnaSequence().length() < 2000 && gbFeature.getReverseComplement()){
             	String seq = dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase();
             	DNASequence dnaS = new DNASequence(seq);
             	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence: " + dnaS.getReverseComplement().getSequenceAsString());
