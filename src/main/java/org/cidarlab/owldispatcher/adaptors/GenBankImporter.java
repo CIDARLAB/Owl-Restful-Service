@@ -137,8 +137,6 @@ public class GenBankImporter {
                     joinFet.setEndx(Integer.parseInt(startStop[1]));
                     joinFet.setReverseComplement(isReverse);
                     joinFet.setName(gbFeature.getName());
-                    joinFet.setForwardColor(gbFeature.getForwardColor());
-                    joinFet.setReverseColor(gbFeature.getReverseColor());
                     joinFet.setGenBankId(gbFeature.getGenBankId());
                     joinFet.setFeatureType(gbFeature.getFeatureType());
                     gbkList.add(joinFet);
@@ -174,14 +172,14 @@ public class GenBankImporter {
             	gbFeature.setDnaSequence(dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase());
             
             
-            if(gbFeature.getDnaSequence().length() >= 2000 && !gbFeature.getReverseComplement()){
+            if(gbFeature.getDnaSequence().length() >= 2000 && !gbFeature.isReverseComplement()){
             	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2000): " + gbFeature.getDnaSequence().substring(0, 2000));
-            } else if (gbFeature.getDnaSequence().length() >= 2000 && gbFeature.getReverseComplement()){
+            } else if (gbFeature.getDnaSequence().length() >= 2000 && gbFeature.isReverseComplement()){
             	String seq = dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase();
             	DNASequence dnaS = new DNASequence(seq);
             	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence_substring(1-2000): " + dnaS.getReverseComplement().getSequenceAsString().substring(0, 2000));
             	gbFeature.setDnaSequence(dnaS.getReverseComplement().getSequenceAsString());
-            } else if (gbFeature.getDnaSequence().length() < 2000 && gbFeature.getReverseComplement()){
+            } else if (gbFeature.getDnaSequence().length() < 2000 && gbFeature.isReverseComplement()){
             	String seq = dnaSEQUENCE.substring(gbFeature.getStartx()-1, gbFeature.getEndx()).toUpperCase();
             	DNASequence dnaS = new DNASequence(seq);
             	System.out.println("Feature: " + featureType + ", Name: " + featureName + ", Sequence: " + dnaS.getReverseComplement().getSequenceAsString());

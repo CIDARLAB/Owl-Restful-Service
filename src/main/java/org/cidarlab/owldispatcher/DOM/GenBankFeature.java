@@ -1,35 +1,48 @@
 package org.cidarlab.owldispatcher.DOM;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /*
  * @author Lloyd M.
+ * @author Yury V. Ivanov
 */
 
 
 public class GenBankFeature extends GenBankFile {
+	
+	@Getter @Setter
 	private String name;
+	@Getter @Setter
 	private boolean reverseComplement;
+	@Getter @Setter
 	private boolean isSource;
-	private String forwardColor;
-	private String reverseColor;
+	@Getter @Setter
 	private int startx;
+	@Getter @Setter
 	private int endx;
+	@Getter @Setter
 	private String dnaSequence;
+	@Getter @Setter
 	private String featureType;
+	@Getter @Setter
 	private String sourceId;
+	@Getter @Setter
 	private String genBankId;
+	@Getter @Setter
 	private String partId;
+	@Getter @Setter
+	private String proteinSequence;
    
 	   public GenBankFeature() {
 	       
 	   }
 	   
-	   public GenBankFeature(String name, boolean reverseComplement, boolean isSource, String forwardColor, String reverseColor, int startx, int endx, String dnaSequence, String featureType, String sourceId, String genBankId, String partId) {
+	   public GenBankFeature(String name, boolean reverseComplement, boolean isSource, int startx, int endx, String dnaSequence, String featureType, String sourceId, String genBankId, String partId, String proteinSequence) {
 	       super();
 		   this.name = name;
 	       this.reverseComplement = reverseComplement;
 	       this.isSource = isSource;
-	       this.forwardColor = forwardColor;
-	       this.reverseColor = reverseColor;
 	       this.startx = startx;
 	       this.endx = endx;
 	       this.dnaSequence = dnaSequence;
@@ -37,100 +50,7 @@ public class GenBankFeature extends GenBankFile {
 	       this.sourceId = sourceId;
 	       this.genBankId = genBankId;
 	       this.partId = partId;
+	       this.proteinSequence = proteinSequence;
 	   }
-	   public void setName(String name) {
-	       this.name = name;
-	   }
-	   
-	   public String getName() {
-	       return name;
-	   }
-	   
-	   public void setReverseComplement(boolean reverseComplement) {
-	       this.reverseComplement = reverseComplement;
-	   }
-	   
-	   public boolean getReverseComplement() {
-	       return reverseComplement;
-	   }
-	   
-	   public void setIsSource(boolean isSource) {
-	       this.isSource = isSource;
-	   }
-	   
-	   public boolean getIsSource() {
-	       return isSource;
-	   }
-	   
-	   public void setForwardColor(String forwardColor) {
-	       this.forwardColor = forwardColor;
-	   }
-	   
-	   public String getForwardColor() {
-	       return forwardColor;
-	   }
-	   
-	   public void setReverseColor(String newRevCol) {
-	       this.reverseColor = newRevCol;
-	   }
-	   
-	   public String getReverseColor() {
-	       return reverseColor;
-	   }
-	   
-	   public void setStartx(int startx) {
-	       this.startx = startx;
-	   }
-	   
-	   public int getStartx() {
-	       return startx;
-	   }
-	   
-	   public void setEndx(int endx) {
-	       this.endx = endx;
-	   }
-	   
-	   public int getEndx() {
-	       return endx;
-	   }
-	   
-	   public void setDnaSequence(String dnaSequence) {
-	       this.dnaSequence = dnaSequence;
-	   }
-	   
-	   public String getDnaSequence() {
-	       return dnaSequence;
-	   }
-	   
-	   public void setFeatureType(String featureType) {
-	       this.featureType = featureType;
-	   }
-	   
-	   public String getFeatureType() {
-	       return featureType;
-	   }
-	   
-	   public void setSourceId(String sourceId) {
-	       this.sourceId = sourceId;
-	   }
-	   
-	   public String getSourceId() {
-	       return sourceId;
-	   }
-	 
-	   public void setGenBankId(String genBankId) {
-	       this.genBankId = genBankId;
-	   }
-	   
-	   public String getGenBankId() {
-	       return genBankId;
-	   }
-	   
-	   public void setPartId(String partId) {
-	       this.partId = partId;
-	   }
-	   
-	   public String getPartId() {
-	       return partId;
-	   }
+  
 }

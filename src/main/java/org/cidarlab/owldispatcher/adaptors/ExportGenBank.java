@@ -54,7 +54,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         }
         for(GenBankFeature part : parts){
         	if(part.getFeatureType().matches("CDS")){
-	        	if(!part.getReverseComplement()){
+	        	if(!part.isReverseComplement()){
 	        		gbkFlatFile +="\n     gene            " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
@@ -83,31 +83,18 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        	//System.out.println(part.getDnaSequence());
 	        	System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence());*/
 	        	ProteinSequence protein = new DNASequence(part.getDnaSequence()).getRNASequence().getProteinSequence();
-	        	/*System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence());*/
+	        	System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence() + " - "+protein.getSequenceAsString() + " " + protein.getLength());
 	        	
-	        	if(protein.toString().contains("*")){
+	        	if(protein.getSequenceAsString().contains("*")){
 	        		gbkFlatFile +="\n                     /partial";
 	        		gbkFlatFile +="\n                     /note=\"partial gene\"";
 	        	} else {
-	        	
-		        	int j=58;
-		        	int v=43;
-		        	for(int i=0;i*j+v<=protein.getLength();i++){
-		        		if(i==0){
-		        			gbkFlatFile +="\n                     /translation=\"" + protein.toString().substring(i, v);
-		        		} else if(i==1){
-		        			gbkFlatFile +="\n                     " + protein.toString().substring(i*v, i*j+v);
-		        		} else if(protein.getLength()-(i*j+v) < 58){
-		        			gbkFlatFile +="\n                     " + protein.toString().substring((i-1)*j+v, i*j+v);
-		        			gbkFlatFile +="\n                     " + protein.toString().substring(i*j+v, protein.getLength()) + "\"";
-		        		} else {
-		        			gbkFlatFile +="\n                     " + protein.toString().substring((i-1)*j+v, (i-1)*j+j+v);
-		        		}
-		        	}
+	        		//generate /translation="<ProteinSequence>" annotation
+	        		gbkFlatFile += getProteinToAnnotation(protein);
 	        	}
 	        	
         	} else if(part.getFeatureType().matches("promoter")){
-	        	if(!part.getReverseComplement()){
+	        	if(!part.isReverseComplement()){
 	        		gbkFlatFile +="\n     promoter        " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
@@ -123,7 +110,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        		}
 	        	}        	
         	} else if (part.getFeatureType().matches("terminator")){
-	        	if(!part.getReverseComplement()){
+	        	if(!part.isReverseComplement()){
 	        		gbkFlatFile +="\n     terminator      " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
@@ -139,7 +126,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        		}
 	        	}  
         	} else if (part.getFeatureType().matches("ncRNA")){
-	        	if(!part.getReverseComplement()){
+	        	if(!part.isReverseComplement()){
 	        		gbkFlatFile +="\n     ncRNA           " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
@@ -155,7 +142,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        		}
 	        	}  
         	} else if (part.getFeatureType().matches("RBS")){
-	        	if(!part.getReverseComplement()){
+	        	if(!part.isReverseComplement()){
 	        		gbkFlatFile +="\n     RBS             " + part.getStartx() + ".." + part.getEndx();
 	        		gbkFlatFile +="\n                     /gene=\"" + part.getName() +"\"";
 	        		gbkFlatFile +="\n                     /locus_tag=\"" + uniqueId + "_" + parts.indexOf(part) + "\"";
@@ -215,13 +202,9 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
             for (int j = 0; j < device.getComponents().size(); j++) {
                 String part = device.getComponents().get(j).get(0).toString();
                 GenBankFeature partFeature = new GenBankFeature(); 
+                partFeature.setDnaSequence(device.getComponents().get(j).get(0).getElement("SEQUENCE").toString().replaceAll("\"", ""));
+                partFeature.setName(device.getComponents().get(j).get(0).getElement("name").toString().replaceAll("\"", ""));
                 
-                String partSequence = device.getComponents().get(j).get(0).getElement("SEQUENCE").toString().replaceAll("\"", "");
-                partFeature.setDnaSequence(partSequence);
-                
-                String partName = device.getComponents().get(j).get(0).getElement("name").toString().replaceAll("\"", "");
-                partFeature.setName(partName);
-                System.out.println(partFeature.getName() + "  :  "+partFeature.getDnaSequence());
                 if (part.startsWith("Promoter")) {
                 	partFeature.setFeatureType("promoter");
                 } else if (part.startsWith("RBS")) {
@@ -230,12 +213,17 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
                 	partFeature.setFeatureType("ncRNA");
                 } else if (part.startsWith("CDS")) {
                 	partFeature.setFeatureType("CDS");
+                	ProteinSequence p = new DNASequence(partFeature.getDnaSequence()).getRNASequence().getProteinSequence();
+                	partFeature.setProteinSequence(p.getSequenceAsString());
                 } else if (part.startsWith("Terminator")) {
                 	partFeature.setFeatureType("terminator");
                 } else {
                     System.out.println("Unrecognized part found  in EugeneArray: "+part);
                 }
-               
+
+                ProteinSequence protein = new DNASequence(partFeature.getDnaSequence()).getRNASequence().getProteinSequence();
+                System.out.println(partFeature.getName() + " : "+partFeature.getFeatureType()+" : "+partFeature.getDnaSequence() + " : " +protein);
+                
                 //TEST 
                partFeature.setStartx(1);
                partFeature.setEndx(102);
@@ -265,6 +253,30 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         return sequence;
     }
 	
+	private static String getProteinToAnnotation(ProteinSequence protein){
+		String annotation = "";
+		int j=58;
+    	int v=44;
+    	if(protein.getLength()<=v){
+    		annotation +="\n                     /translation=\"" + protein.getSequenceAsString()+"\"";
+    	} else{
+	    	for(int i=0;i<=((protein.getLength()-v)/j);i++){
+	    		if(i==0){
+	    			annotation +="\n                     /translation=\"" + protein.getSequenceAsString().substring(0, v);
+	    			if(protein.getLength()<= v+j){
+	    				annotation +="\n                     " + protein.getSequenceAsString().substring(v, protein.getLength())+"\"";
+	    			} else {
+	    				annotation +="\n                     " + protein.getSequenceAsString().substring(v, j+v);
+	    			}	
+	    		} else if(protein.getLength()-(i*j+v) < 58){
+	    			annotation +="\n                     " + protein.getSequenceAsString().substring(i*j+v, protein.getLength()) + "\"";
+	    		} else {
+	    			annotation +="\n                     " + protein.getSequenceAsString().substring(i*j+v, i*j+j+v);
+	    		}
+	    	}
+    	}	
+		return annotation;
+	}
 	
     private static String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
