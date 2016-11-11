@@ -91,7 +91,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
 	        	} else {
 	        	
 		        	int j=58;
-		        	int v=44;
+		        	int v=43;
 		        	for(int i=0;i*j+v<=protein.getLength();i++){
 		        		if(i==0){
 		        			gbkFlatFile +="\n                     /translation=\"" + protein.toString().substring(i, v);

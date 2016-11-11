@@ -156,9 +156,9 @@ import org.springframework.web.bind.annotation.RestController;
                             Device device = (Device)ne;
                             System.out.println(getLogPrefix(project) + "Generating FASTA file for " + device.getName() +" device");
                             System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+                            /*System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
                             System.out.println(getLogPrefix(project) + "Generating GenBank file for " + device.getName() +" device");
-                            ExportGenBank.deviceToGenBank(project, device);
+                            ExportGenBank.deviceToGenBank(project, device);*/
                            
                             //used to create fasta file and put it in JSON response<DataStreamJira>.
                             //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));   
