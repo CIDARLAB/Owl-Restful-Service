@@ -7,8 +7,14 @@ package org.cidarlab.owldispatcher.adaptors;
 
 import java.io.File;
 import java.util.regex.Matcher;
+
+import org.apache.commons.lang.WordUtils;
+import org.cidarlab.eugene.dom.Device;
+import org.cidarlab.eugene.dom.NamedElement;
+import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.model.OwlData;
+import org.neo4j.cypher.internal.compiler.v2_2.perty.recipe.formatErrors;
 
 /**
  *
@@ -37,8 +43,9 @@ public class LatexAdaptor {
         for(String deviceName:project.getPigeonFilepath().keySet()){
             String newDeviceName = deviceName.replaceAll("_", Matcher.quoteReplacement("\\_"));
             latex += "\\item " + newDeviceName + "\\\\\n";
-            latex += "Length of the device (bp):\\\\\n";
-            latex += "\\%GC = \\\\\n";
+            latex += "Length of the device (bp): " + String.format("%,d", project.getDeviceLengths().get(deviceName)) + "\\\\\n";
+            latex += "\\%GC = " + project.getGcContents().get(deviceName) + "\\\\\n";
+            latex += "Composition (5' to 3'): " + project.getDeviceCompositions().get(deviceName) + "\\\\\n";
             latex += getImageMinibox(project.getPigeonFilepath().get(deviceName));
         }
         
@@ -61,6 +68,18 @@ public class LatexAdaptor {
         latex += "          }\n"
                 + "          \\end{minipage}\n";
         return latex;
+    }
+    
+    public static String getDeviceComponents(Device device){
+    	String deviceComp = "";
+        for (NamedElement nel : device.getComponentList()){
+        	try {
+				deviceComp += nel.getElement("name").toString().replaceAll("\"", "") + " ; ";
+			} catch (EugeneException e) {
+				System.out.println("Error processing device components for the LatexAdaptor. Reason: " + e.getMessage());
+			}
+        }
+    	return WordUtils.wrap(deviceComp.replaceAll("_", "\\\\_"), 70, "\n", true);
     }
     
     public static String makeTexFile(OwlData project){

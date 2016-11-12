@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.lang.WordUtils;
+import org.biojava3.core.sequence.DNASequence;
 import org.cidarlab.eugene.dom.Device;
 import org.cidarlab.eugene.dom.NamedElement;
 import org.cidarlab.eugene.dom.imp.container.EugeneArray;
@@ -57,7 +60,40 @@ import org.springframework.web.bind.annotation.RestController;
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATCGTAGCTAGCTAGCTA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA");
             dataStreamJira.setInputRibozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
-            dataStreamJira.setInputProteinsFasta(">gene1\nGTGTTCTACAGAGAGAAGCGTAGAGCAATAGGCTGTATTTTGAGAAAGCTGTGTGAGTGGAAAAGTGTATAA\n>gene2\nATGAAACTCTACAATTTGAAAGATCACAATGAGCAGGTCAGCTTTGCGCAAGCCGTAACCCAGGGGTTGTGA\n>gene3\nATGGCTAAGCAAGATTATTACGAGATTTTAGGCGTTTCCAAAACAGCGGAAGAGCGTGAAATCAAAAAGTAA");
+            dataStreamJira.setInputProteinsFasta(">gene1\nATGGCTAAGCAAGATTATTACGAGATTTTAGGCGTTTCCAAAACAGCGGAAGAGCGTGAAATCAAAAAGG"
+            		+ "CCTACAAACGCCTGGCCATGAAATACCACCCGGACCGTAACCAGGGTGACAAAGAGGCCGAGGCGAAATT"
+            		+ "TAAAGAGATCAAGGAAGCTTATGAAGTTCTGACCGACTCGCAAAAACGTGCGGCATACGATCAGTATGGT"
+            		+ "CATGCTGCGTTTGAGCAAGGTGGCATGGGCGGCGGCGGTTTTGGCGGCGGCGCAGACTTCAGCGATATTT"
+            		+ "TTGGTGACGTTTTCGGCGATATTTTTGGCGGCGGACGTGGTCGTCAACGTGCGGCGCGCGGTGCTGATTT"
+            		+ "ACGCTATAACATGGAGCTCACCCTCGAAGAAGCTGTACGTGGCGTGACCAAAGAGATCCGCATTCCGACT"
+            		+ "CTGGAAGAGTGTGACGTTTGCCACGGTAGCGGTGCAAAACCAGGTACACAGCCGCAGACCTGTCCGACCT"
+            		+ "GTCATGGTTCTGGTCAGGTGCAGATGCGCCAGGGTTTCTTTGCCGTGCAGCAGACCTGTCCACACTGTCA"
+            		+ "GGGCCGCGGTACGCTGATCAAAGATCCGTGCAACAAATGTCATGGTCATGGTCGTGTTGAGCGCAGCAAA"
+            		+ "ACGCTGTCCGTTAAAATCCCGGCAGGGGTGGACACTGGAGACCGCATCCGTCTTGCGGGCGAAGGTGAAG"
+            		+ "TAA\n>gene2\nATGAATGTTAATTACCTGAATGATTCAGATCTGGATTTTCTCCAGCATTGTAGTGAGGAACAGTTAGCAA"
+            		+ "ATTTCGCCCGGCTGCTCACCCATAATGAAAAAGGCAAAACTCGCCTCTCCAGCGTACTGATGCGCAACGA"
+            		+ "ACTGTTTAAATCGATGGAAGGACATCCCGAGCAACATCGCCGCAACTGGCAGCTGATTGCTGGAGAATTA"
+            		+ "CAGCATTTTGGTGGCGATAGTATCGCCAACAAACTGCGCGGACACGGTAAATTGTATCGGGCCATTTTGC"
+            		+ "TCGATGTTTCAAAACGATTGAAGCTGAAAGCCGACAAAGAGATGTCTACGTTTGAAATTGAGCAACAGTT"
+            		+ "ACTGGAACAATTTCTGCGTAATACCTGGAAGAAAATGGACGAGGAACATAAGCAGGAGTTTCTGCACGCG"
+            		+ "GTCGATGCCAGGGTGAATGAGCTGGAAGAGCTGCTGCCGCTGCTGATGAAAGACAAATTATTGGCAAAAG"
+            		+ "GCGTGTCGCATCTGCTTTCCAGCCAACTGACCCGCATTTTACGCACCCACGCAGCAATGAGCGTACTTGG"
+            		+ "GCATGGTTTGCTGCGCGGCGCGGGGCTGGGAGGCCCTGTAGGCGCGGCACTAAATGGGGTTAAAGCGGTC"
+            		+ "AGCGGCAGCTCCTATCGCGTGACGATTCCAGCCGTACTGCAAATCGCCTGCCTGCGCCGGATGGTTAGCG"
+            		+ "CCACTCAGGTCTGA\n>gene3\nATGAGTGACTATAAATCAACCCTGAATTTGCCGGAAACAGGGTTCC"
+            		+ "CGATGCGTGGCGATCTCGCCAAGCGCGAACCGGGAATGCTGGCGCGTTGGACTGATGATGATCTGTACGG"
+            		+ "CATCATTCGTGCGGCTAAAAAAGGCAAAAAAACCTTCATTCTGCATGATGGCCCTCCTTATGCGAATGGC"
+            		+ "AGCATTCATATTGGTCACTCGGTTAACAAGATTCTGAAAGACATTATCGTGAAGTCCAAAGGGCTTTCCG"
+            		+ "GTTATGACTCGCCGTATGTGCCTGGCTGGGACTGCCACGGTCTGCCGATCGAGCTGAAAGTAGAGCAAGA"
+            		+ "ATACGGTAAGCCGGATGAGAAATTCACCGCCGCCGAGTTCCGCGCCAAGTGCCGCGAATACGCGGCGACC"
+            		+ "CAGGTTGACGGTCAACGCAAAGACTTTATCCGTCTGGGCGTGCTGGGCGACTGGTCGCACCCGTACCTGA"
+            		+ "CCATGGACTTCAAAACTGAAGCCAATATCATCCGCGCGCTGGGCAAAATCATCGGCAATGGTCACCTGCA"
+            		+ "CAAAGGCGCGAAGCCGGTGCACTGGTGCGTAGACTGCCGTTCTGCACTGGCAGAAGCGGAAGTTGAGTAT"
+            		+ "TACGACAAAACTTCTCCGTCCATTGACGTCGCTTTCCAGGCGGTCGATCAGGATGCGCTGAAAGCGAAAT"
+            		+ "TTGGCGTAAGCAACGTTAACGGCCCAATCTCGCTGGTGATCTGGACCACTACGCCGTGGACTCTGCCTGC"
+            		+ "GAACCGCGCAATCTCTATTGCACCTGATTTCGACTATGCGCTGGTGCAGATCGACGGTCAGGCCGTGATT"
+            		+ "CTGGCGAAAGATCTGGTTGAAAGCGTAATGCAGCGTATCGGCGTGACCGATTACACCATTCTCGGCACGG"
+            		+ "TAAAAGGTGCGGAGCTTGAGCTGCTGCGCTTTGCCCATCCGTTTATGGGCTTCGACGTCCCGGCAATCC");
             dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT");
             	
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
@@ -95,6 +131,9 @@ import org.springframework.web.bind.annotation.RestController;
                     String genefilepath = dataStreamJira.getInputProteinsFasta();
                     String terminatorfilepath = dataStreamJira.getInputTerminatorsFasta();
                     Map<String,String> images = new LinkedHashMap<String, String>();
+                    Map<String, String> gcContentMap = new HashMap<>();
+                    Map<String, Integer> deviceLengths = new HashMap<>();
+                    Map<String, String> deviceCompositions = new HashMap<>();
                     
                     //For Clotho
                     String username = testUser;
@@ -158,9 +197,17 @@ import org.springframework.web.bind.annotation.RestController;
                             System.out.println(getLogPrefix(project) + "Generating GenBank file for " + device.getName() +" device");
                             String genBankContents = ExportGenBank.deviceToGenBank(project, device);
                             Utilities.writeToFile(Utilities.getProjectFolderPath(project)+device.getName()+".gb", genBankContents);
-                           
-                            //used to create fasta file and put it in JSON response<DataStreamJira>.
-                            //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));   
+                            
+                            //get lengths of devices
+                            deviceLengths.put(device.getName(), device.getSequence().length());
+                            
+                            //get device components for PDF datasheet
+                            deviceCompositions.put(device.getName(), LatexAdaptor.getDeviceComponents(device));
+                            
+                            //Calculate %GC for the device
+                            DNASequence dna = new DNASequence(device.getSequence());
+                            double percentGc = dna.getGCCount()*100.00/dna.getLength();
+                            gcContentMap.put(device.getName(), String.format("%.2f", percentGc));
                         }
 
                     } catch (Exception ex) {
@@ -170,9 +217,10 @@ import org.springframework.web.bind.annotation.RestController;
                 
                  // PDF DATASHEET
                     System.out.println(getLogPrefix(project) + "\n\n################ PDF Datasheet ###############");
-                    OwlData owl = new OwlData(images);
+                    OwlData owl = new OwlData(images, gcContentMap, deviceLengths, deviceCompositions);
                     owl.setMyProjectId(project);
                     owl.setPathToTexFile(owl.getPathToTexFolder()+Utilities.getFileDivider()+owl.getMyProjectId()+".tex");
+                    
                     String texFile = LatexAdaptor.makeTexFile(owl);
                     System.out.println(getLogPrefix(project) + texFile+" file was successfully created.");
                     System.out.println(getLogPrefix(project) + "Generating PDF...");
