@@ -263,7 +263,7 @@ public class FastaAdaptor {
             return null;
         }
         
-        Map projQuery = new HashMap();
+        Map<String, String> projQuery = new HashMap<String, String>();
         projQuery.put("name", projectId);
         projQuery.put("owner",username);
         projQuery.put("schema", Project.class.getCanonicalName());
@@ -324,11 +324,11 @@ public class FastaAdaptor {
             return null;
         }
         
-        Map projQuery = new HashMap();
+        Map<String, String> projQuery = new HashMap<String, String>();
         projQuery.put("name", projectId);
         projQuery.put("owner",username);
         projQuery.put("schema", Project.class.getCanonicalName());
-        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        Map<?, ?> projObj = (Map<?, ?>) clothoObject.queryOne(projQuery);
         if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
@@ -337,11 +337,11 @@ public class FastaAdaptor {
         }
         
         //System.out.println("Project Object :: " + projObj.toString());
-        List<String> componentids = new ArrayList<String>();
+        List<String> componentids = new ArrayList<>();
         componentids = (List<String>) projObj.get(type.toString().toLowerCase());
         
         for (String componentid : componentids) {
-            Map dnaObj = (Map) clothoObject.get(componentid);
+            Map<?, ?> dnaObj = (Map<?, ?>) clothoObject.get(componentid);
                 components.add(DNAcomponent.fromMap(dnaObj));
         }
         clothoObject.logout();
@@ -367,11 +367,11 @@ public class FastaAdaptor {
             return null;
         }
 
-        Map projQuery = new HashMap();
+        Map<String, String> projQuery = new HashMap<String, String>();
         projQuery.put("name", projectId);
         projQuery.put("owner",username);
         projQuery.put("schema", Project.class.getCanonicalName());
-        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        Map<?, ?> projObj = (Map<?, ?>) clothoObject.queryOne(projQuery);
         if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
@@ -399,7 +399,7 @@ public class FastaAdaptor {
         componentids.addAll(terminatorIds);
 
         for (String componentid : componentids) {
-            Map dnaObj = (Map) clothoObject.get(componentid);
+            Map<?, ?> dnaObj = (Map<?, ?>) clothoObject.get(componentid);
             components.add(DNAcomponent.fromMap(dnaObj));
         }
         clothoObject.logout();
@@ -425,11 +425,11 @@ public class FastaAdaptor {
             return null;
         }
 
-        Map projQuery = new HashMap();
+        Map<String, String> projQuery = new HashMap<String, String>();
         projQuery.put("name", projectId);
         projQuery.put("owner",username);
         projQuery.put("schema", Project.class.getCanonicalName());
-        Map projObj = (Map) clothoObject.queryOne(projQuery);
+        Map<?, ?> projObj = (Map<?, ?>) clothoObject.queryOne(projQuery);
         if (projObj == null) {
             System.out.println("PROJECT DOES NOT EXIST!!!");
             clothoObject.logout();
@@ -458,7 +458,7 @@ public class FastaAdaptor {
         List<String> componentNames = new ArrayList<String>();
 
         for (String componentid : componentids) {
-            Map dnaObj = (Map) clothoObject.get(componentid);
+            Map<?, ?> dnaObj = (Map<?, ?>) clothoObject.get(componentid);
             componentNames.add((String) dnaObj.get("name"));
         }
         clothoObject.logout();
@@ -467,7 +467,7 @@ public class FastaAdaptor {
     }
     
     public static List<DNAcomponent> fastaToComponents(List<String> lines, ComponentType type) {
-        List<DNAcomponent> list = new ArrayList();
+        List<DNAcomponent> list = new ArrayList<>();
         String name = "";
         String seq = "";
         for (String line : lines) {

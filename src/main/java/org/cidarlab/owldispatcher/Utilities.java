@@ -236,6 +236,16 @@ public class Utilities {
         return _filepath;
     }
     
+    public static String getProjectFolderPath(String project) {
+        String _filepath = getFilepath();
+        if (Utilities.isWindows()) {
+            _filepath += "\\src\\main\\resources\\outputs\\"+project+"\\";
+        } else {
+            _filepath += "/src/main/resources/outputs/"+project+"/";
+        }
+        return _filepath;
+    }
+    
     public static void removeFile(String pathToFile){
     	File file = new File(pathToFile);
     	String path = null;
@@ -267,6 +277,8 @@ public class Utilities {
         	return false;
         }
     }
+    
+
     
     public static void setEugeneRootDirectory(String filepath){
         Args.eugeneRootDirectory = filepath;

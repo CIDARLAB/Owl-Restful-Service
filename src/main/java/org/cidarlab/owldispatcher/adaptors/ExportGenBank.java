@@ -28,13 +28,19 @@ import com.google.common.base.Splitter;
 public class ExportGenBank {
 public final static String uniqueId = "F" + System.currentTimeMillis();
 	
-	public static final String writeGenBank(List<GenBankFeature> parts) {
+	public static final String writeGenBank(List<GenBankFeature> parts, String project) {
 		String sequence = parts.get(0).getFullSequence();
         String lowCasSeq = sequence.toLowerCase();
         String sequenceLength = Integer.toString(sequence.length());
         //String sanitizedName = name.replaceAll("[^a-zA-Z0-9.-]", "_");
         String gbkFlatFile = "";
-        String desc = ".";
+        String desc = "";
+        
+        if(parts.get(0).getAccession() != null){
+        	desc = parts.get(0).getAccession() + " device of the project: " + parts.get(0).getOldAccession();
+        } else {
+        	desc = ".";
+        }
 
         int spaces = 28 - uniqueId.length() - sequenceLength.length();
         String spacer = String.format("%"+spaces+"s", "");
@@ -78,10 +84,6 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         		}
 	        	gbkFlatFile +="\n                     /product=\"gp" + part.getName() +"\"";
 	        	
-	        	//translate nucleotide sequence into protein and print into CDS annotation in genBank file
-	        	/*System.out.println("+++++++++++++++++++++++");
-	        	//System.out.println(part.getDnaSequence());
-	        	System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence());*/
 	        	ProteinSequence protein = new DNASequence(part.getDnaSequence()).getRNASequence().getProteinSequence();
 	        	System.out.println("type: "+part.getFeatureType()+"  -  "+part.getDnaSequence() + " - "+protein.getSequenceAsString() + " " + protein.getLength());
 	        	
@@ -177,20 +179,15 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         gbkFlatFile += "//";
         System.out.println("==========GenBank exporter===========");
         System.out.println(gbkFlatFile);
-        try {
-			WriteGenBank(gbkFlatFile);
-		} catch (IOException e) {
-			System.out.println("Cannot create GenBank file. Reason: "+e.getMessage());
-		}
+        
         return gbkFlatFile;
     }
 	
 	public static String deviceToGenBank(String project, Device device) throws EugeneException{
 		List<GenBankFeature> gbList = new ArrayList<>();
-            String deviceName = device.getName();
             
             GenBankFeature gbf = new GenBankFeature();
-            gbf.setAccession(deviceName);
+            gbf.setAccession(device.getName());
             gbf.setOldAccession(project);
             gbf.setFeatureType("source");
             gbf.setStartx(1);
@@ -220,10 +217,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
                 } else {
                     System.out.println("Unrecognized part found  in EugeneArray: "+part);
                 }
-
-                ProteinSequence protein = new DNASequence(partFeature.getDnaSequence()).getRNASequence().getProteinSequence();
-                System.out.println(partFeature.getName() + " : "+partFeature.getFeatureType()+" : "+partFeature.getDnaSequence() + " : " +protein);
-                
+                               
                 //TEST 
                partFeature.setStartx(1);
                partFeature.setEndx(102);
@@ -232,7 +226,7 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
                gbList.add(partFeature);
             }
 
-            String gbk = writeGenBank(gbList);
+            String gbk = writeGenBank(gbList, project);
   
 		return gbk;
 	}
@@ -283,15 +277,5 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
         return formatter.format(new Date(System.currentTimeMillis())).toUpperCase();
 
     }
-    
-    private static void WriteGenBank(String genBank) throws IOException {
-    	final String pathToFolder = Utilities.getOutputFilepath() + uniqueId;
-    	final String pathToFile = pathToFolder + "\\" + uniqueId + ".gb";
-        File file = new File(pathToFolder);
-        file.mkdir();
-    	try (FileWriter locFile = new FileWriter(pathToFile);){
-    		locFile.write(genBank);
-    		System.out.println(pathToFile + " file was successfully created.");
-    	}
-    }
+       
 }

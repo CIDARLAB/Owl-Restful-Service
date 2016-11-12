@@ -57,8 +57,7 @@ import org.springframework.web.bind.annotation.RestController;
             dataStreamJira.setInputPromotersFasta(">pT7\nATGCGATCGATCGATCG\n>pBla\nATCGTAGCTAGCTAGCTA");
             dataStreamJira.setInputRbsFasta(">RBS_1\nATGCTAGCTGATCGTA");
             dataStreamJira.setInputRibozymesFasta(">ri1\nATGATCGATCGATCGGCTAGCTA");
-            dataStreamJira.setInputProteinsFasta(">gene1\nATGCTAGCTAGCTA\n>gene2\nTGATCGATCGATCAC\n>gene3\nATGCTAGCTAGCTA\n>gene4\nTGATCGATCGATCAC\n"
-            									+ ">gene5\nATGCTAGCTAGCTA\n>gene6\nTGATCGATCGATCAC\n>gene7\nATGCTAGCTAGCTA\n>gene8\nTGATCGATCGATCAC\n");
+            dataStreamJira.setInputProteinsFasta(">gene1\nGTGTTCTACAGAGAGAAGCGTAGAGCAATAGGCTGTATTTTGAGAAAGCTGTGTGAGTGGAAAAGTGTATAA\n>gene2\nATGAAACTCTACAATTTGAAAGATCACAATGAGCAGGTCAGCTTTGCGCAAGCCGTAACCCAGGGGTTGTGA\n>gene3\nATGGCTAAGCAAGATTATTACGAGATTTTAGGCGTTTCCAAAACAGCGGAAGAGCGTGAAATCAAAAAGTAA");
             dataStreamJira.setInputTerminatorsFasta(">t1\nATCGATCGATCGATCGAT");
             	
             return new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
@@ -109,8 +108,8 @@ import org.springframework.web.bind.annotation.RestController;
                     System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, ribozymefilepath, project, ComponentType.RIBOZYME));
                     System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho RBS");
                     System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, rbsfilepath, project, ComponentType.RBS));
-                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Proteins");
-                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.PROTEIN));
+                    System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Genes");
+                    System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, genefilepath, project, ComponentType.GENE));
                     System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Terminators");
                     System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, terminatorfilepath, project, ComponentType.TERMINATOR));
                     
@@ -156,9 +155,10 @@ import org.springframework.web.bind.annotation.RestController;
                             Device device = (Device)ne;
                             System.out.println(getLogPrefix(project) + "Generating FASTA file for " + device.getName() +" device");
                             System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
-                            /*System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
                             System.out.println(getLogPrefix(project) + "Generating GenBank file for " + device.getName() +" device");
-                            ExportGenBank.deviceToGenBank(project, device);*/
+                            String genBankContents = ExportGenBank.deviceToGenBank(project, device);
+                            Utilities.writeToFile(Utilities.getProjectFolderPath(project)+device.getName()+".gb", genBankContents);
                            
                             //used to create fasta file and put it in JSON response<DataStreamJira>.
                             //dataStreamJira.addFastaFile(new FastaStream(device.getName(),FastaAdaptor.getFastaFileLines(device)));   
@@ -255,7 +255,7 @@ import org.springframework.web.bind.annotation.RestController;
     		};
     		
     		System.out.println(getLogPrefix("Owl") + "writing GenBank file...");
-    		ExportGenBank.writeGenBank(parts);
+    		ExportGenBank.writeGenBank(parts, "OwlProject");
     		System.out.println(getLogPrefix("Owl") + "GenBank file was created.");
     		
     		System.out.println(getLogPrefix("Owl") + "is attempting to zip " + Utilities.getOutputFilepath() + " folder.");

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
  *
  * @author prash
  */
-@Service
 public class DNAcomponent {
     
 	public DNAcomponent(){
@@ -47,8 +46,8 @@ public class DNAcomponent {
         return obj;
     }
     
-    public Map getMap(){
-        Map map = new HashMap();
+    public Map<String, String> getMap(){
+        Map<String, String> map = new HashMap<String, String>();
         map.put("name", this.name);
         map.put("schema", DNAcomponent.class.getCanonicalName());
         map.put("sequence", this.sequence);
@@ -80,7 +79,7 @@ public class DNAcomponent {
         return str;
     }
     
-    public static DNAcomponent fromMap(Map map){        
+    public static DNAcomponent fromMap(Map<?, ?> map){        
         DNAcomponent comp = new DNAcomponent((String)map.get("name"),ComponentType.valueOf((String)map.get("type")),(String)map.get("sequence"));
         if(map.containsKey("id")){
             comp.clothoId = (String)map.get("id");
