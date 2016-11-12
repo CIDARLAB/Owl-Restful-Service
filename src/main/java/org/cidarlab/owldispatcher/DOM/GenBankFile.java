@@ -1,5 +1,8 @@
 package org.cidarlab.owldispatcher.DOM;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /*
  * @author Yury V. Ivanov
 */
@@ -7,33 +10,8 @@ package org.cidarlab.owldispatcher.DOM;
 
 public class GenBankFile {
 	
-	private String fullSequence;
-	private String accession;
-	private String oldAccession;
-	
-	
-	
-	public String getOldAccession() {
-		return oldAccession;
-	}
+	@Getter @Setter private String fullSequence;
+	@Getter @Setter private String accession;
+	@Getter @Setter private String oldAccession;
 
-	public void setOldAccession(String oldAccession) {
-		this.oldAccession = oldAccession;
-	}
-
-	public String getFullSequence() {
-		return fullSequence;
-	}
-
-	public void setFullSequence(String fullSequence) {
-		this.fullSequence = fullSequence;
-	}
-
-	public String getAccession() {
-		return accession;
-	}
-
-	public void setAccession(String accession) {
-		this.accession = accession;
-	}
 }

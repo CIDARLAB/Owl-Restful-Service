@@ -8,31 +8,20 @@ import lombok.Setter;
  * @author Yury V. Ivanov
 */
 
-
 public class GenBankFeature extends GenBankFile {
 	
-	@Getter @Setter
-	private String name;
-	@Getter @Setter
-	private boolean reverseComplement;
-	@Getter @Setter
-	private boolean isSource;
-	@Getter @Setter
-	private int startx;
-	@Getter @Setter
-	private int endx;
-	@Getter @Setter
-	private String dnaSequence;
-	@Getter @Setter
-	private String featureType;
-	@Getter @Setter
-	private String sourceId;
-	@Getter @Setter
-	private String genBankId;
-	@Getter @Setter
-	private String partId;
-	@Getter @Setter
-	private String proteinSequence;
+
+	@Getter @Setter private String name;
+	@Getter @Setter private boolean reverseComplement;
+	@Getter @Setter private boolean isSource;
+	@Getter @Setter private int startx;
+	@Getter @Setter private int endx;
+	@Getter @Setter private String dnaSequence;
+	@Getter @Setter private String featureType;
+	@Getter @Setter private String sourceId;
+	@Getter @Setter private String genBankId;
+	@Getter @Setter private String partId;
+	@Getter @Setter private String proteinSequence;
    
 	   public GenBankFeature() {
 	       
