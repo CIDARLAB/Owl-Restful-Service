@@ -14,7 +14,6 @@ import org.cidarlab.eugene.dom.NamedElement;
 import org.cidarlab.eugene.exception.EugeneException;
 import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.model.OwlData;
-import org.neo4j.cypher.internal.compiler.v2_2.perty.recipe.formatErrors;
 
 /**
  *
