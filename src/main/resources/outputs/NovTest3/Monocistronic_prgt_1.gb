@@ -1,0 +1,70 @@
+LOCUS       F1478915736857           372 bp    DNA     linear   UNK 11-NOV-2016
+DEFINITION  Monocistronic_prgt_1 device of the project: NovTest3
+ACCESSION   F1478915736857
+VERSION     .
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+FEATURES             Location/Qualifiers
+     source          1..372
+                     /note="Monocistronic_prgt_1 device of the project NovTest3"
+     promoter        1..18
+                     /gene="p_pBla"
+                     /locus_tag="F1478915736857_1"
+     RBS             19..34
+                     /gene="RBS_RBS_1"
+                     /locus_tag="F1478915736857_2"
+     gene            35..106
+                     /gene="gene_gene1"
+                     /locus_tag="F1478915736857_3"
+     CDS             35..106
+                     /gene="gene_gene1"
+                     /locus_tag="F1478915736857_3"
+                     /product="gpgene_gene1"
+                     /translation="VFYREKRRAIGCILRKLCEWKSV"
+     terminator      107..124
+                     /gene="t_t1"
+                     /locus_tag="F1478915736857_4"
+     promoter        125..142
+                     /gene="p_pBla"
+                     /locus_tag="F1478915736857_5"
+     RBS             143..158
+                     /gene="RBS_RBS_1"
+                     /locus_tag="F1478915736857_6"
+     gene            159..230
+                     /gene="gene_gene2"
+                     /locus_tag="F1478915736857_7"
+     CDS             159..230
+                     /gene="gene_gene2"
+                     /locus_tag="F1478915736857_7"
+                     /product="gpgene_gene2"
+                     /translation="MKLYNLKDHNEQVSFAQAVTQGL"
+     terminator      231..248
+                     /gene="t_t1"
+                     /locus_tag="F1478915736857_8"
+     promoter        249..266
+                     /gene="p_pBla"
+                     /locus_tag="F1478915736857_9"
+     RBS             267..282
+                     /gene="RBS_RBS_1"
+                     /locus_tag="F1478915736857_10"
+     gene            283..354
+                     /gene="gene_gene3"
+                     /locus_tag="F1478915736857_11"
+     CDS             283..354
+                     /gene="gene_gene3"
+                     /locus_tag="F1478915736857_11"
+                     /product="gpgene_gene3"
+                     /translation="MAKQDYYEILGVSKTAEEREIKK"
+     terminator      355..372
+                     /gene="t_t1"
+                     /locus_tag="F1478915736857_12"
+ORIGIN
+        1 atcgtagcta gctagctaat gctagctgat cgtagtgttc tacagagaga agcgtagagc
+       61 aataggctgt attttgagaa agctgtgtga gtggaaaagt gtataaatcg atcgatcgat
+      121 cgatatcgta gctagctagc taatgctagc tgatcgtaat gaaactctac aatttgaaag
+      181 atcacaatga gcaggtcagc tttgcgcaag ccgtaaccca ggggttgtga atcgatcgat
+      241 cgatcgatat cgtagctagc tagctaatgc tagctgatcg taatggctaa gcaagattat
+      301 tacgagattt taggcgtttc caaaacagcg gaagagcgtg aaatcaaaaa gtaaatcgat
+      361 cgatcgatcg at
+//

@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.json.JSONArray;
+
+import org.apache.commons.lang.WordUtils;
 import org.cidarlab.eugene.dom.Component;
 import org.cidarlab.eugene.dom.Device;
 import org.cidarlab.eugene.dom.NamedElement;
@@ -92,14 +94,7 @@ public class FastaAdaptor {
             BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile));
             writer.write(">"+device.getName());
             writer.newLine();
-            for(List<NamedElement> listnamedElement : device.getComponents()){
-            	for(NamedElement ne : listnamedElement){
-                    Component component = (Component)ne;
-                    writer.write(component.getSequence());
-                    
-                }
-            }
-            writer.newLine();
+            writer.write(WordUtils.wrap(device.getSequence(), 80, "\n", true));
             writer.close();
             
         } catch (IOException ex) {

@@ -155,7 +155,6 @@ import org.springframework.web.bind.annotation.RestController;
                             Device device = (Device)ne;
                             System.out.println(getLogPrefix(project) + "Generating FASTA file for " + device.getName() +" device");
                             System.out.println(getLogPrefix(project) + FastaAdaptor.createDeviceFastaFile(device, project));
-                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
                             System.out.println(getLogPrefix(project) + "Generating GenBank file for " + device.getName() +" device");
                             String genBankContents = ExportGenBank.deviceToGenBank(project, device);
                             Utilities.writeToFile(Utilities.getProjectFolderPath(project)+device.getName()+".gb", genBankContents);

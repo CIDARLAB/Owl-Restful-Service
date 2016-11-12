@@ -5,9 +5,6 @@ package org.cidarlab.owldispatcher.adaptors;
  * @author Yury V. Ivanov
 */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +17,6 @@ import org.cidarlab.eugene.dom.Component;
 import org.cidarlab.eugene.dom.Device;
 import org.cidarlab.eugene.dom.NamedElement;
 import org.cidarlab.eugene.exception.EugeneException;
-import org.cidarlab.owldispatcher.Utilities;
 import org.cidarlab.owldispatcher.DOM.GenBankFeature;
 
 import com.google.common.base.Splitter;
@@ -196,6 +192,8 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
             gbf.setEndx(gbf.getFullSequence().length());
             gbf.setReverseComplement(false);
             gbList.add(gbf);
+            
+            int counter = 0;
             for (int j = 0; j < device.getComponents().size(); j++) {
                 String part = device.getComponents().get(j).get(0).toString();
                 GenBankFeature partFeature = new GenBankFeature(); 
@@ -218,9 +216,10 @@ public final static String uniqueId = "F" + System.currentTimeMillis();
                     System.out.println("Unrecognized part found  in EugeneArray: "+part);
                 }
                                
-                //TEST 
-               partFeature.setStartx(1);
-               partFeature.setEndx(102);
+               //Map part coordinates relative to the entire Device sequence 
+               partFeature.setStartx(counter+1);
+               counter = counter+partFeature.getDnaSequence().length();
+               partFeature.setEndx(counter);
                partFeature.setReverseComplement(false);
                
                gbList.add(partFeature);

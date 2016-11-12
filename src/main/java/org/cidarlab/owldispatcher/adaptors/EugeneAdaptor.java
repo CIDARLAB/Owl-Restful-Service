@@ -257,7 +257,7 @@ public class EugeneAdaptor {
 
         int count = 1;
         for (DNAcomponent gene : genes) {
-            script += "CDS g" + count++ + "(.SEQUENCE(\"" + gene.getSequence() + "\"), .name(\"gene_" + gene.getName() + "\"), .SO(\"SO_0000316\"));";
+            script += "CDS g" + count++ + "(.SEQUENCE(\"" + gene.getSequence() + "\"), .name(\"" + gene.getName() + "\"), .SO(\"SO_0000316\"));";
             script += "\n";
         }
 
@@ -265,25 +265,25 @@ public class EugeneAdaptor {
 
         count = 1;
         for (DNAcomponent promoter : promoters) {
-            script += "Promoter p" + count++ + "(.SEQUENCE(\"" + promoter.getSequence() + "\"), .name(\"p_" + promoter.getName() + "\"), .SO(\"SO_0000167\"));";
+            script += "Promoter p" + count++ + "(.SEQUENCE(\"" + promoter.getSequence() + "\"), .name(\"" + promoter.getName() + "\"), .SO(\"SO_0000167\"));";
             script += "\n";
         }
 
         count = 1;
         for (DNAcomponent ribozyme : ribozymes) {
-            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"ri_" + ribozyme.getName() + "\"), .SO(\"SO_0000627\"), .PIGEON(\"z ri 13\"));";
+            script += "Ribozyme ri" + count++ + "(.SEQUENCE(\"" + ribozyme.getSequence() + "\"), .name(\"" + ribozyme.getName() + "\"), .SO(\"SO_0000627\"), .PIGEON(\"z ri 13\"));";
             script += "\n";
         }
 
         count = 1;
         for (DNAcomponent rbs : rbsList) {
-            script += "RBS rbs" + count++ + "(.SEQUENCE(\"" + rbs.getSequence() + "\"), .name(\"RBS_" + rbs.getName() + "\"), .SO(\"SO_0000139\"));";
+            script += "RBS rbs" + count++ + "(.SEQUENCE(\"" + rbs.getSequence() + "\"), .name(\"" + rbs.getName() + "\"), .SO(\"SO_0000139\"));";
             script += "\n";
         }
 
         count = 1;
         for (DNAcomponent terminator : terminators) {
-            script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"t_" + terminator.getName() + "\"), .SO(\"SO_0000141\"));";
+            script += "Terminator t" + count++ + "(.SEQUENCE(\"" + terminator.getSequence() + "\"), .name(\"" + terminator.getName() + "\"), .SO(\"SO_0000141\"));";
             script += "\n";
         }
 
