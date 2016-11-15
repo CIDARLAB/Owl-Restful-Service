@@ -5,14 +5,9 @@
  */
 package org.cidarlab.owldispatcher.adaptors;
 
-import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -51,13 +46,9 @@ public class EugeneAdaptor {
     // The configuration of the XML-RPC client
     private XmlRpcClientConfigImpl config;
     
-    // @Getter
+    @Getter
     private EugeneArray result;
-    
-    
-    public EugeneArray getResult() {
-		return result;
-	}
+
 
 	public EugeneAdaptor()
             throws Exception {
