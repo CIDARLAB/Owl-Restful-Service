@@ -1,5 +1,7 @@
 package org.cidarlab.owldispatcher.adaptors;
 
+import java.io.ByteArrayOutputStream;
+
 /*
  * @author Yury V. Ivanov
  * code adopted from StackOverFlow
@@ -18,6 +20,15 @@ public final class ZipFileUtil {
         ZipOutputStream zout = new ZipOutputStream(fout);
         zipSubDirectory("", dir, zout);
         zout.close();
+    }
+    
+    public static byte[] giveByteArray(File dir) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zout = new ZipOutputStream(bos);
+        zipSubDirectory("", dir, zout);
+        zout.close();
+        
+        return bos.toByteArray();
     }
 
     private static void zipSubDirectory(String basePath, File dir, ZipOutputStream zout) throws IOException {

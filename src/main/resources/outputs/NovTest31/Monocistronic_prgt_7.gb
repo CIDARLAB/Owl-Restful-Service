@@ -1,0 +1,129 @@
+LOCUS       F1479244425347          2595 bp    DNA     linear   UNK 15-NOV-2016
+DEFINITION  Monocistronic_prgt_7 device of the project: NovTest31
+ACCESSION   F1479244425347
+VERSION     .
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+FEATURES             Location/Qualifiers
+     source          1..2595
+                     /note="Monocistronic_prgt_7 device of the project NovTest31"
+     promoter        1..17
+                     /gene="pT7"
+                     /locus_tag="F1479244425347_1"
+     ncRNA           18..40
+                     /gene="ri1"
+                     /locus_tag="F1479244425347_2"
+     RBS             41..56
+                     /gene="RBS_1"
+                     /locus_tag="F1479244425347_3"
+     gene            57..759
+                     /gene="gene1"
+                     /locus_tag="F1479244425347_4"
+     CDS             57..759
+                     /gene="gene1"
+                     /locus_tag="F1479244425347_4"
+                     /product="gpgene1"
+                     /translation="MAKQDYYEILGVSKTAEEREIKKAYKRLAMKYHPDRNQGDKEAE
+                     AKFKEIKEAYEVLTDSQKRAAYDQYGHAAFEQGGMGGGGFGGGADFSDIFGDVFGDIF
+                     GGGRGRQRAARGADLRYNMELTLEEAVRGVTKEIRIPTLEECDVCHGSGAKPGTQPQT
+                     CPTCHGSGQVQMRQGFFAVQQTCPHCQGRGTLIKDPCNKCHGHGRVERSKTLSVKIPA
+                     GVDTGDRIRLAGEGEV"
+     terminator      760..777
+                     /gene="t1"
+                     /locus_tag="F1479244425347_5"
+     promoter        778..794
+                     /gene="pT7"
+                     /locus_tag="F1479244425347_6"
+     ncRNA           795..817
+                     /gene="ri1"
+                     /locus_tag="F1479244425347_7"
+     RBS             818..833
+                     /gene="RBS_1"
+                     /locus_tag="F1479244425347_8"
+     gene            834..1547
+                     /gene="gene2"
+                     /locus_tag="F1479244425347_9"
+     CDS             834..1547
+                     /gene="gene2"
+                     /locus_tag="F1479244425347_9"
+                     /product="gpgene2"
+                     /translation="MNVNYLNDSDLDFLQHCSEEQLANFARLLTHNEKGKTRLSSVLM
+                     RNELFKSMEGHPEQHRRNWQLIAGELQHFGGDSIANKLRGHGKLYRAILLDVSKRLKL
+                     KADKEMSTFEIEQQLLEQFLRNTWKKMDEEHKQEFLHAVDARVNELEELLPLLMKDKL
+                     LAKGVSHLLSSQLTRILRTHAAMSVLGHGLLRGAGLGGPVGAALNGVKAVSGSSYRVT
+                     IPAVLQIACLRRMVSATQV"
+     terminator      1548..1565
+                     /gene="t1"
+                     /locus_tag="F1479244425347_10"
+     promoter        1566..1583
+                     /gene="pBla"
+                     /locus_tag="F1479244425347_11"
+     ncRNA           1584..1606
+                     /gene="ri1"
+                     /locus_tag="F1479244425347_12"
+     RBS             1607..1622
+                     /gene="RBS_1"
+                     /locus_tag="F1479244425347_13"
+     gene            1623..2577
+                     /gene="gene3"
+                     /locus_tag="F1479244425347_14"
+     CDS             1623..2577
+                     /gene="gene3"
+                     /locus_tag="F1479244425347_14"
+                     /product="gpgene3"
+                     /translation="MSDYKSTLNLPETGFPMRGDLAKREPGMLARWTDDDLYGIIRAA
+                     KKGKKTFILHDGPPYANGSIHIGHSVNKILKDIIVKSKGLSGYDSPYVPGWDCHGLPI
+                     ELKVEQEYGKPDEKFTAAEFRAKCREYAATQVDGQRKDFIRLGVLGDWSHPYLTMDFK
+                     TEANIIRALGKIIGNGHLHKGAKPVHWCVDCRSALAEAEVEYYDKTSPSIDVAFQAVD
+                     QDALKAKFGVSNVNGPISLVIWTTTPWTLPANRAISIAPDFDYALVQIDGQAVILAKD
+                     LVESVMQRIGVTDYTILGTVKGAELELLRFAHPFMGFDVPAI"
+     terminator      2578..2595
+                     /gene="t1"
+                     /locus_tag="F1479244425347_15"
+ORIGIN
+        1 atgcgatcga tcgatcgatg atcgatcgat cggctagcta atgctagctg atcgtaatgg
+       61 ctaagcaaga ttattacgag attttaggcg tttccaaaac agcggaagag cgtgaaatca
+      121 aaaaggccta caaacgcctg gccatgaaat accacccgga ccgtaaccag ggtgacaaag
+      181 aggccgaggc gaaatttaaa gagatcaagg aagcttatga agttctgacc gactcgcaaa
+      241 aacgtgcggc atacgatcag tatggtcatg ctgcgtttga gcaaggtggc atgggcggcg
+      301 gcggttttgg cggcggcgca gacttcagcg atatttttgg tgacgttttc ggcgatattt
+      361 ttggcggcgg acgtggtcgt caacgtgcgg cgcgcggtgc tgatttacgc tataacatgg
+      421 agctcaccct cgaagaagct gtacgtggcg tgaccaaaga gatccgcatt ccgactctgg
+      481 aagagtgtga cgtttgccac ggtagcggtg caaaaccagg tacacagccg cagacctgtc
+      541 cgacctgtca tggttctggt caggtgcaga tgcgccaggg tttctttgcc gtgcagcaga
+      601 cctgtccaca ctgtcagggc cgcggtacgc tgatcaaaga tccgtgcaac aaatgtcatg
+      661 gtcatggtcg tgttgagcgc agcaaaacgc tgtccgttaa aatcccggca ggggtggaca
+      721 ctggagaccg catccgtctt gcgggcgaag gtgaagtaaa tcgatcgatc gatcgatatg
+      781 cgatcgatcg atcgatgatc gatcgatcgg ctagctaatg ctagctgatc gtaatgaatg
+      841 ttaattacct gaatgattca gatctggatt ttctccagca ttgtagtgag gaacagttag
+      901 caaatttcgc ccggctgctc acccataatg aaaaaggcaa aactcgcctc tccagcgtac
+      961 tgatgcgcaa cgaactgttt aaatcgatgg aaggacatcc cgagcaacat cgccgcaact
+     1021 ggcagctgat tgctggagaa ttacagcatt ttggtggcga tagtatcgcc aacaaactgc
+     1081 gcggacacgg taaattgtat cgggccattt tgctcgatgt ttcaaaacga ttgaagctga
+     1141 aagccgacaa agagatgtct acgtttgaaa ttgagcaaca gttactggaa caatttctgc
+     1201 gtaatacctg gaagaaaatg gacgaggaac ataagcagga gtttctgcac gcggtcgatg
+     1261 ccagggtgaa tgagctggaa gagctgctgc cgctgctgat gaaagacaaa ttattggcaa
+     1321 aaggcgtgtc gcatctgctt tccagccaac tgacccgcat tttacgcacc cacgcagcaa
+     1381 tgagcgtact tgggcatggt ttgctgcgcg gcgcggggct gggaggccct gtaggcgcgg
+     1441 cactaaatgg ggttaaagcg gtcagcggca gctcctatcg cgtgacgatt ccagccgtac
+     1501 tgcaaatcgc ctgcctgcgc cggatggtta gcgccactca ggtctgaatc gatcgatcga
+     1561 tcgatatcgt agctagctag ctaatgatcg atcgatcggc tagctaatgc tagctgatcg
+     1621 taatgagtga ctataaatca accctgaatt tgccggaaac agggttcccg atgcgtggcg
+     1681 atctcgccaa gcgcgaaccg ggaatgctgg cgcgttggac tgatgatgat ctgtacggca
+     1741 tcattcgtgc ggctaaaaaa ggcaaaaaaa ccttcattct gcatgatggc cctccttatg
+     1801 cgaatggcag cattcatatt ggtcactcgg ttaacaagat tctgaaagac attatcgtga
+     1861 agtccaaagg gctttccggt tatgactcgc cgtatgtgcc tggctgggac tgccacggtc
+     1921 tgccgatcga gctgaaagta gagcaagaat acggtaagcc ggatgagaaa ttcaccgccg
+     1981 ccgagttccg cgccaagtgc cgcgaatacg cggcgaccca ggttgacggt caacgcaaag
+     2041 actttatccg tctgggcgtg ctgggcgact ggtcgcaccc gtacctgacc atggacttca
+     2101 aaactgaagc caatatcatc cgcgcgctgg gcaaaatcat cggcaatggt cacctgcaca
+     2161 aaggcgcgaa gccggtgcac tggtgcgtag actgccgttc tgcactggca gaagcggaag
+     2221 ttgagtatta cgacaaaact tctccgtcca ttgacgtcgc tttccaggcg gtcgatcagg
+     2281 atgcgctgaa agcgaaattt ggcgtaagca acgttaacgg cccaatctcg ctggtgatct
+     2341 ggaccactac gccgtggact ctgcctgcga accgcgcaat ctctattgca cctgatttcg
+     2401 actatgcgct ggtgcagatc gacggtcagg ccgtgattct ggcgaaagat ctggttgaaa
+     2461 gcgtaatgca gcgtatcggc gtgaccgatt acaccattct cggcacggta aaaggtgcgg
+     2521 agcttgagct gctgcgcttt gcccatccgt ttatgggctt cgacgtcccg gcaatccatc
+     2581 gatcgatcga tcgat
+//

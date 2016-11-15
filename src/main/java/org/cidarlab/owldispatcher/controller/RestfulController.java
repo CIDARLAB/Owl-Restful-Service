@@ -1,13 +1,18 @@
     package org.cidarlab.owldispatcher.controller;
-
-import java.io.File;
-import java.io.IOException;
-
-/*
+    
+    /*
      * @author Yury V. Ivanov
     */
 
-    
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +22,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.WordUtils;
+import javax.servlet.http.HttpServletResponse;
+
 import org.biojava3.core.sequence.DNASequence;
 import org.cidarlab.eugene.dom.Device;
 import org.cidarlab.eugene.dom.NamedElement;
@@ -37,7 +43,10 @@ import org.cidarlab.owldispatcher.adaptors.ZipFileUtil;
 import org.cidarlab.owldispatcher.exception.BadRequestException;
 import org.cidarlab.owldispatcher.model.DataStreamJira;
 import org.cidarlab.owldispatcher.model.OwlData;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,11 +55,12 @@ import org.springframework.web.bind.annotation.RestController;
 
     @RestController
     public class RestfulController {
-
-        private static String testUser = "Foundry";
-        //private static String testProject = "testProjectNew";
-        private static String testPassword = "Broadies2016";
-
+    	
+    	@Value("${security.user.name}")
+    	private String username;
+    	@Value("${security.user.password}")
+    	private String password;
+    	
         @RequestMapping(value = "/json")
         public ResponseEntity<DataStreamJira> getJson() {
         	DataStreamJira dataStreamJira = new DataStreamJira();
@@ -119,12 +129,13 @@ import org.springframework.web.bind.annotation.RestController;
 
         }
         
-        @RequestMapping(value = "/run", method = RequestMethod.POST)
-        public ResponseEntity<DataStreamJira> update(@RequestBody DataStreamJira dataStreamJira) {
+        @RequestMapping(value = "/run", method = RequestMethod.POST, produces="application/octet-stream")
+        public ResponseEntity<byte[]> update(@RequestBody DataStreamJira dataStreamJira, HttpServletResponse resp) {
             if (dataStreamJira == null) {
                 throw new BadRequestException();
             } else {
             	try {
+            		String project = dataStreamJira.getMyProjectId();
             		String promoterfilepath = dataStreamJira.getInputPromotersFasta();
                     String ribozymefilepath = dataStreamJira.getInputRibozymesFasta();
                     String rbsfilepath = dataStreamJira.getInputRbsFasta();
@@ -134,12 +145,6 @@ import org.springframework.web.bind.annotation.RestController;
                     Map<String, String> gcContentMap = new HashMap<>();
                     Map<String, Integer> deviceLengths = new HashMap<>();
                     Map<String, String> deviceCompositions = new HashMap<>();
-                    
-                    //For Clotho
-                    String username = testUser;
-                    String password = testPassword;
-                    
-                    String project = dataStreamJira.getMyProjectId();
                     
                     System.out.println(getLogPrefix(project) + "\n\n######################## Fasta To Clotho Promoters");
                     System.out.println(getLogPrefix(project) + FastaAdaptor.fastaToClotho(username, password, promoterfilepath, project, ComponentType.PROMOTER));
@@ -242,7 +247,7 @@ import org.springframework.web.bind.annotation.RestController;
                     Utilities.removeFile(Utilities.getProjectFolderPath(owl)+owl.getMyProjectId()+".out");
                     
                     System.out.println(getLogPrefix("Owl") + "is attempting to zip " + Utilities.getProjectFolderPath(owl) + " folder.");
-            		try{
+            		/*try{
             			ZipFileUtil.zipDirectory(new File(Utilities.getProjectFolderPath(owl)), new File(Utilities.getOutputFilepath()+project+".zip"));
             		} catch (IOException ex) {
             			System.out.println(getLogPrefix(project) + "Something went wrong while attempting to zip the project folder.");
@@ -255,17 +260,30 @@ import org.springframework.web.bind.annotation.RestController;
             			System.out.println(getLogPrefix(project) + folder.getCanonicalPath()+" was successfully deleted");
             		} else {
             			System.out.println("Something went wrong while deleting "+folder.getCanonicalPath()+" folder");
-            		}
+            		}*/
             		
                     System.out.println(getLogPrefix(project) + "Wrapping up...");
                     
             	} catch (Throwable e){
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Owl failed. Reason: " + e.getMessage());
-            }
+            	}
             	
+            	//Send out zip folder with HttpStatus
+            	final HttpHeaders headers = new HttpHeaders();
+            	byte[] zipByteArray = null;
+            	
+            	try{
+            		zipByteArray = ZipFileUtil.giveByteArray(new File(Utilities.getProjectFolderPath(dataStreamJira.getMyProjectId())));
+        		} catch (IOException ex) {
+        			String msg = "ERROR: Could not generate zip folder.";
+                    headers.setContentType(MediaType.TEXT_PLAIN);
+                    return new ResponseEntity<byte[]>(msg.getBytes(), headers, HttpStatus.NOT_FOUND);
+        		}
+            	
+            	resp.setHeader("Content-Disposition", "attachment; filename=\""+dataStreamJira.getMyProjectId()+ ".zip\"");
             	
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "\n\n########## Project is done");
-            	ResponseEntity<DataStreamJira> res = new ResponseEntity<DataStreamJira>(dataStreamJira, HttpStatus.OK);
+            	ResponseEntity<byte[]> res = new ResponseEntity<byte[]>(zipByteArray,headers,HttpStatus.OK);
             	System.out.println(getLogPrefix(dataStreamJira.getMyProjectId()) + "Returning result");
             	return res;
             	
